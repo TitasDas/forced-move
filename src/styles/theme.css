@@ -210,6 +210,8 @@
   text-align: center;
   border: 2px solid var(--accent);
   box-shadow: 0 18px 44px var(--glow);
+  display: grid;
+  gap: 0.5rem;
 }
 
 .confetti {
@@ -242,7 +244,6 @@
 }
 
 .overlay-action {
-  position: absolute;
-  left: 1rem;
-  bottom: 1rem;
+  position: static;
+  margin: 0.5rem auto 0;
 }
