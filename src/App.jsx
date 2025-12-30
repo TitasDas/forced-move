@@ -148,56 +148,75 @@ export default function App() {
   const [paletteAlt, setPaletteAlt] = useState(false);
   const [screen, setScreen] = useState('menu');
   const [mode, setMode] = useState('nested');
+  const [intro, setIntro] = useState(true);
 
   return (
     <div className={`app ${contrast ? 'high-contrast' : ''} ${paletteAlt ? 'palette-alt' : ''}`}>
-      <div className="shell">
-        <div className="sound-corner">
-          <AudioToggle src="/audio/lofi.mp3" />
-          <button
-            className="btn secondary palette-toggle"
-            onClick={() => setPaletteAlt((v) => !v)}
-            aria-label="Toggle color palette"
-            title="Switch color palette"
-          >
-            {paletteAlt ? '🎨' : '◐'}
-          </button>
-        </div>
-        {screen === 'menu' && <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} />}
-
-        <AccessibilityBar
-          contrast={contrast}
-          onToggleContrast={() => setContrast((v) => !v)}
-        />
-
-        {screen === 'menu' && (
-          <div className="panel">
-            <div className="card-title">How to play</div>
-            <div className="list">
-              <div>Tap a square to place your mark. Three in a row wins.</div>
-              <div>Nested mode: your move decides which mini-board your opponent must play next.</div>
-              <div>Shareable links let friends join instantly.</div>
-            </div>
-          </div>
-        )}
-
-        {screen === 'solo' && (
-          <SinglePlayerGame
-            initialMode={mode}
-            onBack={() => setScreen('menu')}
-          />
-        )}
-        {screen === 'multi' && (
-          <MultiplayerLobby
-            initialMode={mode}
-            onBack={() => setScreen('menu')}
-          />
-        )}
-
-        <footer className="footer-tag">
-          <span className="tag">Forced Move · v{GAME_VERSION}</span>
-        </footer>
+      <div className="sound-corner">
+        <AudioToggle src="/audio/lofi.mp3" />
+        <button
+          className="btn secondary palette-toggle"
+          onClick={() => setPaletteAlt((v) => !v)}
+          aria-label="Toggle color palette"
+          title="Switch color palette"
+        >
+          {paletteAlt ? '🎨' : '◐'}
+        </button>
       </div>
+      {intro ? (
+        <div
+          className="intro-screen"
+          role="dialog"
+          aria-label="Forced Move intro"
+          style={{ backgroundImage: "url('/intro.jpg')" }}
+        >
+          <div className="intro-overlay panel">
+            <div className="tag ghost">A game of structure, not speed.</div>
+            <h1>Forced Move</h1>
+            <p>Win the small boards to claim the big board.</p>
+            <button className="btn" onClick={() => setIntro(false)}>
+              Enter the game
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="shell">
+          {screen === 'menu' && <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} />}
+
+          <AccessibilityBar
+            contrast={contrast}
+            onToggleContrast={() => setContrast((v) => !v)}
+          />
+
+          {screen === 'menu' && (
+            <div className="panel">
+              <div className="card-title">How to play</div>
+              <div className="list">
+                <div>Tap a square to place your mark. Three in a row wins.</div>
+                <div>Nested mode: your move decides which mini-board your opponent must play next.</div>
+                <div>Shareable links let friends join instantly.</div>
+              </div>
+            </div>
+          )}
+
+          {screen === 'solo' && (
+            <SinglePlayerGame
+              initialMode={mode}
+              onBack={() => setScreen('menu')}
+            />
+          )}
+          {screen === 'multi' && (
+            <MultiplayerLobby
+              initialMode={mode}
+              onBack={() => setScreen('menu')}
+            />
+          )}
+
+          <footer className="footer-tag">
+            <span className="tag">Forced Move · v{GAME_VERSION}</span>
+          </footer>
+        </div>
+      )}
     </div>
   );
 }
