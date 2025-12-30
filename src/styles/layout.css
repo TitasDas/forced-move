@@ -138,6 +138,16 @@
   border: 2px solid rgba(0, 0, 0, 0.08);
 }
 
+.mini-board.mini-owned.mark-x {
+  box-shadow: 0 14px 30px rgba(255, 77, 109, 0.35);
+  border-color: rgba(255, 77, 109, 0.35);
+}
+
+.mini-board.mini-owned.mark-o {
+  box-shadow: 0 14px 30px rgba(47, 128, 237, 0.35);
+  border-color: rgba(47, 128, 237, 0.35);
+}
+
 .mini-overlay {
   position: absolute;
   inset: 0;
