@@ -66,10 +66,15 @@ function StartScreen({ mode, setMode, setScreen }) {
                   <line key={p} x1="5" y1={p} x2="85" y2={p} stroke="currentColor" />
                 ))}
                 <rect x="8" y="8" width="24" height="24" fill="rgba(255,77,109,0.18)" stroke="var(--accent)" />
-                <line x1="8" y1="20" x2="32" y2="20" stroke="var(--mark-x)" strokeWidth="3" />
-                <line x1="20" y1="8" x2="20" y2="32" stroke="var(--mark-o)" strokeWidth="3" />
-                <polygon points="32,32 52,44 32,56" fill="var(--mark-o)" opacity="0.28" />
-                <line x1="32" y1="32" x2="50" y2="44" stroke="var(--mark-o)" strokeWidth="2.5" />
+                <text x="20" y="24" textAnchor="middle" fontSize="12" fontWeight="800" fill="var(--mark-x)">
+                  X
+                </text>
+                <rect x="34" y="34" width="24" height="24" fill="rgba(47,128,237,0.15)" stroke="var(--mark-o)" />
+                <text x="46" y="50" textAnchor="middle" fontSize="12" fontWeight="800" fill="var(--mark-o)">
+                  O
+                </text>
+                <line x1="32" y1="32" x2="34" y2="34" stroke="var(--accent)" strokeWidth="3" />
+                <line x1="24" y1="24" x2="34" y2="34" stroke="var(--accent)" strokeWidth="2" />
               </svg>
               <span>Your move decides which mini-board your opponent must play next.</span>
             </div>
@@ -80,9 +85,9 @@ function StartScreen({ mode, setMode, setScreen }) {
                 <text x="45" y="32" textAnchor="middle" fontSize="10" fontWeight="700" fill="var(--ink)">
                   Target full?
                 </text>
-                <rect x="28" y="44" width="34" height="16" rx="4" fill="#fff" stroke="var(--mark-o)" />
-                <text x="45" y="56" textAnchor="middle" fontSize="10" fontWeight="700" fill="var(--mark-o)">
-                  Choose any
+                <rect x="16" y="44" width="58" height="18" rx="6" fill="#fff" stroke="var(--mark-o)" />
+                <text x="45" y="57" textAnchor="middle" fontSize="11" fontWeight="800" fill="var(--mark-o)">
+                  Choose any board
                 </text>
               </svg>
               <span>If that target board is full or won, you can choose any open mini-board.</span>
@@ -109,6 +114,7 @@ function StartScreen({ mode, setMode, setScreen }) {
                   X
                 </text>
                 <line x1="10" y1="10" x2="80" y2="80" stroke="var(--mark-x)" strokeWidth="4" strokeLinecap="round" />
+                <line x1="10" y1="80" x2="80" y2="10" stroke="rgba(0,0,0,0.08)" strokeWidth="2" />
               </svg>
               <span>Win a mini-board to claim that cell on the main board. Three claimed cells wins.</span>
             </div>
