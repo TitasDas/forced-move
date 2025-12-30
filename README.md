@@ -14,6 +14,8 @@ I first learned about this variant while reading Ben Orlin’s *Math with Bad Dr
 
 [Play the game](https://example.com/demo) — (link coming soon, for now you have to run it locally :/)
 
+![Intro screen showing the “Enter the game” overlay on a chalkboard illustration](public/intro.jpg)
+
 ## How it works
 
 - Each big square is its own mini 3×3 board.
