@@ -43,7 +43,7 @@ export default function BoardClassic({
             disabled={locked}
             aria-label={`Cell ${idx + 1} ${cell ? `occupied by ${cell}` : 'empty'}`}
           >
-            {cell}
+            {cell || (pendingOrigin === idx ? state.currentPlayer : '')}
           </button>
         );
       })}
