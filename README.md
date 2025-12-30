@@ -29,3 +29,7 @@ npm run dev   # open http://localhost:5173
 ```
 
 That’s it! grab a friend or play the CPU, and enjoy the forced-move dance.
+
+## For curious builders
+
+Developer details live in `devnotes/README.md` (architecture, backend, multiplayer flow), and UI/UX choices plus future polish ideas live in `ui-ux-notes/README.md`.
