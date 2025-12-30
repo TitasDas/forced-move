@@ -144,8 +144,12 @@ export default function App() {
       <div className="shell">
         <div className="sound-corner">
           <AudioToggle src="/audio/lofi.mp3" />
-          <button className="btn secondary" onClick={() => setPaletteAlt((v) => !v)}>
-            Palette: {paletteAlt ? 'Cool' : 'Warm'}
+          <button
+            className="btn secondary palette-toggle"
+            onClick={() => setPaletteAlt((v) => !v)}
+            aria-label="Toggle color palette"
+          >
+            {paletteAlt ? '🎨' : '◐'}
           </button>
         </div>
         {screen === 'menu' && <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} />}
