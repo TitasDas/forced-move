@@ -122,6 +122,8 @@
 
 .start-card {
   background: linear-gradient(135deg, rgba(255, 77, 109, 0.16), rgba(47, 128, 237, 0.16));
+  display: grid;
+  gap: 0.75rem;
 }
 
 .mode-grid {
