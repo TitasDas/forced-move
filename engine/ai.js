@@ -103,6 +103,15 @@ export function chooseMove(state, difficulty = 3) {
   if (!moves.length) return null;
   if (difficulty === 1) return randomChoice(moves);
 
+  if (state.mode === 'adjacent') {
+    // Treat like classic heuristics but return a raw position; caller will wrap with allowed adjacents.
+    let move = heuristicClassic(state);
+    if (move === null || move === undefined) {
+      move = randomChoice(moves);
+    }
+    return move;
+  }
+
   if (state.mode === 'classic') {
     if (difficulty === 2) {
       return heuristicClassic(state);
