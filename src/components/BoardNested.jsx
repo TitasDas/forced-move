@@ -14,10 +14,15 @@ function MiniBoard({ board, boardIndex, state, onMove }) {
     state.nextBoardConstraint === boardIndex;
   const closed = board.winner || board.isFull;
   const label = `Mini board ${boardIndex + 1}`;
+  const owner = board.winner;
 
   return (
-    <div className="mini-board" aria-label={label} role="grid">
-      {board.winner && <span className="badge">{board.winner} won</span>}
+    <div
+      className={`mini-board ${owner ? `mini-owned mark-${owner.toLowerCase()}` : ''}`}
+      aria-label={label}
+      role="grid"
+    >
+      {owner && <span className="badge">{owner} won</span>}
       {board.isFull && !board.winner && <span className="badge">draw</span>}
       {board.cells.map((cell, cellIndex) => {
         const locked =
@@ -38,6 +43,7 @@ function MiniBoard({ board, boardIndex, state, onMove }) {
           </button>
         );
       })}
+      {owner && <div className="mini-overlay">{owner}</div>}
     </div>
   );
 }

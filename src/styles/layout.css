@@ -132,6 +132,22 @@
   font-size: 0.75rem;
 }
 
+.mini-board.mini-owned {
+  background: linear-gradient(160deg, rgba(255, 77, 109, 0.16), rgba(47, 128, 237, 0.14));
+  box-shadow: 0 8px 22px var(--glow);
+}
+
+.mini-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: rgba(14, 18, 36, 0.12);
+  pointer-events: none;
+}
+
 .status {
   display: flex;
   justify-content: space-between;
