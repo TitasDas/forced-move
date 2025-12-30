@@ -135,14 +135,18 @@ function StartScreen({ mode, setMode, setScreen }) {
 
 export default function App() {
   const [contrast, setContrast] = useState(false);
+  const [paletteAlt, setPaletteAlt] = useState(false);
   const [screen, setScreen] = useState('menu');
   const [mode, setMode] = useState('nested');
 
   return (
-    <div className={`app ${contrast ? 'high-contrast' : ''}`}>
+    <div className={`app ${contrast ? 'high-contrast' : ''} ${paletteAlt ? 'palette-alt' : ''}`}>
       <div className="shell">
         <div className="sound-corner">
           <AudioToggle src="/audio/lofi.mp3" />
+          <button className="btn secondary" onClick={() => setPaletteAlt((v) => !v)}>
+            Palette: {paletteAlt ? 'Cool' : 'Warm'}
+          </button>
         </div>
         {screen === 'menu' && <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} />}
 

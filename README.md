@@ -12,7 +12,7 @@ I first learned about this variant while reading Ben Orlin’s *Math with Bad Dr
 - With a friend: create a game, share the invite link, and play in real time.
 - Accessible controls: keyboard-friendly, high-contrast toggle, clear board labels.
 
-[Play the game](https://example.com/demo) — (link coming soon)
+[Play the game](https://example.com/demo) — (link coming soon, for now you have to run it locally :/)
 
 ## How it works
 
