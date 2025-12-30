@@ -23,13 +23,12 @@ I first learned about this variant while reading Ben Orlin’s *Math with Bad Dr
 
 ### Adjacent Lock (classic remix)
 
-- Play on the classic 3×3 board.
+- Play on the classic 3×3 board, but with constraints.
 - On your turn, place your mark **and** specify up to two adjacent squares where your opponent must play next.
 - If one of those squares is occupied, your opponent is forced into the other; if both are open, they are free to pick any. 
 
 ### Naming
 
-- Classic — free placement.
 - Adjacent Lock — choose your spot and two neighbors to steer your opponent.
 - Ultimate — constrained mini-boards that roll up to a main-board win.
 

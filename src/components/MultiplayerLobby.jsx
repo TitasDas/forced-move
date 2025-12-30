@@ -5,7 +5,7 @@ import { useWebSocketGame } from '../hooks/useWebSocketGame.js';
 import WinnerOverlay from './WinnerOverlay.jsx';
 
 export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
-  const [mode, setMode] = useState(initialMode);
+  const [mode, setMode] = useState(initialMode === 'classic' ? 'adjacent' : initialMode);
   const [gameId, setGameId] = useState('');
   const [token, setToken] = useState('');
   const [inviteToken, setInviteToken] = useState('');
@@ -76,7 +76,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
         <button className="btn secondary" onClick={onBack}>
           ← Back
         </button>
-        <div className="tag">Board: {mode === 'classic' ? 'Classic' : 'Ultimate Tic-Tac-Toe'}</div>
+        <div className="tag">Board: {mode === 'adjacent' ? 'Adjacent Lock' : 'Ultimate Tic-Tac-Toe'}</div>
       </div>
       <div className="status">
         <div>
@@ -90,8 +90,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
             className="btn secondary"
             aria-label="Mode"
           >
-            <option value="classic">Classic</option>
-            <option value="adjacent">Adjacent Constraint</option>
+            <option value="adjacent">Adjacent Lock</option>
             <option value="nested">Ultimate Tic-Tac-Toe</option>
           </select>
           <button className="btn" onClick={createGame}>

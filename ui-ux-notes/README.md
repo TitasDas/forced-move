@@ -5,7 +5,7 @@
 - **Accessibility**: Keyboard-focusable buttons for cells; screen-reader labels per cell/board; high-contrast toggle; readable fonts.
 - **Audio**: Corner sound toggle (On/Off) controls looping `/audio/lofi.mp3`.
 - **Layouts**: Mobile-first stacking; two-column on wide screens; board widths capped to avoid overlap; winner overlays centered with confetti.
-- **Onboarding**: Intro screen with chalkboard art, board/mode selection; rule cards show mini-board visuals with X/O; CTA buttons styled as pills. New Adjacent Constraint badge added in status.
+- **Onboarding**: Intro screen with chalkboard art, board/mode selection; rule cards show mini-board visuals with X/O; CTA buttons styled as pills. Adjacent Lock badge added in status.
 
 ## Future polish
 

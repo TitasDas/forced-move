@@ -5,7 +5,7 @@ import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import WinnerOverlay from './WinnerOverlay.jsx';
 
-export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
+export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
   const [mode, setMode] = useState(initialMode);
   const [difficulty, setDifficulty] = useState(3);
   const [state, setState] = useState(() => createGame(initialMode));
@@ -104,12 +104,7 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
           ← Back
         </button>
           <div className="tag">
-            Board:{' '}
-            {mode === 'classic'
-              ? 'Classic'
-              : mode === 'adjacent'
-                ? 'Adjacent Constraint'
-                : 'Ultimate Tic-Tac-Toe'}
+            Board: {mode === 'adjacent' ? 'Adjacent Lock' : 'Ultimate Tic-Tac-Toe'}
           </div>
       </div>
       <div className="status">
@@ -117,7 +112,7 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
           <div className="card-title">Solo mode</div>
           <div className="control-row">
             <span>{statusText}</span>
-            {mode === 'adjacent' && <span className="tag">Adjacent Constraint</span>}
+            {mode === 'adjacent' && <span className="tag">Adjacent Lock</span>}
             {aiThinking && (
               <span className="thinker" aria-live="polite">
                 <span className="sigil">∑</span>
