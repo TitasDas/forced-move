@@ -1,6 +1,7 @@
 import { applyMove, getAvailableMoves } from './index.js';
 import { GAME_STATUS, PLAYER_O, PLAYER_X } from './state.js';
 import { checkClassicWinner, WIN_LINES } from './classic.js';
+import { getAdjacentCells } from './adjacent.js';
 
 export const DIFFICULTY_LEVELS = [1, 2, 3, 4, 5];
 
@@ -130,4 +131,9 @@ export function chooseMove(state, difficulty = 3) {
     return best ?? randomChoice(moves);
   }
   return randomChoice(moves);
+}
+
+export function buildAdjacentMove(state, position) {
+  const adj = getAdjacentCells(position).filter((idx) => state.board[idx] === null);
+  return { position, allowed: adj.slice(0, 2) };
 }

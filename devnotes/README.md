@@ -5,9 +5,10 @@ For maintainers and contributors. Player-facing info lives in the root README.
 ## Architecture
 
 - Frontend: React (Vite), mobile-first retro theme. Audio toggle, accessibility (labels, focus, high-contrast).
-- Game engine: `engine/` pure logic (classic + ultimate rules, state versioning, deterministic applyMove, AI ladder).
+- Game engine: `engine/` pure logic (classic + ultimate rules + adjacent-constraint remix), state versioning, deterministic applyMove, AI ladder.
 - Backend: `server/index.js` (Express + `ws`). Authoritative validation, invite tokens, lightweight rate limiting. In-memory store (add Redis/DB for production).
 - Multiplayer: WebSocket path `/ws` with `gameId` + `token`. Moves validated server-side; state broadcast to both players.
+- Adjacent constraint mode: move includes `{ position, allowed[] }` with up to two adjacent cells to constrain the opponent. Server enforces constraints; if both are blocked, opponent falls back to any open cell.
 
 ## Scripts
 

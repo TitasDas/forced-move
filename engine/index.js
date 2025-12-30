@@ -1,21 +1,31 @@
 import { applyClassicMove, getAvailableMovesClassic } from './classic.js';
 import { applyNestedMove, getAvailableMovesNested } from './nested.js';
-import { createClassicGame, createNestedGame, GAME_STATUS } from './state.js';
+import { applyAdjacentMove, getAvailableMovesAdjacent } from './adjacent.js';
+import { createClassicGame, createAdjacentGame, createNestedGame, GAME_STATUS } from './state.js';
 
 export {
   createClassicGame,
   createNestedGame,
+  createAdjacentGame,
   GAME_STATUS,
 } from './state.js';
 
 export function createGame(mode = 'classic') {
-  return mode === 'nested' ? createNestedGame() : createClassicGame();
+  if (mode === 'nested') return createNestedGame();
+  if (mode === 'adjacent') return createAdjacentGame();
+  return createClassicGame();
 }
 
 export function applyMove(state, move) {
   if (state.mode === 'classic') {
     if (typeof move !== 'number') throw new Error('Classic move expects a number');
     return applyClassicMove(state, move);
+  }
+  if (state.mode === 'adjacent') {
+    if (!move || typeof move.position !== 'number') {
+      throw new Error('Adjacent move expects { position, allowed[] }');
+    }
+    return applyAdjacentMove(state, move);
   }
   if (state.mode === 'nested') {
     if (!move || typeof move.boardIndex !== 'number' || typeof move.cellIndex !== 'number') {
@@ -30,10 +40,13 @@ export function getAvailableMoves(state) {
   if (state.mode === 'classic') {
     return getAvailableMovesClassic(state);
   }
+  if (state.mode === 'adjacent') {
+    return getAvailableMovesAdjacent(state);
+  }
   if (state.mode === 'nested') {
     return getAvailableMovesNested(state);
   }
   return [];
 }
 
-export { getAvailableMovesClassic, getAvailableMovesNested };
+export { getAvailableMovesClassic, getAvailableMovesNested, getAvailableMovesAdjacent };

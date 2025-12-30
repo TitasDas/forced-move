@@ -91,6 +91,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
             aria-label="Mode"
           >
             <option value="classic">Classic</option>
+            <option value="adjacent">Adjacent Constraint</option>
             <option value="nested">Ultimate Tic-Tac-Toe</option>
           </select>
           <button className="btn" onClick={createGame}>
