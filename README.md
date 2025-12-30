@@ -5,7 +5,7 @@ Forced Move is a take on Tic-Tac-Toe where the rules constrain what comes next. 
 
 ## A quick story
 
-I first learned about this family of games while reading Ben Orlin’s *Math with Bad Drawings*, where he mentions mathematicians in Berkeley getting hooked on an “ultimate” Tic-Tac-Toe played across nested boards. Forced Move is my homage to that tale: a calm, mobile-friendly way to play the same idea with friends or the computer. 
+I first learned about this family of games while reading Ben Orlin’s *Math with Bad Drawings*, where he mentions mathematicians in Berkeley getting hooked on an “ultimate” Tic-Tac-Toe played across nested boards. Forced Move is my homage to that tale: a calm, mobile-friendly way to play the same idea with friends or the computer. ***What's fascinating about this is how simple rules quietly force deep strategy.*** 
 
 ## Play it
 
