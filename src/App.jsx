@@ -148,6 +148,7 @@ export default function App() {
             className="btn secondary palette-toggle"
             onClick={() => setPaletteAlt((v) => !v)}
             aria-label="Toggle color palette"
+            title="Switch color palette"
           >
             {paletteAlt ? '🎨' : '◐'}
           </button>
