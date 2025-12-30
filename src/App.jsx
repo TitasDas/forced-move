@@ -41,7 +41,7 @@ function StartScreen({ mode, setMode, setScreen }) {
         </div>
         <div className="panel start-card">
           <div className="card-title">Pick how you play</div>
-          <div className="control-row">
+          <div className="control-row pill-row">
             <button className="btn" onClick={() => setScreen('solo')}>
               Start solo vs CPU
             </button>

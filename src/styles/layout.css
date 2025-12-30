@@ -37,6 +37,10 @@
   align-items: center;
 }
 
+.pill-row {
+  gap: 0.75rem;
+}
+
 .play-panel {
   max-width: 1100px;
   margin: 0 auto;
