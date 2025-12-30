@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import { useWebSocketGame } from '../hooks/useWebSocketGame.js';
+import WinnerOverlay from './WinnerOverlay.jsx';
 
 export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const [mode, setMode] = useState(initialMode);
@@ -59,14 +60,23 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   };
 
   const handleMove = (move) => sendMove(move);
+  const showWin = state && state.winner && state.status !== 'draw' && state.status !== 'in_progress';
 
   return (
     <div className="panel grid play-panel" aria-label="multiplayer lobby">
+      {showWin && (
+        <WinnerOverlay
+          message={`Congratulations! ${state.winner} wins.`}
+          subText="Share the link for a rematch."
+          onAction={() => setLink(shareUrl)}
+          actionLabel="Rematch / share link"
+        />
+      )}
       <div className="control-row topbar">
         <button className="btn secondary" onClick={onBack}>
           ← Back
         </button>
-        <div className="tag">Board: {mode === 'classic' ? 'Classic' : 'Nested'}</div>
+        <div className="tag">Board: {mode === 'classic' ? 'Classic' : 'Ultimate Tic-Tac-Toe'}</div>
       </div>
       <div className="status">
         <div>
@@ -90,6 +100,15 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
       </div>
 
       <div className="grid two">
+        <div className="panel game-panel">
+          <div className="card-title">Game</div>
+          {!state && <p>Waiting for connection… create or join to start.</p>}
+          {state && (
+            <div className={`board-wrap ${state.mode === 'nested' ? 'nested' : ''}`}>
+              <Board state={state} onMove={handleMove} />
+            </div>
+          )}
+        </div>
         <div className="panel">
           <div className="card-title">Invite & join</div>
           <div className="list">
@@ -122,15 +141,6 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
             {role && <div className="mono">You are: {role}</div>}
             {status && <div className="mono">Status: {status}</div>}
           </div>
-        </div>
-        <div className="panel">
-          <div className="card-title">Game</div>
-          {!state && <p>Waiting for connection… create or join to start.</p>}
-          {state && (
-            <div className={`board-wrap ${state.mode === 'nested' ? 'nested' : ''}`}>
-              <Board state={state} onMove={handleMove} />
-            </div>
-          )}
         </div>
       </div>
     </div>

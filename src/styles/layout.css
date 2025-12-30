@@ -55,6 +55,11 @@
   width: min(95vw, 640px);
 }
 
+.game-panel {
+  display: grid;
+  grid-auto-rows: auto 1fr;
+}
+
 .board {
   display: grid;
   gap: 6px;

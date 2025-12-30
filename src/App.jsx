@@ -132,7 +132,7 @@ export default function App() {
     <div className={`app ${contrast ? 'high-contrast' : ''}`}>
       <div className="shell">
         <div className="sound-corner">
-          <AudioToggle src="/audio/lofi.mp3" label="Lofi loop" />
+          <AudioToggle src="/audio/lofi.mp3" />
         </div>
         {screen === 'menu' && <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} />}
 

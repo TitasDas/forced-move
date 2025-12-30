@@ -3,6 +3,7 @@ import { applyMove, createGame, GAME_STATUS } from '../../engine/index.js';
 import { chooseMove, DIFFICULTY_LEVELS } from '../../engine/ai.js';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
+import WinnerOverlay from './WinnerOverlay.jsx';
 
 export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
   const [mode, setMode] = useState(initialMode);
@@ -61,11 +62,19 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
 
   return (
     <div className="panel grid play-panel" aria-label="single player game">
+      {state.status !== GAME_STATUS.IN_PROGRESS && state.status !== GAME_STATUS.DRAW && (
+        <WinnerOverlay
+          message={state.winner === 'X' ? 'Hurray! You won.' : 'Computer takes it this time.'}
+          subText={state.winner === 'X' ? 'Nice line-up. Play again?' : 'Try another round or bump the difficulty.'}
+          onAction={reset}
+          actionLabel="Play again"
+        />
+      )}
       <div className="control-row topbar">
         <button className="btn secondary" onClick={onBack}>
           ← Back
         </button>
-          <div className="tag">Board: {mode === 'classic' ? 'Classic' : 'Ultimate Tic-Tac-Toe'}</div>
+        <div className="tag">Board: {mode === 'classic' ? 'Classic' : 'Ultimate Tic-Tac-Toe'}</div>
       </div>
       <div className="status">
         <div>
