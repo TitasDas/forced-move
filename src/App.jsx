@@ -176,8 +176,6 @@ export default function App() {
         >
           <div className="intro-overlay panel">
             <h1>Forced Move</h1>
-            <p>Ultimate: your move sends them to the next mini-board.</p>
-            <p>Adjacent Lock: pick up to two neighbors for their reply.</p>
             <button className="btn" onClick={() => setIntro(false)}>
               Enter the game
             </button>
