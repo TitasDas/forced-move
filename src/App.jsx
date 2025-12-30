@@ -173,7 +173,8 @@ export default function App() {
           <div className="intro-overlay panel">
             <div className="tag ghost">A game of structure, not speed.</div>
             <h1>Forced Move</h1>
-            <p>Win the small boards to claim the big board.</p>
+            <p>Ultimate: your move sends them to the next mini-board.</p>
+            <p>Adjacent: pick up to two neighboring squares for their reply.</p>
             <button className="btn" onClick={() => setIntro(false)}>
               Enter the game
             </button>
