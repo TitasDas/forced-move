@@ -65,18 +65,25 @@ function StartScreen({ mode, setMode, setScreen }) {
                 {[30, 60].map((p) => (
                   <line key={p} x1="5" y1={p} x2="85" y2={p} stroke="currentColor" />
                 ))}
-                <circle cx="25" cy="25" r="6" fill="var(--accent)" />
-                <rect x="55" y="55" width="12" height="12" fill="var(--retro-blue)" />
-                <line x1="25" y1="25" x2="60" y2="60" stroke="var(--accent)" strokeWidth="3" />
+                <rect x="8" y="8" width="24" height="24" fill="rgba(255,77,109,0.15)" stroke="var(--accent)" />
+                <line x1="16" y1="8" x2="16" y2="32" stroke="currentColor" strokeWidth="0.8" />
+                <line x1="24" y1="8" x2="24" y2="32" stroke="currentColor" strokeWidth="0.8" />
+                <line x1="8" y1="16" x2="32" y2="16" stroke="currentColor" strokeWidth="0.8" />
+                <line x1="8" y1="24" x2="32" y2="24" stroke="currentColor" strokeWidth="0.8" />
+                <text x="14" y="23" fontSize="10" fontWeight="700" fill="var(--mark-x)">X</text>
+                <text x="24" y="29" fontSize="10" fontWeight="700" fill="var(--mark-o)">O</text>
               </svg>
               <span>Your move decides which mini-board your opponent must play next.</span>
             </div>
             <div className="rule-line">
               <svg width="90" height="90" viewBox="0 0 90 90">
                 <rect x="5" y="5" width="80" height="80" fill="none" stroke="currentColor" />
-                <rect x="5" y="5" width="80" height="80" fill="rgba(30,195,139,0.08)" />
-                <text x="45" y="52" textAnchor="middle" fontSize="20" fill="currentColor">
-                  ?
+                <rect x="5" y="5" width="80" height="80" fill="rgba(47,128,237,0.08)" />
+                <text x="45" y="34" textAnchor="middle" fontSize="11" fontWeight="700" fill="var(--ink)">
+                  Target full?
+                </text>
+                <text x="45" y="54" textAnchor="middle" fontSize="11" fontWeight="700" fill="var(--mark-o)">
+                  Choose any
                 </text>
               </svg>
               <span>If that target board is full or won, you can choose any open mini-board.</span>
@@ -90,17 +97,19 @@ function StartScreen({ mode, setMode, setScreen }) {
                 {[30, 60].map((p) => (
                   <line key={p} x1="5" y1={p} x2="85" y2={p} stroke="currentColor" />
                 ))}
-                {[12, 42, 72].map((p, i) => (
-                  <line
-                    key={p}
-                    x1="5"
-                    y1={p}
-                    x2="85"
-                    y2={p}
-                    stroke={i === 1 ? 'var(--accent)' : 'transparent'}
-                    strokeWidth="4"
-                  />
-                ))}
+                <rect x="6" y="6" width="24" height="24" fill="rgba(255,77,109,0.15)" />
+                <text x="18" y="24" textAnchor="middle" fontSize="14" fontWeight="800" fill="var(--mark-x)">
+                  X
+                </text>
+                <rect x="34" y="34" width="24" height="24" fill="rgba(47,128,237,0.15)" />
+                <text x="46" y="52" textAnchor="middle" fontSize="14" fontWeight="800" fill="var(--mark-o)">
+                  O
+                </text>
+                <rect x="62" y="62" width="24" height="24" fill="rgba(255,77,109,0.15)" />
+                <text x="74" y="80" textAnchor="middle" fontSize="14" fontWeight="800" fill="var(--mark-x)">
+                  X
+                </text>
+                <line x1="6" y1="6" x2="86" y2="86" stroke="var(--accent)" strokeWidth="4" strokeLinecap="round" />
               </svg>
               <span>Win a mini-board to claim that cell on the main board. Three claimed cells wins.</span>
             </div>
