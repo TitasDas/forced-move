@@ -40,12 +40,13 @@
   background: rgba(20, 22, 30, 0.72);
   color: #fefefe;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.65rem;
   max-width: min(520px, 90vw);
   padding: 1.5rem 1.75rem;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.48);
+  align-items: center;
 }
 
 .hero-visual {
