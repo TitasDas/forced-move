@@ -3,6 +3,10 @@ import { GAME_STATUS } from '../../engine/index.js';
 
 export default function BoardClassic({ state, onMove }) {
   const { board, winLine } = state;
+  const constrained =
+    state.mode === 'adjacent' && state.constraintTargets && state.constraintTargets.length
+      ? state.constraintTargets.filter((idx) => state.board[idx] === null)
+      : null;
   return (
     <div
       className="board classic-board"
@@ -12,7 +16,10 @@ export default function BoardClassic({ state, onMove }) {
     >
       {board.map((cell, idx) => {
         const locked =
-          cell !== null || state.status !== GAME_STATUS.IN_PROGRESS || state.currentPlayer === null;
+          cell !== null ||
+          state.status !== GAME_STATUS.IN_PROGRESS ||
+          state.currentPlayer === null ||
+          (constrained && !constrained.includes(idx));
         const isWin = winLine?.includes(idx);
         return (
           <button

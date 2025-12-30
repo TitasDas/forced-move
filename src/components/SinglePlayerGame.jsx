@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { applyMove, createGame, GAME_STATUS } from '../../engine/index.js';
-import { chooseMove, DIFFICULTY_LEVELS } from '../../engine/ai.js';
+import { chooseMove, DIFFICULTY_LEVELS, buildAdjacentMove } from '../../engine/ai.js';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import WinnerOverlay from './WinnerOverlay.jsx';
@@ -50,7 +50,11 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
       if (current.status !== GAME_STATUS.IN_PROGRESS || current.currentPlayer !== 'X') {
         return current;
       }
-      const afterHuman = applyMove(current, move);
+      const humanMove =
+        mode === 'adjacent' && typeof move === 'number'
+          ? buildAdjacentMove(current, move)
+          : move;
+      const afterHuman = applyMove(current, humanMove);
       if (afterHuman.status !== GAME_STATUS.IN_PROGRESS) {
         setAiThinking(false);
         return afterHuman;
@@ -63,7 +67,10 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
             setAiThinking(false);
             return latest;
           }
-          const aiMove = chooseMove(latest, difficulty);
+          let aiMove = chooseMove(latest, difficulty);
+          if (aiMove !== null && latest.mode === 'adjacent' && typeof aiMove === 'number') {
+            aiMove = buildAdjacentMove(latest, aiMove);
+          }
           const afterAi = aiMove !== null ? applyMove(latest, aiMove) : latest;
           setAiThinking(false);
           return afterAi;
@@ -96,13 +103,21 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
         <button className="btn secondary" onClick={onBack}>
           ← Back
         </button>
-        <div className="tag">Board: {mode === 'classic' ? 'Classic' : 'Ultimate Tic-Tac-Toe'}</div>
+          <div className="tag">
+            Board:{' '}
+            {mode === 'classic'
+              ? 'Classic'
+              : mode === 'adjacent'
+                ? 'Adjacent Constraint'
+                : 'Ultimate Tic-Tac-Toe'}
+          </div>
       </div>
       <div className="status">
         <div>
           <div className="card-title">Solo mode</div>
           <div className="control-row">
             <span>{statusText}</span>
+            {mode === 'adjacent' && <span className="tag">Adjacent Constraint</span>}
             {aiThinking && (
               <span className="thinker" aria-live="polite">
                 <span className="sigil">∑</span>

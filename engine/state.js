@@ -22,6 +22,20 @@ export function createClassicGame() {
   };
 }
 
+export function createAdjacentGame() {
+  return {
+    version: GAME_VERSION,
+    mode: 'adjacent',
+    board: Array(9).fill(null),
+    currentPlayer: PLAYER_X,
+    status: GAME_STATUS.IN_PROGRESS,
+    winner: null,
+    lastMove: null,
+    history: [],
+    constraintTargets: [],
+  };
+}
+
 export function createNestedGame() {
   return {
     version: GAME_VERSION,
