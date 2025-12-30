@@ -7,8 +7,13 @@ export default function AccessibilityBar({ contrast, onToggleContrast }) {
         <span aria-hidden="true">♿</span>
         Accessible play
       </div>
-      <button className="btn secondary" onClick={onToggleContrast} aria-pressed={contrast}>
-        {contrast ? 'Disable high contrast' : 'Enable high contrast'}
+      <button
+        className="btn secondary"
+        onClick={onToggleContrast}
+        aria-pressed={contrast}
+        aria-label="Toggle light or dark mode"
+      >
+        {contrast ? 'Switch to light' : 'Switch to dark'}
       </button>
     </div>
   );
