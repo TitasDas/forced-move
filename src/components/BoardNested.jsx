@@ -31,15 +31,21 @@ function MiniBoard({ board, boardIndex, state, onMove }) {
           state.status !== GAME_STATUS.IN_PROGRESS ||
           !isConstrained;
         const isWin = board.line?.includes(cellIndex);
+        const isClaimedCenter =
+          owner && boardIndex === cellIndex; // highlight the winning cell that maps to main board
         return (
           <button
             key={cellIndex}
-            className={`cell ${cell ? `mark-${cell.toLowerCase()}` : ''} ${locked ? 'locked' : ''} ${isWin ? 'win' : ''}`}
+            className={`cell ${cell ? `mark-${cell.toLowerCase()}` : ''} ${locked ? 'locked' : ''} ${isWin ? 'win' : ''} ${isClaimedCenter ? 'claimed-mark' : ''}`}
             onClick={() => !locked && onMove({ boardIndex, cellIndex })}
             disabled={locked}
             aria-label={`${label} cell ${cellIndex + 1} ${cell ? `occupied by ${cell}` : 'empty'}`}
           >
-            {cell}
+            {isClaimedCenter && owner ? (
+              <span className="claimed-symbol">{owner}</span>
+            ) : (
+              cell
+            )}
           </button>
         );
       })}
