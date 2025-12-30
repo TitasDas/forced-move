@@ -167,6 +167,9 @@
   top: 1rem;
   left: 1rem;
   z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .sound-corner .btn {
@@ -195,6 +198,24 @@
   justify-content: flex-end;
   margin-top: 1rem;
   color: var(--muted);
+}
+
+.palette-alt {
+  --bg: #f1f4ff;
+  --panel: #fdfcff;
+  --accent: #7c5cff;
+  --accent-strong: #4ac7ff;
+  --ink: #0e1330;
+  --muted: #3d4868;
+  --grid: rgba(14, 19, 48, 0.08);
+  --glow: rgba(124, 92, 255, 0.24);
+  --shadow: 0 14px 32px rgba(10, 12, 30, 0.2);
+  --focus: 0 0 0 3px rgba(124, 92, 255, 0.5);
+  --retro-green: #38e0b8;
+  --retro-blue: #1f8af0;
+  --retro-purple: #a46cff;
+  --mark-x: #7c5cff;
+  --mark-o: #1f8af0;
 }
 
 .winner-overlay {
