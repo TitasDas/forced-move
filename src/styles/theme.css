@@ -96,14 +96,14 @@
   --ink: #f5f5f5;
   --muted: #c8c8c8;
   --grid: rgba(245, 245, 245, 0.12);
-  --glow: rgba(124, 92, 255, 0.28);
-  --accent: #7c5cff;
-  --accent-strong: #5bbaf2;
-  --mark-x: #f26d8d;
-  --mark-o: #5bbaf2;
-  background: radial-gradient(circle at 20% 20%, rgba(92, 83, 192, 0.2), transparent 32%),
-    radial-gradient(circle at 80% 10%, rgba(91, 186, 242, 0.22), transparent 28%),
-    linear-gradient(135deg, #0d0d0f, #171821);
+  --glow: rgba(86, 169, 255, 0.3);
+  --accent: #82aaff;
+  --accent-strong: #58c4ff;
+  --mark-x: #ff89b5;
+  --mark-o: #58c4ff;
+  background: radial-gradient(circle at 18% 18%, rgba(88, 196, 255, 0.24), transparent 30%),
+    radial-gradient(circle at 78% 12%, rgba(130, 170, 255, 0.24), transparent 28%),
+    linear-gradient(135deg, #0c1018, #111624);
 }
 
 .high-contrast .panel {
