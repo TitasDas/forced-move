@@ -1,4 +1,5 @@
 # Forced Move
+![Intro screen showing the “Enter the game” overlay on a chalkboard illustration](public/intro.jpg)
 
 A warm, retro take on Ultimate Tic-Tac-Toe (a “forced move” twist). You place an X or O on a mini-board, and that square tells your opponent which mini-board they must play in next. Win mini-boards to claim big-board squares; three in a row takes the match.
 
@@ -14,7 +15,7 @@ I first learned about this variant while reading Ben Orlin’s *Math with Bad Dr
 
 [Play the game](https://example.com/demo) — (link coming soon, for now you have to run it locally :/)
 
-![Intro screen showing the “Enter the game” overlay on a chalkboard illustration](public/intro.jpg)
+
 
 ## How it works
 

@@ -104,23 +104,16 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     }
     const adj = getAdjacentCells(pending.origin).filter((c) => state.board[c] === null);
     if (!adj.includes(idx)) return;
-    const already = pending.allowed.includes(idx);
-    const nextAllowed = already
-      ? pending.allowed.filter((c) => c !== idx)
-      : pending.allowed.length >= 2
-        ? [...pending.allowed.slice(1), idx]
-        : [...pending.allowed, idx];
-    setPending({ origin: pending.origin, allowed: nextAllowed });
+    if (pending.allowed.includes(idx)) return;
+    const nextAllowed = [...pending.allowed, idx].slice(0, 2);
+    const shouldCommit = nextAllowed.length >= 2 || nextAllowed.length === adj.length;
+    if (shouldCommit) {
+      commitMove({ position: pending.origin, allowed: nextAllowed });
+      setPending(null);
+    } else {
+      setPending({ origin: pending.origin, allowed: nextAllowed });
+    }
   };
-
-  const confirmAdjacent = () => {
-    if (!pending || pending.origin === null) return;
-    const adj = getAdjacentCells(pending.origin).filter((c) => state.board[c] === null);
-    const allowed = pending.allowed.length ? pending.allowed : adj.slice(0, 2);
-    commitMove({ position: pending.origin, allowed });
-  };
-
-  const cancelPending = () => setPending(null);
 
   const replay = (index) => {
     // Rebuild the game up to the desired history index.
