@@ -16,8 +16,18 @@ const MODES = [
 
 function StartScreen({ mode, setMode, setScreen }) {
   const activeMode = MODES.find((m) => m.id === mode);
+  const heroStyle = {
+    backgroundImage: "url('/intro.jpg')",
+  };
   return (
     <header className="hero panel intro">
+      <div className="hero-visual" style={heroStyle} role="img" aria-label="Forced Move chalkboard illustration">
+        <div className="hero-overlay">
+          <div className="tag ghost">A game of structure, not speed.</div>
+          <h1>Forced Move</h1>
+          <p>Win the small boards to claim the big board.</p>
+        </div>
+      </div>
       <h1>Choose your board, then hit start.</h1>
       <p>
         Retro-tinted Tic-Tac-Toe with a twist. Pick your board style, go solo against the CPU, or
