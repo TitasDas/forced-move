@@ -13,16 +13,12 @@ I first learned about this variant while reading Ben Orlin’s *Math with Bad Dr
 - With a friend: create a game, share the invite link, and play in real time.
 - Accessible controls: keyboard-friendly, high-contrast toggle, clear board labels.
 
-[Play the game](https://example.com/demo) — (link coming soon, for now you have to run it locally :/)
+[Play the game](https://example.com/demo) (link coming soon, for now you have to run it locally :/)
 
 
 
 ## How it works
 
-- Each big square is its own mini 3×3 board.
-- Your move sends your opponent to the matching mini-board.
-- If that target board is full or already won, the opponent may choose any open mini-board.
-- Win a mini-board to claim its big square; three big squares in a row wins.
 
 ### Adjacent Lock (classic remix)
 
@@ -30,10 +26,11 @@ I first learned about this variant while reading Ben Orlin’s *Math with Bad Dr
 - On your turn, place your mark **and** specify up to two adjacent squares where your opponent must play next.
 - If one of those squares is occupied, your opponent is forced into the other; if both are open, they are free to pick any. 
 
-### Naming
-
-- Adjacent Lock — choose your spot and two neighbors to steer your opponent.
-- Ultimate — constrained mini-boards that roll up to a main-board win.
+### Ultimate
+- Each big square is its own mini 3×3 board.
+- Your move sends your opponent to the matching mini-board.
+- If that target board is full or already won, the opponent may choose any open mini-board.
+- Win a mini-board to claim its big square; three big squares in a row wins.
 
 ## Want to run it locally?
 
