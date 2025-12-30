@@ -10,10 +10,10 @@ export {
   GAME_STATUS,
 } from './state.js';
 
-export function createGame(mode = 'classic') {
+export function createGame(mode = 'adjacent') {
   if (mode === 'nested') return createNestedGame();
-  if (mode === 'adjacent') return createAdjacentGame();
-  return createClassicGame();
+  if (mode === 'adjacent' || mode === 'classic') return createAdjacentGame();
+  return createAdjacentGame();
 }
 
 export function applyMove(state, move) {
