@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AccessibilityBar from './components/AccessibilityBar.jsx';
 import SinglePlayerGame from './components/SinglePlayerGame.jsx';
 import MultiplayerLobby from './components/MultiplayerLobby.jsx';
+import AudioToggle from './components/AudioToggle.jsx';
 import { GAME_VERSION } from '../engine/state.js';
 
 const MODES = [
@@ -130,6 +131,9 @@ export default function App() {
   return (
     <div className={`app ${contrast ? 'high-contrast' : ''}`}>
       <div className="shell">
+        <div className="sound-corner">
+          <AudioToggle src="/audio/lofi.mp3" label="Lofi loop" />
+        </div>
         {screen === 'menu' && <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} />}
 
         <AccessibilityBar

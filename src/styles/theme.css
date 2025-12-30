@@ -158,6 +158,18 @@
   font-size: 0.95rem;
 }
 
+.sound-corner {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 20;
+}
+
+.sound-corner .btn {
+  padding: 0.55rem 0.8rem;
+  box-shadow: none;
+}
+
 .rule-row .panel {
   background: rgba(255, 255, 255, 0.9);
 }
