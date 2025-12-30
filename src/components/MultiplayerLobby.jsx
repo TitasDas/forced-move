@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import { useWebSocketGame } from '../hooks/useWebSocketGame.js';
 import WinnerOverlay from './WinnerOverlay.jsx';
+import { getAdjacentCells } from '../../engine/adjacent.js';
 
 export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const [mode, setMode] = useState(initialMode === 'classic' ? 'adjacent' : initialMode);
@@ -11,6 +12,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const [inviteToken, setInviteToken] = useState('');
   const [link, setLink] = useState('');
   const [error, setError] = useState('');
+  const [pending, setPending] = useState(null); // { origin, allowed[] }
 
   const { state, role, status, sendMove } = useWebSocketGame(gameId, token);
   const Board = state?.mode === 'nested' ? BoardNested : BoardClassic;
@@ -62,6 +64,44 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const handleMove = (move) => sendMove(move);
   const showWin = state && state.winner && state.status !== 'draw' && state.status !== 'in_progress';
 
+  useEffect(() => {
+    setPending(null);
+  }, [mode, state?.currentPlayer, state?.status]);
+
+  const handleSelect = (idx) => {
+    if (!state || state.mode !== 'adjacent') {
+      handleMove(idx);
+      return;
+    }
+    if (state.status !== 'in_progress' || state.currentPlayer !== role) return;
+    if (state.board[idx] !== null) return;
+    const constrained =
+      state.constraintTargets && state.constraintTargets.length
+        ? state.constraintTargets.filter((c) => state.board[c] === null)
+        : null;
+    if (constrained && !constrained.includes(idx)) return;
+
+    if (!pending || pending.origin === null) {
+      setPending({ origin: idx, allowed: [] });
+      return;
+    }
+    if (pending.origin === idx) {
+      setPending(null);
+      return;
+    }
+    const adj = getAdjacentCells(pending.origin).filter((c) => state.board[c] === null);
+    if (!adj.includes(idx)) return;
+    if (pending.allowed.includes(idx)) return;
+    const nextAllowed = [...pending.allowed, idx].slice(0, 2);
+    const shouldCommit = nextAllowed.length >= 2 || nextAllowed.length === adj.length;
+    if (shouldCommit) {
+      handleMove({ position: pending.origin, allowed: nextAllowed });
+      setPending(null);
+    } else {
+      setPending({ origin: pending.origin, allowed: nextAllowed });
+    }
+  };
+
   return (
     <div className="panel grid play-panel" aria-label="multiplayer lobby">
       {showWin && (
@@ -105,7 +145,13 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
           {!state && <p>Waiting for connection… create or join to start.</p>}
           {state && (
             <div className={`board-wrap ${state.mode === 'nested' ? 'nested' : ''}`}>
-              <Board state={state} onMove={handleMove} />
+              <Board
+                state={state}
+                onMove={state.mode === 'adjacent' ? undefined : handleMove}
+                onSelect={state.mode === 'adjacent' ? handleSelect : undefined}
+                pendingOrigin={state.mode === 'adjacent' ? pending?.origin : null}
+                pendingAllowed={state.mode === 'adjacent' ? pending?.allowed || [] : []}
+              />
             </div>
           )}
         </div>
