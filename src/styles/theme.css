@@ -185,3 +185,55 @@
   max-width: 90px;
   color: var(--ink);
 }
+
+.winner-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 41, 0.35);
+  display: grid;
+  place-items: center;
+  z-index: 30;
+}
+
+.winner-card {
+  position: relative;
+  max-width: 420px;
+  text-align: center;
+  border: 2px solid var(--accent);
+  box-shadow: 0 18px 44px var(--glow);
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti .flake {
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  background: var(--accent);
+  top: -10%;
+  left: 50%;
+  animation: fall 1.8s linear infinite;
+  opacity: 0.9;
+}
+
+.confetti .f-1 { background: var(--retro-blue); left: 20%; animation-duration: 2s; }
+.confetti .f-2 { background: var(--retro-green); left: 40%; animation-duration: 2.2s; }
+.confetti .f-3 { background: var(--retro-purple); left: 60%; animation-duration: 2.4s; }
+.confetti .f-4 { background: var(--accent-strong); left: 75%; animation-duration: 2.1s; }
+.confetti .f-5 { background: #fff; left: 30%; animation-duration: 2.3s; }
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(120vh) rotate(240deg); }
+}
+
+.overlay-action {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+}
