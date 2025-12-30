@@ -188,12 +188,6 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
         {mode === 'adjacent' && pending?.origin !== null && (
           <div className="control-row">
             <div className="tag">Pick up to two adjacent squares for your opponent.</div>
-            <button className="btn" onClick={confirmAdjacent}>
-              Confirm move
-            </button>
-            <button className="btn secondary" onClick={cancelPending}>
-              Cancel
-            </button>
           </div>
         )}
       </div>
@@ -205,9 +199,11 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
               <li key={`${move.player}-${idx}`} className="control-row">
                 <span className="mono">
                   {idx + 1}. {move.player} →
-                  {mode === 'classic'
-                    ? ` cell ${move.position + 1}`
-                    : ` board ${move.boardIndex + 1}, cell ${move.cellIndex + 1}`}
+                  {mode === 'nested'
+                    ? ` board ${move.boardIndex + 1}, cell ${move.cellIndex + 1}`
+                    : ` cell ${move.position + 1} ${move.allowed ? `(adjacent: ${move.allowed
+                        .map((c) => c + 1)
+                        .join(', ')})` : ''}`}
                 </span>
                 <button className="btn secondary" onClick={() => replay(idx)}>
                   Replay here
