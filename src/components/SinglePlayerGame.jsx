@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { applyMove, createGame, GAME_STATUS } from '../../engine/index.js';
 import { chooseMove, DIFFICULTY_LEVELS, buildAdjacentMove } from '../../engine/ai.js';
+import { getAdjacentCells } from '../../engine/adjacent.js';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import WinnerOverlay from './WinnerOverlay.jsx';
@@ -11,14 +12,17 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
   const [state, setState] = useState(() => createGame(initialMode));
   const [aiThinking, setAiThinking] = useState(false);
   const aiTimer = useRef(null);
+  const [pending, setPending] = useState(null); // { origin, allowed[] }
 
   useEffect(() => {
     setState(createGame(mode));
+    setPending(null);
   }, [mode]);
 
   useEffect(() => {
     setMode(initialMode);
     setState(createGame(initialMode));
+    setPending(null);
   }, [initialMode]);
 
   useEffect(() => {
@@ -45,16 +49,12 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     setState(createGame(mode));
   };
 
-  const handleMove = (move) => {
+  const commitMove = (move) => {
     setState((current) => {
       if (current.status !== GAME_STATUS.IN_PROGRESS || current.currentPlayer !== 'X') {
         return current;
       }
-      const humanMove =
-        mode === 'adjacent' && typeof move === 'number'
-          ? buildAdjacentMove(current, move)
-          : move;
-      const afterHuman = applyMove(current, humanMove);
+      const afterHuman = applyMove(current, move);
       if (afterHuman.status !== GAME_STATUS.IN_PROGRESS) {
         setAiThinking(false);
         return afterHuman;
@@ -76,9 +76,51 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
           return afterAi;
         });
       }, 600);
+      setPending(null);
       return afterHuman;
     });
   };
+
+  const handleSelect = (idx) => {
+    if (mode !== 'adjacent') {
+      commitMove(idx);
+      return;
+    }
+    if (state.status !== GAME_STATUS.IN_PROGRESS || state.currentPlayer !== 'X') return;
+    const constrained =
+      state.constraintTargets && state.constraintTargets.length
+        ? state.constraintTargets.filter((c) => state.board[c] === null)
+        : null;
+    if (state.board[idx] !== null) return;
+    if (constrained && !constrained.includes(idx)) return;
+
+    if (!pending || pending.origin === null) {
+      setPending({ origin: idx, allowed: [] });
+      return;
+    }
+    if (pending.origin === idx) {
+      setPending(null);
+      return;
+    }
+    const adj = getAdjacentCells(pending.origin).filter((c) => state.board[c] === null);
+    if (!adj.includes(idx)) return;
+    const already = pending.allowed.includes(idx);
+    const nextAllowed = already
+      ? pending.allowed.filter((c) => c !== idx)
+      : pending.allowed.length >= 2
+        ? [...pending.allowed.slice(1), idx]
+        : [...pending.allowed, idx];
+    setPending({ origin: pending.origin, allowed: nextAllowed });
+  };
+
+  const confirmAdjacent = () => {
+    if (!pending || pending.origin === null) return;
+    const adj = getAdjacentCells(pending.origin).filter((c) => state.board[c] === null);
+    const allowed = pending.allowed.length ? pending.allowed : adj.slice(0, 2);
+    commitMove({ position: pending.origin, allowed });
+  };
+
+  const cancelPending = () => setPending(null);
 
   const replay = (index) => {
     // Rebuild the game up to the desired history index.
@@ -143,7 +185,24 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
         </div>
       </div>
       <div className={`board-wrap ${mode === 'nested' ? 'nested' : ''}`}>
-        <Board state={state} onMove={handleMove} />
+        <Board
+          state={state}
+          onMove={mode === 'adjacent' ? undefined : commitMove}
+          onSelect={mode === 'adjacent' ? handleSelect : undefined}
+          pendingOrigin={mode === 'adjacent' ? pending?.origin : null}
+          pendingAllowed={mode === 'adjacent' ? pending?.allowed || [] : []}
+        />
+        {mode === 'adjacent' && pending?.origin !== null && (
+          <div className="control-row">
+            <div className="tag">Pick up to two adjacent squares for your opponent.</div>
+            <button className="btn" onClick={confirmAdjacent}>
+              Confirm move
+            </button>
+            <button className="btn secondary" onClick={cancelPending}>
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
       <div className="grid two">
         <div className="panel">
