@@ -37,7 +37,7 @@
 .intro-overlay {
   text-align: center;
   backdrop-filter: blur(12px);
-  background: rgba(20, 22, 30, 0.72);
+  background: rgba(20, 22, 30, 0.25);
   color: #fefefe;
   display: grid;
   gap: 0.65rem;
