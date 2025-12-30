@@ -34,7 +34,7 @@ function StartScreen({ mode, setMode, setScreen }) {
       </div>
       <h1>Choose your board, then hit start.</h1>
       <p>
-        Retro-tinted Tic-Tac-Toe with a twist. Pick your board style, go solo against the CPU, or
+        Tic-Tac-Toe with a twist. Pick your board style, go solo against the CPU, or
         send an invite link to a friend. Built for quick play on any device.
       </p>
       <div className="grid two">

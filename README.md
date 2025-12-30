@@ -1,11 +1,11 @@
 # Forced Move
 ![Intro screen showing the “Enter the game” overlay on a chalkboard illustration](public/intro.jpg)
 
-A warm, retro take on Ultimate Tic-Tac-Toe (a “forced move” twist). You place an X or O on a mini-board, and that square tells your opponent which mini-board they must play in next. Win mini-boards to claim big-board squares; three in a row takes the match.
+Forced Move is a take on Tic-Tac-Toe where the rules constrain what comes next. Each move reshapes the space of possible moves that follow, rewarding foresight over fast reactions. Inspired by mathematical game structures, strategy here comes from understanding constraints rather than racing to click.
 
 ## A quick story
 
-I first learned about this variant while reading Ben Orlin’s *Math with Bad Drawings*, where he mentions mathematicians in Berkeley getting hooked on an “ultimate” Tic-Tac-Toe played across nested boards. Forced Move is my homage to that tale: a calm, mobile-friendly way to play the same idea with friends or the computer.
+I first learned about this family of games while reading Ben Orlin’s *Math with Bad Drawings*, where he mentions mathematicians in Berkeley getting hooked on an “ultimate” Tic-Tac-Toe played across nested boards. Forced Move is my homage to that tale: a calm, mobile-friendly way to play the same idea with friends or the computer. 
 
 ## Play it
 
@@ -13,7 +13,7 @@ I first learned about this variant while reading Ben Orlin’s *Math with Bad Dr
 - With a friend: create a game, share the invite link, and play in real time.
 - Accessible controls: keyboard-friendly, high-contrast toggle, clear board labels.
 
-[Play the game](https://example.com/demo) (link coming soon, for now you have to run it locally :/)
+[Play the game](https://example.com/demo) (link coming soon, for now you have to run it locally)
 
 
 
