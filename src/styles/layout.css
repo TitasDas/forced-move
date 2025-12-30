@@ -133,8 +133,9 @@
 }
 
 .mini-board.mini-owned {
-  background: linear-gradient(160deg, rgba(255, 77, 109, 0.16), rgba(47, 128, 237, 0.14));
-  box-shadow: 0 8px 22px var(--glow);
+  background: linear-gradient(160deg, rgba(255, 77, 109, 0.22), rgba(47, 128, 237, 0.2));
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(0, 0, 0, 0.08);
 }
 
 .mini-overlay {
@@ -142,9 +143,10 @@
   inset: 0;
   display: grid;
   place-items: center;
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 800;
-  color: rgba(14, 18, 36, 0.12);
+  color: rgba(14, 18, 36, 0.18);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   pointer-events: none;
 }
 
