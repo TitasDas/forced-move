@@ -1,0 +1,110 @@
+:root {
+  --bg: #f7f0e8;
+  --panel: #fefbf6;
+  --accent: #f0b775;
+  --accent-strong: #e68b3c;
+  --ink: #1f1b2d;
+  --muted: #524d63;
+  --grid: rgba(31, 27, 45, 0.08);
+  --glow: rgba(230, 139, 60, 0.25);
+  --shadow: 0 10px 30px rgba(12, 10, 18, 0.12);
+  --radius: 18px;
+  --transition: 150ms ease;
+  --focus: 0 0 0 3px rgba(230, 139, 60, 0.5);
+}
+
+.app {
+  min-height: 100vh;
+  background: radial-gradient(circle at 15% 20%, rgba(240, 183, 117, 0.18), transparent 35%),
+    radial-gradient(circle at 90% 10%, rgba(75, 111, 116, 0.18), transparent 32%),
+    linear-gradient(135deg, #f7f0e8, #f3e7da);
+  color: var(--ink);
+  font-family: 'Atkinson Hyperlegible', 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  padding: 1.5rem;
+}
+
+.panel {
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.1rem 1.25rem;
+  border: 1px solid rgba(31, 27, 45, 0.04);
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(145deg, var(--accent), var(--accent-strong));
+  color: #241b1b;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 10px 25px var(--glow);
+}
+
+.btn.secondary {
+  background: rgba(31, 27, 45, 0.08);
+  color: var(--ink);
+  box-shadow: none;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.panel input,
+.panel select {
+  border: 1px solid rgba(31, 27, 45, 0.12);
+  border-radius: 12px;
+  padding: 0.6rem 0.7rem;
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+}
+
+.panel input:focus,
+.panel select:focus {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(31, 27, 45, 0.06);
+  font-size: 0.9rem;
+  gap: 0.4rem;
+}
+
+.high-contrast {
+  --bg: #161616;
+  --panel: #1f1f1f;
+  --ink: #f4f4f4;
+  --muted: #c9c9c9;
+  --grid: rgba(255, 255, 255, 0.1);
+  --glow: rgba(240, 183, 117, 0.35);
+  background: linear-gradient(135deg, #0f0f0f, #161616);
+}
+
+.high-contrast .panel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
