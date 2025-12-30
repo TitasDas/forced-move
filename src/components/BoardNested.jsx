@@ -29,7 +29,7 @@ function MiniBoard({ board, boardIndex, state, onMove }) {
         return (
           <button
             key={cellIndex}
-            className={`cell ${locked ? 'locked' : ''} ${isWin ? 'win' : ''}`}
+            className={`cell ${cell ? `mark-${cell.toLowerCase()}` : ''} ${locked ? 'locked' : ''} ${isWin ? 'win' : ''}`}
             onClick={() => !locked && onMove({ boardIndex, cellIndex })}
             disabled={locked}
             aria-label={`${label} cell ${cellIndex + 1} ${cell ? `occupied by ${cell}` : 'empty'}`}
