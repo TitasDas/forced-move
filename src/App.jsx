@@ -175,7 +175,6 @@ export default function App() {
           style={{ backgroundImage: "url('/intro.jpg')" }}
         >
           <div className="intro-overlay panel">
-            <h1>Forced Move</h1>
             <button className="btn" onClick={() => setIntro(false)}>
               Enter the game
             </button>
