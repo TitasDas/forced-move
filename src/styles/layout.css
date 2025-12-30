@@ -27,7 +27,7 @@
 }
 
 .grid.two {
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .control-row {
@@ -47,12 +47,13 @@
 }
 
 .board-wrap {
-  width: min(95vw, 520px);
+  width: 100%;
+  max-width: 520px;
   margin: 0 auto;
 }
 
 .board-wrap.nested {
-  width: min(95vw, 640px);
+  max-width: 640px;
 }
 
 .game-panel {
@@ -145,4 +146,10 @@
 .mono {
   font-family: 'Space Grotesk', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
+}
+
+@media (min-width: 960px) {
+  .grid.two {
+    grid-template-columns: minmax(360px, 1fr) minmax(320px, 0.8fr);
+  }
 }
