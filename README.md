@@ -21,11 +21,17 @@ I first learned about this variant while reading Ben Orlin’s *Math with Bad Dr
 - If that target board is full or already won, the opponent may choose any open mini-board.
 - Win a mini-board to claim its big square; three big squares in a row wins.
 
-### Adjacent Constraint (classic remix)
+### Adjacent Lock (classic remix)
 
 - Play on the classic 3×3 board.
 - On your turn, place your mark **and** specify up to two adjacent squares where your opponent must play next.
 - If one of those squares is occupied, your opponent is forced into the other; if both are open, they are free to pick any. 
+
+### Naming
+
+- Classic — free placement.
+- Adjacent Lock — choose your spot and two neighbors to steer your opponent.
+- Ultimate — constrained mini-boards that roll up to a main-board win.
 
 ## Want to run it locally?
 

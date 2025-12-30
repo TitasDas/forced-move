@@ -8,6 +8,11 @@ import { GAME_VERSION } from '../engine/state.js';
 const MODES = [
   { id: 'classic', label: 'Classic 3x3', description: 'Fast rounds with clear wins.' },
   {
+    id: 'adjacent',
+    label: 'Adjacent Lock',
+    description: 'Pick your square and two neighbors to constrain your opponent.',
+  },
+  {
     id: 'nested',
     label: 'Ultimate Tic-Tac-Toe',
     description: 'Each move locks the next board for your opponent.',
@@ -174,7 +179,7 @@ export default function App() {
             <div className="tag ghost">A game of structure, not speed.</div>
             <h1>Forced Move</h1>
             <p>Ultimate: your move sends them to the next mini-board.</p>
-            <p>Adjacent: pick up to two neighboring squares for their reply.</p>
+            <p>Adjacent Lock: pick up to two neighbors for their reply.</p>
             <button className="btn" onClick={() => setIntro(false)}>
               Enter the game
             </button>
