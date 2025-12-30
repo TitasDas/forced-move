@@ -3,8 +3,8 @@ import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import { useWebSocketGame } from '../hooks/useWebSocketGame.js';
 
-export default function MultiplayerLobby() {
-  const [mode, setMode] = useState('classic');
+export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
+  const [mode, setMode] = useState(initialMode);
   const [gameId, setGameId] = useState('');
   const [token, setToken] = useState('');
   const [inviteToken, setInviteToken] = useState('');
@@ -61,11 +61,17 @@ export default function MultiplayerLobby() {
   const handleMove = (move) => sendMove(move);
 
   return (
-    <div className="panel grid" aria-label="multiplayer lobby">
+    <div className="panel grid play-panel" aria-label="multiplayer lobby">
+      <div className="control-row topbar">
+        <button className="btn secondary" onClick={onBack}>
+          ← Back
+        </button>
+        <div className="tag">Board: {mode === 'classic' ? 'Classic' : 'Nested'}</div>
+      </div>
       <div className="status">
         <div>
-          <div className="card-title">Real-time play</div>
-          <div>Authoritative server validates turns and moves. Share a link to invite.</div>
+          <div className="card-title">Multiplayer</div>
+          <div>Share a link so a friend can jump in.</div>
         </div>
         <div className="control-row">
           <select
@@ -75,7 +81,7 @@ export default function MultiplayerLobby() {
             aria-label="Mode"
           >
             <option value="classic">Classic</option>
-            <option value="nested">Nested</option>
+            <option value="nested">Ultimate Tic-Tac-Toe</option>
           </select>
           <button className="btn" onClick={createGame}>
             Create game
@@ -108,24 +114,23 @@ export default function MultiplayerLobby() {
                 Join with invite
               </button>
               <button className="btn secondary" onClick={() => setLink(shareUrl)}>
-                Copy share link
+                Show invite link
               </button>
             </div>
             {link && <div className="mono">{link}</div>}
             {error && <div className="mono">Error: {error}</div>}
-            {status && <div className="mono">Socket: {status}</div>}
             {role && <div className="mono">You are: {role}</div>}
-            {token && (
-              <div className="mono" aria-label="private token">
-                Token (keep secret): {token}
-              </div>
-            )}
+            {status && <div className="mono">Status: {status}</div>}
           </div>
         </div>
         <div className="panel">
           <div className="card-title">Game</div>
           {!state && <p>Waiting for connection… create or join to start.</p>}
-          {state && <Board state={state} onMove={handleMove} />}
+          {state && (
+            <div className={`board-wrap ${state.mode === 'nested' ? 'nested' : ''}`}>
+              <Board state={state} onMove={handleMove} />
+            </div>
+          )}
         </div>
       </div>
     </div>

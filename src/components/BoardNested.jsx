@@ -2,8 +2,16 @@ import React from 'react';
 import { GAME_STATUS } from '../../engine/index.js';
 
 function MiniBoard({ board, boardIndex, state, onMove }) {
+  const constraintBoard =
+    state.nextBoardConstraint === null
+      ? null
+      : state.miniBoards[state.nextBoardConstraint] || null;
+  const constraintIsOpen =
+    constraintBoard && !constraintBoard.winner && !constraintBoard.isFull;
   const isConstrained =
-    state.nextBoardConstraint === null || state.nextBoardConstraint === boardIndex;
+    state.nextBoardConstraint === null ||
+    !constraintIsOpen ||
+    state.nextBoardConstraint === boardIndex;
   const closed = board.winner || board.isFull;
   const label = `Mini board ${boardIndex + 1}`;
 
