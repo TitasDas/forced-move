@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { applyMove, createGame, GAME_STATUS } from '../../engine/index.js';
 import { chooseMove, DIFFICULTY_LEVELS } from '../../engine/ai.js';
 import BoardClassic from './BoardClassic.jsx';
@@ -9,6 +9,8 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
   const [mode, setMode] = useState(initialMode);
   const [difficulty, setDifficulty] = useState(3);
   const [state, setState] = useState(() => createGame(initialMode));
+  const [aiThinking, setAiThinking] = useState(false);
+  const aiTimer = useRef(null);
 
   useEffect(() => {
     setState(createGame(mode));
@@ -18,6 +20,14 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
     setMode(initialMode);
     setState(createGame(initialMode));
   }, [initialMode]);
+
+  useEffect(() => {
+    return () => {
+      if (aiTimer.current) {
+        clearTimeout(aiTimer.current);
+      }
+    };
+  }, []);
 
   const Board = mode === 'classic' ? BoardClassic : BoardNested;
 
@@ -40,14 +50,26 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
       if (current.status !== GAME_STATUS.IN_PROGRESS || current.currentPlayer !== 'X') {
         return current;
       }
-      let next = applyMove(current, move);
-      if (next.status !== GAME_STATUS.IN_PROGRESS) return next;
-
-      const aiMove = chooseMove(next, difficulty);
-      if (aiMove !== null) {
-        next = applyMove(next, aiMove);
+      const afterHuman = applyMove(current, move);
+      if (afterHuman.status !== GAME_STATUS.IN_PROGRESS) {
+        setAiThinking(false);
+        return afterHuman;
       }
-      return next;
+      setAiThinking(true);
+      if (aiTimer.current) clearTimeout(aiTimer.current);
+      aiTimer.current = setTimeout(() => {
+        setState((latest) => {
+          if (latest.status !== GAME_STATUS.IN_PROGRESS || latest.currentPlayer !== 'O') {
+            setAiThinking(false);
+            return latest;
+          }
+          const aiMove = chooseMove(latest, difficulty);
+          const afterAi = aiMove !== null ? applyMove(latest, aiMove) : latest;
+          setAiThinking(false);
+          return afterAi;
+        });
+      }, 600);
+      return afterHuman;
     });
   };
 
@@ -79,7 +101,16 @@ export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
       <div className="status">
         <div>
           <div className="card-title">Solo mode</div>
-          <div>{statusText}</div>
+          <div className="control-row">
+            <span>{statusText}</span>
+            {aiThinking && (
+              <span className="thinker" aria-live="polite">
+                <span className="sigil">∑</span>
+                <span className="dots">⋯</span>
+                <span className="sigil">∫</span>
+              </span>
+            )}
+          </div>
         </div>
         <div className="control-row">
           <label>

@@ -177,6 +177,37 @@
   box-shadow: none;
 }
 
+.thinker {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+  font-weight: 700;
+}
+
+.thinker .sigil {
+  color: var(--mark-o);
+  animation: floaty 900ms ease-in-out infinite;
+}
+
+.thinker .sigil:nth-child(3) {
+  color: var(--mark-x);
+  animation-duration: 1100ms;
+}
+
+.thinker .dots {
+  animation: blink 900ms steps(2, start) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.2; }
+}
+
+@keyframes floaty {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
 .palette-toggle {
   width: 46px;
   height: 42px;
