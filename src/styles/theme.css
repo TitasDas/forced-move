@@ -1,19 +1,21 @@
 :root {
-  --bg: #f5e9da;
-  --panel: #fff8ef;
-  --accent: #f43153;
-  --accent-strong: #ffd447;
-  --ink: #0f1729;
-  --muted: #3f3b52;
-  --grid: rgba(15, 23, 41, 0.1);
-  --glow: rgba(255, 212, 71, 0.32);
-  --shadow: 0 14px 32px rgba(14, 10, 22, 0.2);
+  --bg: #f7efe4;
+  --panel: #fff7ec;
+  --accent: #ff4d6d;
+  --accent-strong: #ffd166;
+  --ink: #0e1224;
+  --muted: #3e3a4f;
+  --grid: rgba(14, 18, 36, 0.1);
+  --glow: rgba(255, 209, 102, 0.33);
+  --shadow: 0 14px 32px rgba(12, 10, 24, 0.2);
   --radius: 18px;
   --transition: 160ms ease;
-  --focus: 0 0 0 3px rgba(244, 49, 83, 0.55);
-  --retro-green: #1ec38b;
-  --retro-blue: #3a7dff;
-  --retro-purple: #b44cff;
+  --focus: 0 0 0 3px rgba(255, 77, 109, 0.55);
+  --retro-green: #2bd9a3;
+  --retro-blue: #2f80ed;
+  --retro-purple: #c671ff;
+  --mark-x: #ff4d6d;
+  --mark-o: #2f80ed;
 }
 
 .app {
@@ -119,7 +121,7 @@
 }
 
 .start-card {
-  background: linear-gradient(135deg, rgba(236, 111, 102, 0.18), rgba(122, 199, 163, 0.18));
+  background: linear-gradient(135deg, rgba(255, 77, 109, 0.16), rgba(47, 128, 237, 0.16));
 }
 
 .mode-grid {
@@ -184,6 +186,13 @@
 .rule-line svg {
   max-width: 90px;
   color: var(--ink);
+}
+
+.footer-tag {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  color: var(--muted);
 }
 
 .winner-overlay {

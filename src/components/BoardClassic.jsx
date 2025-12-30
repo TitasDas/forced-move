@@ -17,7 +17,7 @@ export default function BoardClassic({ state, onMove }) {
         return (
           <button
             key={idx}
-            className={`cell ${locked ? 'locked' : ''} ${isWin ? 'win' : ''}`}
+            className={`cell ${cell ? `mark-${cell.toLowerCase()}` : ''} ${locked ? 'locked' : ''} ${isWin ? 'win' : ''}`}
             onClick={() => !locked && onMove(idx)}
             disabled={locked}
             aria-label={`Cell ${idx + 1} ${cell ? `occupied by ${cell}` : 'empty'}`}

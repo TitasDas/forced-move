@@ -18,10 +18,6 @@ function StartScreen({ mode, setMode, setScreen }) {
   const activeMode = MODES.find((m) => m.id === mode);
   return (
     <header className="hero panel intro">
-      <div className="tag">
-        <span aria-hidden="true">▧</span>
-        Forced Move · v{GAME_VERSION}
-      </div>
       <h1>Choose your board, then hit start.</h1>
       <p>
         Retro-tinted Tic-Tac-Toe with a twist. Pick your board style, go solo against the CPU, or
@@ -164,6 +160,10 @@ export default function App() {
             onBack={() => setScreen('menu')}
           />
         )}
+
+        <footer className="footer-tag">
+          <span className="tag">Forced Move · v{GAME_VERSION}</span>
+        </footer>
       </div>
     </div>
   );
