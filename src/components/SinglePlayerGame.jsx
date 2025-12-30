@@ -29,7 +29,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     };
   }, []);
 
-  const Board = mode === 'classic' ? BoardClassic : BoardNested;
+  const Board = mode === 'nested' ? BoardNested : BoardClassic;
 
   const statusText = useMemo(() => {
     if (state.status === GAME_STATUS.IN_PROGRESS) {

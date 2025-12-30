@@ -175,13 +175,13 @@ export default function App() {
           style={{ backgroundImage: "url('/intro.jpg')" }}
         >
           <div className="intro-overlay panel">
-            <div className="tag ghost">A game of structure, not speed.</div>
             <h1>Forced Move</h1>
             <p>Ultimate: your move sends them to the next mini-board.</p>
             <p>Adjacent Lock: pick up to two neighbors for their reply.</p>
             <button className="btn" onClick={() => setIntro(false)}>
               Enter the game
             </button>
+            <div className="tag ghost">A game where each move limits the choices that follow.</div>
           </div>
         </div>
       ) : (
