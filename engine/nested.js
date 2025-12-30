@@ -29,7 +29,13 @@ function computeMainWinner(mainBoard) {
 export function getAvailableMovesNested(state) {
   if (state.status !== GAME_STATUS.IN_PROGRESS) return [];
 
-  const targetBoard = state.nextBoardConstraint;
+  const constraintBoard =
+    state.nextBoardConstraint === null
+      ? null
+      : state.miniBoards[state.nextBoardConstraint] || null;
+  const constraintIsOpen =
+    constraintBoard && !constraintBoard.winner && !constraintBoard.isFull;
+  const targetBoard = constraintIsOpen ? state.nextBoardConstraint : null;
   const moves = [];
 
   const boardIndices =

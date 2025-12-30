@@ -4,15 +4,19 @@ import { chooseMove, DIFFICULTY_LEVELS } from '../../engine/ai.js';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 
-export default function SinglePlayerGame() {
-  const [mode, setMode] = useState('classic');
+export default function SinglePlayerGame({ initialMode = 'nested', onBack }) {
+  const [mode, setMode] = useState(initialMode);
   const [difficulty, setDifficulty] = useState(3);
-  const [state, setState] = useState(() => createGame(mode));
-  const [aiNotes, setAiNotes] = useState('');
+  const [state, setState] = useState(() => createGame(initialMode));
 
   useEffect(() => {
     setState(createGame(mode));
   }, [mode]);
+
+  useEffect(() => {
+    setMode(initialMode);
+    setState(createGame(initialMode));
+  }, [initialMode]);
 
   const Board = mode === 'classic' ? BoardClassic : BoardNested;
 
@@ -27,12 +31,10 @@ export default function SinglePlayerGame() {
   }, [state, difficulty]);
 
   const reset = () => {
-    setAiNotes('');
     setState(createGame(mode));
   };
 
   const handleMove = (move) => {
-    let futureAiNotes = '';
     setState((current) => {
       if (current.status !== GAME_STATUS.IN_PROGRESS || current.currentPlayer !== 'X') {
         return current;
@@ -42,12 +44,10 @@ export default function SinglePlayerGame() {
 
       const aiMove = chooseMove(next, difficulty);
       if (aiMove !== null) {
-        futureAiNotes = JSON.stringify(aiMove);
         next = applyMove(next, aiMove);
       }
       return next;
     });
-    if (futureAiNotes) setAiNotes(futureAiNotes);
   };
 
   const replay = (index) => {
@@ -60,20 +60,19 @@ export default function SinglePlayerGame() {
   };
 
   return (
-    <div className="panel grid" aria-label="single player game">
+    <div className="panel grid play-panel" aria-label="single player game">
+      <div className="control-row topbar">
+        <button className="btn secondary" onClick={onBack}>
+          ← Back
+        </button>
+          <div className="tag">Board: {mode === 'classic' ? 'Classic' : 'Ultimate Tic-Tac-Toe'}</div>
+      </div>
       <div className="status">
         <div>
           <div className="card-title">Solo mode</div>
           <div>{statusText}</div>
         </div>
         <div className="control-row">
-          <label>
-            <span className="sr-only">Mode</span>
-            <select value={mode} onChange={(e) => setMode(e.target.value)} className="btn secondary">
-              <option value="classic">Classic 3x3</option>
-              <option value="nested">Nested variant</option>
-            </select>
-          </label>
           <label>
             <span className="sr-only">Difficulty</span>
             <select
@@ -93,7 +92,9 @@ export default function SinglePlayerGame() {
           </button>
         </div>
       </div>
-      <Board state={state} onMove={handleMove} />
+      <div className={`board-wrap ${mode === 'nested' ? 'nested' : ''}`}>
+        <Board state={state} onMove={handleMove} />
+      </div>
       <div className="grid two">
         <div className="panel">
           <div className="card-title">Move log</div>
@@ -113,13 +114,6 @@ export default function SinglePlayerGame() {
             ))}
             {!state.history.length && <li>No moves yet — start playing.</li>}
           </ol>
-        </div>
-        <div className="panel">
-          <div className="card-title">AI notes</div>
-          <p className="list">
-            Level 1 is random, 2-3 are heuristic, 4-5 use minimax (classic) or constrained heuristics
-            (nested). Current suggestion: <span className="mono">{aiNotes || 'pending'}</span>
-          </p>
         </div>
       </div>
     </div>
