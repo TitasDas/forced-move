@@ -155,6 +155,29 @@
   color: var(--ink);
 }
 
+.high-contrast .rule-card {
+  background: linear-gradient(135deg, rgba(33, 36, 48, 0.9), rgba(23, 26, 36, 0.9));
+  color: var(--ink);
+}
+
+.high-contrast .mode {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ink);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.high-contrast .mode-desc {
+  color: #d5d8e6;
+}
+
+.high-contrast .list {
+  color: #d5d8e6;
+}
+
+.high-contrast .card-title {
+  color: #ffffff;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
