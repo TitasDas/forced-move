@@ -12,7 +12,7 @@ I first learned about this variant while reading Ben Orlin’s *Math with Bad Dr
 - With a friend: create a game, share the invite link, and play in real time.
 - Accessible controls: keyboard-friendly, high-contrast toggle, clear board labels.
 
-[Play the demo](https://example.com/demo) — replace with your live link when ready.
+[Play the game](https://example.com/demo) — (link coming soon)
 
 ## How it works
 
@@ -28,4 +28,4 @@ npm install
 npm run dev   # open http://localhost:5173
 ```
 
-That’s it—grab a friend or play the CPU, and enjoy the forced-move dance.
+That’s it! grab a friend or play the CPU, and enjoy the forced-move dance.
