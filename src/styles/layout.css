@@ -197,6 +197,19 @@
   box-shadow: 0 12px 30px var(--glow);
 }
 
+.cell.pending-origin {
+  outline: 3px solid rgba(255, 77, 109, 0.5);
+}
+
+.cell.pending-choice {
+  outline: 2px dashed rgba(47, 128, 237, 0.5);
+}
+
+.cell.pending-selected {
+  outline: 3px solid rgba(47, 128, 237, 0.8);
+  background: radial-gradient(circle at 50% 50%, rgba(47, 128, 237, 0.18), rgba(255, 255, 255, 0.8));
+}
+
 .mini-board {
   border-radius: 14px;
   padding: 8px;
