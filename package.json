@@ -14,19 +14,19 @@
     "lint": "eslint . --ext .js,.jsx"
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "nanoid": "^5.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "vite": "^5.2.0",
     "ws": "^8.17.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
-    "nodemon": "^3.1.4",
-    "vite": "^5.2.0"
+    "nodemon": "^3.1.4"
   }
 }
