@@ -80,24 +80,30 @@ export function applyAdjacentMove(state, move) {
         (idx) => Number.isInteger(idx) && idx >= 0 && idx <= 8 && idx !== position,
       )
     : [];
+  const emptiesAfterMove = next.board
+    .map((cell, idx) => (cell === null ? idx : null))
+    .filter((idx) => idx !== null);
+  const emptyPairs = getAdjacentEmptyPairs(next.board);
 
   let constraint = [];
-  const adjacentEmpties = getAdjacentCells(position).filter((idx) => next.board[idx] === null);
-  const requiredTargets = Math.min(2, adjacentEmpties.length);
-  const allowedAdjacent = cleanedAllowed.filter((idx) => adjacentEmpties.includes(idx));
-
-  if (requiredTargets === 2) {
-    if (cleanedAllowed.length !== 2 || allowedAdjacent.length !== 2) {
-      throw new Error('Must choose two empty squares adjacent to your move');
+  if (emptyPairs.length > 0) {
+    if (cleanedAllowed.length !== 2) {
+      throw new Error('Must choose two adjacent cells');
     }
-    constraint = allowedAdjacent;
-  } else if (requiredTargets === 1) {
-    if (cleanedAllowed.length !== 1 || allowedAdjacent.length !== 1) {
-      throw new Error('Must choose the empty square adjacent to your move');
+    if (!cellsAreAdjacent(cleanedAllowed[0], cleanedAllowed[1])) {
+      throw new Error('Chosen cells must be adjacent');
     }
-    constraint = allowedAdjacent;
-  } else if (cleanedAllowed.length) {
-    throw new Error('No adjacent squares available to choose');
+    if (next.board[cleanedAllowed[0]] !== null || next.board[cleanedAllowed[1]] !== null) {
+      throw new Error('Chosen cells must be empty while empty adjacent pairs exist');
+    }
+    constraint = cleanedAllowed;
+  } else {
+    const needed = Math.min(2, emptiesAfterMove.length);
+    const allowedEmpties = cleanedAllowed.filter((idx) => next.board[idx] === null);
+    if (!allowedEmpties.length) {
+      throw new Error('Must choose an available cell');
+    }
+    constraint = allowedEmpties.slice(0, needed);
   }
 
   const { winner, line } = checkClassicWinner(next.board);

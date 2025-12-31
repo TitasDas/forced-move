@@ -23,7 +23,7 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 
 ### Adjacent Lock (original remix)
 - Play on the classic 3×3 board, but with constraints.
-- On your turn, place your mark **and** pick up to two empty squares adjacent to that mark for your opponent’s next move (if only one adjacent empty remains, pick that one; if none are open, they can play anywhere).
+- On your turn, place your mark **and** specify adjacent squares where your opponent must play next (up to two if an empty adjacent pair exists, otherwise a single empty square when no empty adjacent pair remains).
 - If one target is occupied, they take the other; if both are blocked, they can play anywhere.
 
 ### Ultimate
