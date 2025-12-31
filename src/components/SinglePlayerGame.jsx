@@ -163,7 +163,11 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       return;
     }
     const first = pending.allowed[0];
-    if (first === idx) return;
+    if (first === idx) {
+      // Allow undo of first choice
+      setPending({ origin: pending.origin, allowed: [] });
+      return;
+    }
     if (emptyPairsExist && state.board[idx] !== null) return;
     if (!getAdjacentCells(first).includes(idx)) return;
     const allowed = [first, idx];
