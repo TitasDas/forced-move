@@ -61,15 +61,14 @@ export function chooseNestedMove(state, difficulty = 3) {
   const moves = getAvailableMoves(state);
   if (!moves.length) return null;
   if (difficulty === 1) return randomChoice(moves);
-  if (difficulty === 2) return randomChoice(moves);
-  if (difficulty === 3) return nestedHeuristic(state);
-  if (difficulty === 4) {
-    // Heuristic with light rollouts.
+  if (difficulty === 2) return nestedHeuristic(state);
+  if (difficulty === 3) {
+    // Heuristic plus short rollouts.
     let best = null;
     let bestScore = -Infinity;
     for (const move of moves) {
       const next = applyMove(state, move);
-      const estimate = rolloutNested(next, state.currentPlayer, 6);
+      const estimate = rolloutNested(next, state.currentPlayer, 4);
       if (estimate > bestScore) {
         bestScore = estimate;
         best = move;
@@ -77,15 +76,34 @@ export function chooseNestedMove(state, difficulty = 3) {
     }
     return best ?? nestedHeuristic(state);
   }
-  // Difficulty 5: more rollouts to approximate Monte Carlo search.
+  if (difficulty === 4) {
+    // More rollouts, deeper plies.
+    let best = null;
+    let bestScore = -Infinity;
+    const rolloutsPerMove = 24;
+    for (const move of moves) {
+      let total = 0;
+      for (let i = 0; i < rolloutsPerMove; i += 1) {
+        const next = applyMove(state, move);
+        total += rolloutNested(next, state.currentPlayer, 8);
+      }
+      const avg = total / rolloutsPerMove;
+      if (avg > bestScore) {
+        bestScore = avg;
+        best = move;
+      }
+    }
+    return best ?? nestedHeuristic(state);
+  }
+  // Difficulty 5: heavier Monte Carlo search.
   let best = null;
   let bestScore = -Infinity;
-  const rolloutsPerMove = 60;
+  const rolloutsPerMove = 100;
   for (const move of moves) {
     let total = 0;
     for (let i = 0; i < rolloutsPerMove; i += 1) {
       const next = applyMove(state, move);
-      total += rolloutNested(next, state.currentPlayer, 10, Math.random);
+      total += rolloutNested(next, state.currentPlayer, 12, Math.random);
     }
     const avg = total / rolloutsPerMove;
     if (avg > bestScore) {
