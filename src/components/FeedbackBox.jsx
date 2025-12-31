@@ -20,7 +20,6 @@ export default function FeedbackBox({ context = 'app' }) {
         <a className="btn" href={href}>
           Write email
         </a>
-        <div className="subtle">No sign-up; just send to {EMAIL}.</div>
       </div>
     </div>
   );
