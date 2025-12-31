@@ -1,4 +1,4 @@
-import { getAvailableMoves } from '../index.js';
+import { applyMove, getAvailableMoves } from '../index.js';
 import { GAME_STATUS, PLAYER_O, PLAYER_X } from '../state.js';
 import { WIN_LINES } from '../classic.js';
 import { getAdjacentCells, getAdjacentEmptyPairs } from '../adjacent.js';
@@ -39,15 +39,69 @@ function heuristicAdjacent(state, legalMoves) {
   return legalMoves[0];
 }
 
+function scoreAdjacentState(state, player) {
+  if (state.winner === player) return 1000;
+  if (state.winner === opposite(player)) return -1000;
+  if (state.status === GAME_STATUS.DRAW) return 0;
+
+  let score = 0;
+  for (const line of WIN_LINES) {
+    const vals = line.map((idx) => state.board[idx]);
+    const mine = vals.filter((v) => v === player).length;
+    const theirs = vals.filter((v) => v === opposite(player)).length;
+    const empties = vals.filter((v) => v === null).length;
+    if (mine === 2 && empties === 1) score += 25;
+    if (theirs === 2 && empties === 1) score -= 20;
+    if (mine === 1 && empties === 2) score += 3;
+    if (theirs === 1 && empties === 2) score -= 2;
+  }
+  // Prefer giving fewer options to opponent.
+  const constraintSize = state.constraintTargets ? state.constraintTargets.length : 0;
+  score -= constraintSize * 0.5;
+  return score;
+}
+
+function minimaxAdjacent(state, player, depth, alpha = -Infinity, beta = Infinity) {
+  if (depth === 0 || state.status !== GAME_STATUS.IN_PROGRESS) {
+    return { score: scoreAdjacentState(state, player) };
+  }
+  const moves = getAvailableMoves(state);
+  let bestMove = null;
+  let bestScore = -Infinity;
+
+  for (const move of moves) {
+    const next = applyMove(state, typeof move === 'number' ? { position: move, allowed: [] } : move);
+    const { score } = minimaxAdjacent(next, player, depth - 1, -beta, -alpha);
+    const adjusted = -score;
+    if (adjusted > bestScore) {
+      bestScore = adjusted;
+      bestMove = move;
+    }
+    alpha = Math.max(alpha, adjusted);
+    if (alpha >= beta) break;
+  }
+  return { move: bestMove, score: bestScore };
+}
+
 export function chooseAdjacentMove(state, difficulty = 3) {
   if (state.status !== GAME_STATUS.IN_PROGRESS) return null;
   const moves = getAvailableMoves(state);
   if (!moves.length) return null;
   if (difficulty === 1) return randomChoice(moves);
   if (difficulty === 2) return heuristicAdjacent(state, moves);
-  if (difficulty === 3) return heuristicAdjacent(state, moves);
-  if (difficulty >= 4) return heuristicAdjacent(state, moves);
-  return randomChoice(moves);
+  if (difficulty === 3) {
+    const { move } = minimaxAdjacent(state, state.currentPlayer, 2);
+    return move ?? heuristicAdjacent(state, moves);
+  }
+  if (difficulty === 4) {
+    const { move } = minimaxAdjacent(state, state.currentPlayer, 4);
+    return move ?? heuristicAdjacent(state, moves);
+  }
+  // Level 5: deeper search to be very hard to beat.
+  const remaining = state.board.filter((c) => c === null).length;
+  const depth = Math.max(4, Math.min(8, remaining * 2));
+  const { move } = minimaxAdjacent(state, state.currentPlayer, depth);
+  return move ?? heuristicAdjacent(state, moves);
 }
 
 export function buildAdjacentMove(state, position) {
