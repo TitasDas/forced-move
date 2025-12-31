@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { applyMove, createGame, GAME_STATUS } from '../../engine/index.js';
-import { chooseMove, DIFFICULTY_LEVELS, buildAdjacentMove } from '../../engine/ai.js';
+import { chooseMove, DIFFICULTY_LEVELS, buildAdjacentMove } from '../../engine/ai/index.js';
 import { getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
