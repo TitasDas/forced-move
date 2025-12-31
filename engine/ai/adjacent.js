@@ -39,6 +39,34 @@ function heuristicAdjacent(state, legalMoves) {
   return legalMoves[0];
 }
 
+function opponentImmediateWins(board, player) {
+  const threats = new Set();
+  for (const line of WIN_LINES) {
+    const marks = line.map((idx) => board[idx]);
+    const emptyIndex = marks.indexOf(null);
+    if (emptyIndex === -1) continue;
+    const [a, b, c] = line;
+    const values = [board[a], board[b], board[c]];
+    if (values.filter((v) => v === player).length === 2 && values.includes(null)) {
+      threats.add(line[emptyIndex]);
+    }
+  }
+  return threats;
+}
+
+function scoreConstraintPair(state, position, pair) {
+  const shadowBoard = state.board.slice();
+  shadowBoard[position] = state.currentPlayer;
+  const oppThreats = opponentImmediateWins(shadowBoard, opposite(state.currentPlayer));
+  let score = 0;
+  if (oppThreats.has(pair[0])) score -= 50;
+  if (oppThreats.has(pair[1])) score -= 50;
+  const empties = pair.filter((p) => shadowBoard[p] === null).length;
+  score -= empties * 5;
+  if (pair.includes(4)) score += 8;
+  return score;
+}
+
 function scoreAdjacentState(state, player) {
   if (state.winner === player) return 1000;
   if (state.winner === opposite(player)) return -1000;
@@ -105,7 +133,7 @@ export function chooseAdjacentMove(state, difficulty = 3) {
   }
   // Level 5: deeper search to be very hard to beat.
   const remaining = state.board.filter((c) => c === null).length;
-  const depth = Math.max(4, Math.min(8, remaining * 2));
+  const depth = Math.max(4, Math.min(10, remaining * 2));
   const { move } = minimaxAdjacent(state, state.currentPlayer, depth);
   return move ?? heuristicAdjacent(state, moves);
 }
@@ -115,7 +143,16 @@ export function buildAdjacentMove(state, position) {
   shadowBoard[position] = state.currentPlayer;
   const pairs = getAdjacentEmptyPairs(shadowBoard);
   if (pairs.length) {
-    return { position, allowed: pairs[0] };
+    let bestPair = pairs[0];
+    let bestScore = -Infinity;
+    for (const pair of pairs) {
+      const score = scoreConstraintPair(state, position, pair);
+      if (score > bestScore) {
+        bestScore = score;
+        bestPair = pair;
+      }
+    }
+    return { position, allowed: bestPair };
   }
   // Fallback: use any adjacent pair even if one is filled, to keep the game moving.
   for (let i = 0; i < 9; i += 1) {
