@@ -16,22 +16,6 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 
 [Play the game](https://forced-move.onrender.com/) (Still in testing, feedback can be given by filing an issue)
 
-
-
-## How it works
-
-
-### Adjacent Lock (original remix)
-- Play on the classic 3×3 board, but with constraints.
-- On your turn, place your mark **and** specify adjacent squares where your opponent must play next (up to two if an empty adjacent pair exists, otherwise a single empty square when no empty adjacent pair remains).
-- If one target is occupied, they take the other; if both are blocked, they can play anywhere.
-
-### Ultimate
-- Each big square is its own mini 3×3 board.
-- Your move sends your opponent to the matching mini-board.
-- If that target board is full or already won, the opponent may choose any open mini-board.
-- Win a mini-board to claim its big square; three big squares in a row wins.
-
 ## Want to run it locally?
 
 ```
