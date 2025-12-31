@@ -80,21 +80,31 @@ export function applyAdjacentMove(state, move) {
         (idx) => Number.isInteger(idx) && idx >= 0 && idx <= 8 && idx !== position,
       )
     : [];
-  if (cleanedAllowed.length !== 2) {
-    throw new Error('Must choose two adjacent cells');
-  }
-  if (!cellsAreAdjacent(cleanedAllowed[0], cleanedAllowed[1])) {
-    throw new Error('Chosen cells must be adjacent');
-  }
-
+  const emptiesAfterMove = next.board
+    .map((cell, idx) => (cell === null ? idx : null))
+    .filter((idx) => idx !== null);
   const emptyPairs = getAdjacentEmptyPairs(next.board);
+
+  let constraint = [];
   if (emptyPairs.length > 0) {
+    if (cleanedAllowed.length !== 2) {
+      throw new Error('Must choose two adjacent cells');
+    }
+    if (!cellsAreAdjacent(cleanedAllowed[0], cleanedAllowed[1])) {
+      throw new Error('Chosen cells must be adjacent');
+    }
     if (next.board[cleanedAllowed[0]] !== null || next.board[cleanedAllowed[1]] !== null) {
       throw new Error('Chosen cells must be empty while empty adjacent pairs exist');
     }
+    constraint = cleanedAllowed;
+  } else {
+    const needed = Math.min(2, emptiesAfterMove.length);
+    const allowedEmpties = cleanedAllowed.filter((idx) => next.board[idx] === null);
+    if (!allowedEmpties.length) {
+      throw new Error('Must choose an available cell');
+    }
+    constraint = allowedEmpties.slice(0, needed);
   }
-
-  const constraint = cleanedAllowed;
 
   const { winner, line } = checkClassicWinner(next.board);
   if (winner) {

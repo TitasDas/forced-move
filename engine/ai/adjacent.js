@@ -154,12 +154,21 @@ export function buildAdjacentMove(state, position) {
     }
     return { position, allowed: bestPair };
   }
-  // Fallback: use any adjacent pair even if one is filled, to keep the game moving.
+  // No empty adjacent pairs; pick a single best empty cell if possible.
+  const empties = shadowBoard
+    .map((cell, idx) => (cell === null ? idx : null))
+    .filter((idx) => idx !== null);
+  if (empties.length) {
+    const preferred = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+    const chosen = preferred.find((idx) => empties.includes(idx)) ?? empties[0];
+    return { position, allowed: [chosen] };
+  }
+  // Fallback: any adjacent even if filled, as last resort.
   for (let i = 0; i < 9; i += 1) {
     for (const neighbor of getAdjacentCells(i)) {
       if (neighbor === i) continue;
-      return { position, allowed: [i, neighbor] };
+      return { position, allowed: [i] };
     }
   }
-  return { position, allowed: [0, 1] };
+  return { position, allowed: [0] };
 }
