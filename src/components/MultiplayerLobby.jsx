@@ -158,6 +158,9 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
           ← Back
         </button>
         <div className="tag">Board: {mode === 'adjacent' ? 'Adjacent Lock' : 'Ultimate Tic-Tac-Toe'}</div>
+        <a className="btn secondary" href="mailto:titas.das+gh@gmail.com?subject=Forced%20Move%20feedback">
+          Send feedback
+        </a>
       </div>
       <div className="status">
         <div>
