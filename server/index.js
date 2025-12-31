@@ -5,7 +5,7 @@ import { WebSocketServer } from 'ws';
 import { nanoid } from 'nanoid';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { applyMove, createGame, GAME_STATUS, getAvailableMoves } from '../engine/index.js';
+import { applyMove, createGame, GAME_STATUS } from '../engine/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -150,15 +150,12 @@ wss.on('connection', (ws, req) => {
           return;
         }
 
-        const available = getAvailableMoves(game.state);
-        const serializedMove = JSON.stringify(msg.move);
-        const isAllowed = available.some((m) => JSON.stringify(m) === serializedMove);
-        if (!isAllowed) {
-          ws.send(JSON.stringify({ type: 'error', message: 'Illegal move' }));
+        try {
+          game.state = applyMove(game.state, msg.move);
+        } catch (err) {
+          ws.send(JSON.stringify({ type: 'error', message: err.message }));
           return;
         }
-
-        game.state = applyMove(game.state, msg.move);
         game.lastUpdate = Date.now();
         broadcast(game, { type: 'state', state: game.state });
       }
