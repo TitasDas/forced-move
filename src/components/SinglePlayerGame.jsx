@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { applyMove, createGame, GAME_STATUS, getAvailableMoves } from '../../engine/index.js';
 import { chooseMove, DIFFICULTY_LEVELS, buildAdjacentMove } from '../../engine/ai/index.js';
-import { getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
+import { getAdjacentCells } from '../../engine/adjacent.js';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import WinnerOverlay from './WinnerOverlay.jsx';
@@ -51,21 +51,13 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     if (!pending || pending.origin === null) return null;
     const shadow = state.board.slice();
     shadow[pending.origin] = state.currentPlayer;
-    const emptyPairs = getAdjacentEmptyPairs(shadow);
-    const empties = shadow
-      .map((cell, idx) => (cell === null ? idx : null))
-      .filter((idx) => idx !== null);
-    const required = emptyPairs.length ? 2 : 1;
+    const adjacentEmpties = getAdjacentCells(pending.origin).filter((idx) => shadow[idx] === null);
+    const required = Math.min(2, adjacentEmpties.length);
+    if (!required) return [];
     if (!pending.allowed.length) {
-      return empties.filter((idx) => idx !== pending.origin);
+      return adjacentEmpties;
     }
-    const first = pending.allowed[0];
-    return getAdjacentCells(first).filter(
-      (idx) =>
-        idx !== pending.origin &&
-        idx !== first &&
-        (required === 2 ? shadow[idx] === null : true),
-    );
+    return adjacentEmpties.filter((idx) => idx !== pending.allowed[0]);
   }, [mode, pending, state.board, state.currentPlayer]);
 
   const reset = () => {
@@ -161,10 +153,16 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       state.constraintTargets && state.constraintTargets.length
         ? state.constraintTargets.filter((c) => state.board[c] === null)
         : null;
+    const hasConstraint = constrained && constrained.length > 0;
 
     if (!pending || pending.origin === null) {
       if (state.board[idx] !== null) return;
-      if (constrained && !constrained.includes(idx)) return;
+      if (hasConstraint && !constrained.includes(idx)) return;
+      const adjacentEmpties = getAdjacentCells(idx).filter((cellIdx) => state.board[cellIdx] === null);
+      if (adjacentEmpties.length === 0) {
+        commitMove({ position: idx, allowed: [] });
+        return;
+      }
       setPending({ origin: idx, allowed: [] });
       return;
     }
@@ -176,14 +174,16 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
 
     const shadow = state.board.slice();
     shadow[pending.origin] = state.currentPlayer;
-    const emptyPairs = getAdjacentEmptyPairs(shadow);
-    const empties = shadow
-      .map((cell, cellIdx) => (cell === null ? cellIdx : null))
-      .filter((cellIdx) => cellIdx !== null);
-    const required = emptyPairs.length ? 2 : 1;
+    const adjacentEmpties = getAdjacentCells(pending.origin).filter((cellIdx) => shadow[cellIdx] === null);
+    const required = Math.min(2, adjacentEmpties.length);
+    if (!required) {
+      setPending(null);
+      return;
+    }
 
     if (!pending.allowed.length) {
       if (shadow[idx] !== null) return;
+      if (!adjacentEmpties.includes(idx)) return;
       if (required === 1) {
         commitMove({ position: pending.origin, allowed: [idx] });
         setPending(null);
@@ -199,7 +199,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       return;
     }
     if (shadow[idx] !== null) return;
-    if (!getAdjacentCells(first).includes(idx)) return;
+    if (!adjacentEmpties.includes(idx)) return;
     const allowed = [first, idx];
     commitMove({ position: pending.origin, allowed });
     setPending(null);
@@ -279,7 +279,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
         />
         {mode === 'adjacent' && pending?.origin !== null && (
           <div className="control-row">
-            <div className="tag">Pick up to two adjacent squares for your opponent.</div>
+            <div className="tag">Pick up to two squares next to your move for your opponent.</div>
           </div>
         )}
       </div>
@@ -293,9 +293,11 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
                   {idx + 1}. {move.player} →
                   {mode === 'nested'
                     ? ` board ${move.boardIndex + 1}, cell ${move.cellIndex + 1}`
-                    : ` cell ${move.position + 1} ${move.allowed ? `(adjacent: ${move.allowed
-                        .map((c) => c + 1)
-                        .join(', ')})` : ''}`}
+                    : ` cell ${move.position + 1}${
+                        move.allowed && move.allowed.length
+                          ? ` (adjacent: ${move.allowed.map((c) => c + 1).join(', ')})`
+                          : ' (no adjacent targets)'
+                      }`}
                 </span>
                 <button className="btn secondary" onClick={() => replay(idx)}>
                   Replay here
