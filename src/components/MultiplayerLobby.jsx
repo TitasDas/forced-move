@@ -77,7 +77,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
     const empties = shadow
       .map((cell, idx) => (cell === null ? idx : null))
       .filter((idx) => idx !== null);
-    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
+    const required = emptyPairs.length ? 2 : 1;
     if (!pending.allowed.length) {
       return empties.filter((idx) => idx !== pending.origin);
     }
@@ -119,7 +119,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
     const empties = shadow
       .map((cell, cellIdx) => (cell === null ? cellIdx : null))
       .filter((cellIdx) => cellIdx !== null);
-    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
+    const required = emptyPairs.length ? 2 : 1;
 
     if (!pending.allowed.length) {
       if (shadow[idx] !== null) return;
