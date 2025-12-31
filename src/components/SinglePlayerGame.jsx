@@ -231,6 +231,9 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
           <div className="tag">
             Board: {mode === 'adjacent' ? 'Adjacent Lock' : 'Ultimate Tic-Tac-Toe'}
           </div>
+          <a className="btn secondary" href="mailto:titas.das+gh@gmail.com?subject=Forced%20Move%20feedback">
+            Send feedback
+          </a>
       </div>
       <div className="status">
         <div>

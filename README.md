@@ -16,20 +16,6 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 
 [Play the game](https://forced-move.onrender.com/) (Still in testing, feedback can be given by filing an issue)
 
-## Want to run it locally?
-
-```
-npm install
-npm run dev   # open http://localhost:5173
-npm run build # output to dist/
-```
-
-That’s it! grab a friend or play the CPU, and enjoy the forced-move dance.
-
-### Android (WebView wrapper)
-- Build the web app first: `npm run build`
-- From `android/`: `./gradlew :app:assembleDebug` (or `assembleRelease`) to produce an APK that loads `dist/` locally. No proprietary SDKs; F-Droid friendly.
-
 ## For curious builders
 
 Developer details live in `devnotes/README.md` (architecture, backend, multiplayer flow), and UI/UX choices plus future polish ideas live in `ui-ux-notes/README.md`.

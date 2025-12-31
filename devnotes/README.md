@@ -17,6 +17,17 @@ For maintainers and contributors. Player-facing info lives in the root README.
 - `npm start` — serve `dist/` and WebSocket API on `PORT` (default 8788).
 - Android wrapper (WebView): from `android/`, `./gradlew :app:assembleDebug` after `npm run build`; copies `dist/` into assets. No proprietary deps.
 
+## Run it locally
+
+```
+npm install
+npm run dev   # open http://localhost:5173
+npm run build # output to dist/
+PORT=8788 npm start # serves dist/ + WebSocket API
+```
+
+- Android (WebView wrapper): build the web app first with `npm run build`, then from `android/` run `./gradlew :app:assembleDebug` (or `assembleRelease`) to produce an APK that loads `dist/` locally.
+
 ## State & security
 
 - Shared engine and validation for client + server to avoid client authority.
