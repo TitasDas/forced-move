@@ -306,6 +306,17 @@
   color: var(--ink);
 }
 
+.rule-row .list.numbered {
+  list-style: decimal;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.rule-row li {
+  line-height: 1.5;
+}
+
 .feedback-card {
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(247, 245, 255, 0.9));
   border: 1px solid rgba(86, 71, 255, 0.1);
