@@ -105,6 +105,11 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
     if (!pending || pending.origin === null) {
       if (state.board[idx] !== null) return;
       if (constrained && !constrained.includes(idx)) return;
+      const adjacentEmpties = getAdjacentCells(idx).filter((cellIdx) => state.board[cellIdx] === null);
+      if (adjacentEmpties.length === 0) {
+        handleMove({ position: idx, allowed: [] });
+        return;
+      }
       setPending({ origin: idx, allowed: [] });
       return;
     }
@@ -116,14 +121,17 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
 
     const shadow = state.board.slice();
     shadow[pending.origin] = state.currentPlayer;
-    const emptyPairs = getAdjacentEmptyPairs(shadow);
-    const empties = shadow
-      .map((cell, cellIdx) => (cell === null ? cellIdx : null))
-      .filter((cellIdx) => cellIdx !== null);
-    const required = emptyPairs.length ? 2 : 1;
+    const adjacentEmpties = getAdjacentCells(pending.origin).filter((cellIdx) => shadow[cellIdx] === null);
+    if (adjacentEmpties.length === 0) {
+      handleMove({ position: pending.origin, allowed: [] });
+      setPending(null);
+      return;
+    }
+    const required = Math.min(2, adjacentEmpties.length);
 
     if (!pending.allowed.length) {
       if (shadow[idx] !== null) return;
+      if (!adjacentEmpties.includes(idx)) return;
       if (required === 1) {
         handleMove({ position: pending.origin, allowed: [idx] });
         setPending(null);
@@ -138,7 +146,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
       return;
     }
     if (shadow[idx] !== null) return;
-    if (!getAdjacentCells(first).includes(idx)) return;
+    if (!adjacentEmpties.includes(idx)) return;
     const allowed = [first, idx];
     handleMove({ position: pending.origin, allowed });
     setPending(null);
