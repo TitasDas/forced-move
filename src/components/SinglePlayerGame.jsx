@@ -49,20 +49,24 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
   const selectableTargets = useMemo(() => {
     if (mode !== 'adjacent') return null;
     if (!pending || pending.origin === null) return null;
-    const emptyPairsExist = getAdjacentEmptyPairs(state.board).length > 0;
+    const shadow = state.board.slice();
+    shadow[pending.origin] = state.currentPlayer;
+    const emptyPairs = getAdjacentEmptyPairs(shadow);
+    const empties = shadow
+      .map((cell, idx) => (cell === null ? idx : null))
+      .filter((idx) => idx !== null);
+    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
     if (!pending.allowed.length) {
-      return [...Array(9).keys()].filter(
-        (idx) => idx !== pending.origin && (!emptyPairsExist ? true : state.board[idx] === null),
-      );
+      return empties.filter((idx) => idx !== pending.origin);
     }
     const first = pending.allowed[0];
     return getAdjacentCells(first).filter(
       (idx) =>
         idx !== pending.origin &&
         idx !== first &&
-        (!emptyPairsExist ? true : state.board[idx] === null),
+        (required === 2 ? shadow[idx] === null : true),
     );
-  }, [mode, pending, state.board]);
+  }, [mode, pending, state.board, state.currentPlayer]);
 
   const reset = () => {
     setState(createGame(mode));
@@ -170,10 +174,21 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       return;
     }
 
-    const emptyPairsExist = getAdjacentEmptyPairs(state.board).length > 0;
+    const shadow = state.board.slice();
+    shadow[pending.origin] = state.currentPlayer;
+    const emptyPairs = getAdjacentEmptyPairs(shadow);
+    const empties = shadow
+      .map((cell, cellIdx) => (cell === null ? cellIdx : null))
+      .filter((cellIdx) => cellIdx !== null);
+    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
 
     if (!pending.allowed.length) {
-      if (emptyPairsExist && state.board[idx] !== null) return;
+      if (shadow[idx] !== null) return;
+      if (required === 1) {
+        commitMove({ position: pending.origin, allowed: [idx] });
+        setPending(null);
+        return;
+      }
       setPending({ origin: pending.origin, allowed: [idx] });
       return;
     }
@@ -183,7 +198,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       setPending({ origin: pending.origin, allowed: [] });
       return;
     }
-    if (emptyPairsExist && state.board[idx] !== null) return;
+    if (shadow[idx] !== null) return;
     if (!getAdjacentCells(first).includes(idx)) return;
     const allowed = [first, idx];
     commitMove({ position: pending.origin, allowed });
