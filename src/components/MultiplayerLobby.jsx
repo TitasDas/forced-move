@@ -3,7 +3,7 @@ import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import { useWebSocketGame } from '../hooks/useWebSocketGame.js';
 import WinnerOverlay from './WinnerOverlay.jsx';
-import { getAdjacentCells } from '../../engine/adjacent.js';
+import { getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
 
 export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const [mode, setMode] = useState(initialMode === 'classic' ? 'adjacent' : initialMode);
@@ -68,38 +68,61 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
     setPending(null);
   }, [mode, state?.currentPlayer, state?.status]);
 
+  const selectableTargets = useMemo(() => {
+    if (!state || state.mode !== 'adjacent') return null;
+    if (!pending || pending.origin === null) return null;
+    const emptyPairsExist = getAdjacentEmptyPairs(state.board).length > 0;
+    if (!pending.allowed.length) {
+      return [...Array(9).keys()].filter(
+        (idx) => idx !== pending.origin && (!emptyPairsExist ? true : state.board[idx] === null),
+      );
+    }
+    const first = pending.allowed[0];
+    return getAdjacentCells(first).filter(
+      (idx) =>
+        idx !== pending.origin &&
+        idx !== first &&
+        (!emptyPairsExist ? true : state.board[idx] === null),
+    );
+  }, [pending, state]);
+
   const handleSelect = (idx) => {
     if (!state || state.mode !== 'adjacent') {
       handleMove(idx);
       return;
     }
     if (state.status !== 'in_progress' || state.currentPlayer !== role) return;
-    if (state.board[idx] !== null) return;
     const constrained =
       state.constraintTargets && state.constraintTargets.length
         ? state.constraintTargets.filter((c) => state.board[c] === null)
         : null;
-    if (constrained && !constrained.includes(idx)) return;
 
     if (!pending || pending.origin === null) {
+      if (state.board[idx] !== null) return;
+      if (constrained && !constrained.includes(idx)) return;
       setPending({ origin: idx, allowed: [] });
       return;
     }
+
     if (pending.origin === idx) {
       setPending(null);
       return;
     }
-    const adj = getAdjacentCells(pending.origin).filter((c) => state.board[c] === null);
-    if (!adj.includes(idx)) return;
-    if (pending.allowed.includes(idx)) return;
-    const nextAllowed = [...pending.allowed, idx].slice(0, 2);
-    const shouldCommit = nextAllowed.length >= 2 || nextAllowed.length === adj.length;
-    if (shouldCommit) {
-      handleMove({ position: pending.origin, allowed: nextAllowed });
-      setPending(null);
-    } else {
-      setPending({ origin: pending.origin, allowed: nextAllowed });
+
+    const emptyPairsExist = getAdjacentEmptyPairs(state.board).length > 0;
+
+    if (!pending.allowed.length) {
+      if (emptyPairsExist && state.board[idx] !== null) return;
+      setPending({ origin: pending.origin, allowed: [idx] });
+      return;
     }
+    const first = pending.allowed[0];
+    if (first === idx) return;
+    if (emptyPairsExist && state.board[idx] !== null) return;
+    if (!getAdjacentCells(first).includes(idx)) return;
+    const allowed = [first, idx];
+    handleMove({ position: pending.origin, allowed });
+    setPending(null);
   };
 
   return (
@@ -151,6 +174,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
                 onSelect={state.mode === 'adjacent' ? handleSelect : undefined}
                 pendingOrigin={state.mode === 'adjacent' ? pending?.origin : null}
                 pendingAllowed={state.mode === 'adjacent' ? pending?.allowed || [] : []}
+                selectableTargets={state.mode === 'adjacent' ? selectableTargets : null}
               />
             </div>
           )}

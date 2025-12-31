@@ -1,6 +1,5 @@
 import React from 'react';
 import { GAME_STATUS } from '../../engine/index.js';
-import { getAdjacentCells } from '../../engine/adjacent.js';
 
 export default function BoardClassic({
   state,
@@ -8,14 +7,17 @@ export default function BoardClassic({
   onSelect,
   pendingOrigin = null,
   pendingAllowed = [],
+  selectableTargets = null,
 }) {
   const { board, winLine } = state;
+  const selectingTargets = Array.isArray(selectableTargets);
   const constrained =
-    state.mode === 'adjacent' && state.constraintTargets && state.constraintTargets.length
+    pendingOrigin === null &&
+    state.mode === 'adjacent' &&
+    state.constraintTargets &&
+    state.constraintTargets.length
       ? state.constraintTargets.filter((idx) => state.board[idx] === null)
       : null;
-  const pendingAdjacents =
-    pendingOrigin !== null ? getAdjacentCells(pendingOrigin) : [];
   return (
     <div
       className="board classic-board"
@@ -24,15 +26,28 @@ export default function BoardClassic({
       aria-live="polite"
     >
       {board.map((cell, idx) => {
-        const locked =
-          cell !== null ||
-          state.status !== GAME_STATUS.IN_PROGRESS ||
-          state.currentPlayer === null ||
-          (constrained && !constrained.includes(idx));
+        const isOrigin = pendingOrigin === idx;
+        let locked =
+          state.status !== GAME_STATUS.IN_PROGRESS || state.currentPlayer === null;
+
+        if (selectingTargets) {
+          locked =
+            locked ||
+            (!isOrigin &&
+              selectableTargets &&
+              selectableTargets.length > 0 &&
+              !selectableTargets.includes(idx));
+        } else {
+          locked =
+            locked ||
+            cell !== null ||
+            (constrained && !constrained.includes(idx));
+        }
+
         const isWin = winLine?.includes(idx);
-        const isPendingOrigin = pendingOrigin === idx;
+        const isPendingOrigin = isOrigin;
         const isPendingChoice =
-          pendingOrigin !== null && pendingAdjacents.includes(idx) && cell === null;
+          pendingOrigin !== null && selectingTargets && selectableTargets.includes(idx);
         const isSelectedPending = pendingAllowed.includes(idx);
         const handler = onSelect || onMove;
         return (
