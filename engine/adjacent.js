@@ -80,6 +80,26 @@ export function applyAdjacentMove(state, move) {
         (idx) => Number.isInteger(idx) && idx >= 0 && idx <= 8 && idx !== position,
       )
     : [];
+
+  // If this move wins or fills the board, end the game immediately and ignore target validation.
+  const { winner, line } = checkClassicWinner(next.board);
+  if (winner) {
+    next.winner = winner;
+    next.status = statusFromWinner(winner);
+    next.winLine = line;
+    next.constraintTargets = [];
+    next.lastMove = { position, player: state.currentPlayer, allowed: cleanedAllowed };
+    next.history = [...state.history, next.lastMove];
+    return next;
+  }
+  if (isBoardFull(next.board)) {
+    next.status = GAME_STATUS.DRAW;
+    next.constraintTargets = [];
+    next.lastMove = { position, player: state.currentPlayer, allowed: cleanedAllowed };
+    next.history = [...state.history, next.lastMove];
+    return next;
+  }
+
   const emptiesAfterMove = next.board
     .map((cell, idx) => (cell === null ? idx : null))
     .filter((idx) => idx !== null);
@@ -104,24 +124,6 @@ export function applyAdjacentMove(state, move) {
       throw new Error('Must choose an available cell');
     }
     constraint = allowedEmpties.slice(0, needed);
-  }
-
-  const { winner, line } = checkClassicWinner(next.board);
-  if (winner) {
-    next.winner = winner;
-    next.status = statusFromWinner(winner);
-    next.winLine = line;
-    next.constraintTargets = [];
-    next.lastMove = { position, player: state.currentPlayer, allowed: constraint };
-    next.history = [...state.history, next.lastMove];
-    return next;
-  }
-  if (isBoardFull(next.board)) {
-    next.status = GAME_STATUS.DRAW;
-    next.constraintTargets = [];
-    next.lastMove = { position, player: state.currentPlayer, allowed: constraint };
-    next.history = [...state.history, next.lastMove];
-    return next;
   }
 
   next.constraintTargets = constraint;
