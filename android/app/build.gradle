@@ -1,0 +1,62 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.forcedmove'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.forcedmove"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+        }
+    }
+
+    packaging {
+        resources.excludes += [
+                'META-INF/AL2.0',
+                'META-INF/LGPL2.1'
+        ]
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.activity:activity-ktx:1.8.2'
+    implementation 'androidx.webkit:webkit:1.8.0'
+}
+
+// Copy built web assets into the app before each build.
+tasks.register("distCheck") {
+    doFirst {
+        def distDir = file("${rootProject.projectDir.parent}/dist")
+        if (!distDir.exists()) {
+            throw new GradleException("Missing dist/. Run `npm run build` first.")
+        }
+    }
+}
+
+tasks.register("copyWebAssets", Copy) {
+    dependsOn("distCheck")
+    from("${rootProject.projectDir.parent}/dist") {
+        exclude("**/*.map")
+    }
+    into("${projectDir}/src/main/assets/www")
+}
+
+tasks.named("preBuild").configure {
+    dependsOn("copyWebAssets")
+}
