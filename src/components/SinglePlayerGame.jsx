@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { applyMove, createGame, GAME_STATUS } from '../../engine/index.js';
+import { applyMove, createGame, GAME_STATUS, getAvailableMoves } from '../../engine/index.js';
 import { chooseMove, DIFFICULTY_LEVELS, buildAdjacentMove } from '../../engine/ai/index.js';
 import { getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
 import BoardClassic from './BoardClassic.jsx';
@@ -13,6 +13,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
   const [aiThinking, setAiThinking] = useState(false);
   const aiTimer = useRef(null);
   const [pending, setPending] = useState(null); // { origin, allowed[] }
+  const [deadlock, setDeadlock] = useState('');
 
   useEffect(() => {
     setState(createGame(mode));
@@ -65,6 +66,18 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
 
   const reset = () => {
     setState(createGame(mode));
+    setDeadlock('');
+  };
+
+  const resolveDeadlock = (nextState) => {
+    if (nextState.status !== GAME_STATUS.IN_PROGRESS) return nextState;
+    const moves = getAvailableMoves(nextState);
+    if (moves.length === 0) {
+      setDeadlock('No moves available — board reset to keep play going.');
+      setPending(null);
+      return createGame(mode);
+    }
+    return nextState;
   };
 
   const commitMove = (move) => {
@@ -85,6 +98,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
         console.error(err);
         return current;
       }
+      afterHuman = resolveDeadlock(afterHuman);
       if (afterHuman.status !== GAME_STATUS.IN_PROGRESS) {
         setAiThinking(false);
         return afterHuman;
@@ -123,6 +137,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
           } catch (err) {
             console.error(err);
           }
+          afterAi = resolveDeadlock(afterAi);
           setAiThinking(false);
           return afterAi;
         });
@@ -208,6 +223,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
           <div className="control-row">
             <span>{statusText}</span>
             {mode === 'adjacent' && <span className="tag">Adjacent Lock</span>}
+            {deadlock && <span className="tag secondary">{deadlock}</span>}
             {aiThinking && (
               <span className="thinker" aria-live="polite">
                 <span className="sigil">∑</span>
