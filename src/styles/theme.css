@@ -354,6 +354,11 @@
   box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.25);
 }
 
+.feedback-input.contact {
+  margin-top: 0.35rem;
+  min-height: auto;
+}
+
 .feedback-actions {
   display: flex;
   align-items: center;
