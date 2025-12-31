@@ -1,7 +1,7 @@
 import { applyMove, getAvailableMoves } from './index.js';
 import { GAME_STATUS, PLAYER_O, PLAYER_X } from './state.js';
 import { checkClassicWinner, WIN_LINES } from './classic.js';
-import { getAdjacentCells } from './adjacent.js';
+import { getAdjacentCells, getAdjacentEmptyPairs } from './adjacent.js';
 
 export const DIFFICULTY_LEVELS = [1, 2, 3, 4, 5];
 
@@ -11,6 +11,20 @@ function randomChoice(arr) {
 
 function opposite(player) {
   return player === PLAYER_X ? PLAYER_O : PLAYER_X;
+}
+
+function findBlockingCell(board, player) {
+  for (const line of WIN_LINES) {
+    const marks = line.map((idx) => board[idx]);
+    const emptyIndex = marks.indexOf(null);
+    if (emptyIndex === -1) continue;
+    const [a, b, c] = line;
+    const values = [board[a], board[b], board[c]];
+    if (values.filter((v) => v === player).length === 2 && values.includes(null)) {
+      return line[emptyIndex];
+    }
+  }
+  return null;
 }
 
 function immediateClassicMove(state, player) {
@@ -104,12 +118,11 @@ export function chooseMove(state, difficulty = 3) {
   if (difficulty === 1) return randomChoice(moves);
 
   if (state.mode === 'adjacent') {
-    // Treat like classic heuristics but return a raw position; caller will wrap with allowed adjacents.
-    let move = heuristicClassic(state);
-    if (move === null || move === undefined) {
-      move = randomChoice(moves);
+    const preferred = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+    for (const idx of preferred) {
+      if (moves.includes(idx)) return idx;
     }
-    return move;
+    return randomChoice(moves);
   }
 
   if (state.mode === 'classic') {
@@ -143,6 +156,18 @@ export function chooseMove(state, difficulty = 3) {
 }
 
 export function buildAdjacentMove(state, position) {
-  const adj = getAdjacentCells(position).filter((idx) => state.board[idx] === null);
-  return { position, allowed: adj.slice(0, 2) };
+  const shadowBoard = state.board.slice();
+  shadowBoard[position] = state.currentPlayer;
+  const pairs = getAdjacentEmptyPairs(shadowBoard);
+  if (pairs.length) {
+    return { position, allowed: pairs[0] };
+  }
+  // Fallback: use any adjacent pair even if one is filled, to keep the game moving.
+  for (let i = 0; i < 9; i += 1) {
+    for (const neighbor of getAdjacentCells(i)) {
+      if (neighbor === i) continue;
+      return { position, allowed: [i, neighbor] };
+    }
+  }
+  return { position, allowed: [0, 1] };
 }

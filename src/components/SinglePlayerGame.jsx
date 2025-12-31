@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { applyMove, createGame, GAME_STATUS } from '../../engine/index.js';
 import { chooseMove, DIFFICULTY_LEVELS, buildAdjacentMove } from '../../engine/ai.js';
-import { getAdjacentCells } from '../../engine/adjacent.js';
+import { getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import WinnerOverlay from './WinnerOverlay.jsx';
@@ -45,6 +45,24 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     return state.winner === 'X' ? 'You win!' : 'Computer wins';
   }, [state, difficulty]);
 
+  const selectableTargets = useMemo(() => {
+    if (mode !== 'adjacent') return null;
+    if (!pending || pending.origin === null) return null;
+    const emptyPairsExist = getAdjacentEmptyPairs(state.board).length > 0;
+    if (!pending.allowed.length) {
+      return [...Array(9).keys()].filter(
+        (idx) => idx !== pending.origin && (!emptyPairsExist ? true : state.board[idx] === null),
+      );
+    }
+    const first = pending.allowed[0];
+    return getAdjacentCells(first).filter(
+      (idx) =>
+        idx !== pending.origin &&
+        idx !== first &&
+        (!emptyPairsExist ? true : state.board[idx] === null),
+    );
+  }, [mode, pending, state.board]);
+
   const reset = () => {
     setState(createGame(mode));
   };
@@ -54,7 +72,19 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       if (current.status !== GAME_STATUS.IN_PROGRESS || current.currentPlayer !== 'X') {
         return current;
       }
-      const afterHuman = applyMove(current, move);
+      if (current.mode === 'adjacent' && current.constraintTargets?.length) {
+        const legal = current.constraintTargets.filter((idx) => current.board[idx] === null);
+        if (legal.length && !legal.includes(move.position)) {
+          return current;
+        }
+      }
+      let afterHuman = current;
+      try {
+        afterHuman = applyMove(current, move);
+      } catch (err) {
+        console.error(err);
+        return current;
+      }
       if (afterHuman.status !== GAME_STATUS.IN_PROGRESS) {
         setAiThinking(false);
         return afterHuman;
@@ -67,11 +97,32 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
             setAiThinking(false);
             return latest;
           }
+          const legalConstraint =
+            latest.mode === 'adjacent' &&
+            latest.constraintTargets &&
+            latest.constraintTargets.filter((idx) => latest.board[idx] === null);
+
           let aiMove = chooseMove(latest, difficulty);
-          if (aiMove !== null && latest.mode === 'adjacent' && typeof aiMove === 'number') {
-            aiMove = buildAdjacentMove(latest, aiMove);
+
+          // Force AI to respect current constraint if one exists.
+          if (latest.mode === 'adjacent') {
+            let aiPos =
+              aiMove && typeof aiMove === 'object' ? aiMove.position : aiMove;
+            if (legalConstraint && legalConstraint.length && !legalConstraint.includes(aiPos)) {
+              aiPos = legalConstraint[0];
+              aiMove = aiPos;
+            }
+            if (aiMove !== null && typeof aiMove === 'number') {
+              aiMove = buildAdjacentMove(latest, aiMove);
+            }
           }
-          const afterAi = aiMove !== null ? applyMove(latest, aiMove) : latest;
+
+          let afterAi = latest;
+          try {
+            afterAi = aiMove !== null ? applyMove(latest, aiMove) : latest;
+          } catch (err) {
+            console.error(err);
+          }
           setAiThinking(false);
           return afterAi;
         });
@@ -91,28 +142,33 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       state.constraintTargets && state.constraintTargets.length
         ? state.constraintTargets.filter((c) => state.board[c] === null)
         : null;
-    if (state.board[idx] !== null) return;
-    if (constrained && !constrained.includes(idx)) return;
 
     if (!pending || pending.origin === null) {
+      if (state.board[idx] !== null) return;
+      if (constrained && !constrained.includes(idx)) return;
       setPending({ origin: idx, allowed: [] });
       return;
     }
+
     if (pending.origin === idx) {
       setPending(null);
       return;
     }
-    const adj = getAdjacentCells(pending.origin).filter((c) => state.board[c] === null);
-    if (!adj.includes(idx)) return;
-    if (pending.allowed.includes(idx)) return;
-    const nextAllowed = [...pending.allowed, idx].slice(0, 2);
-    const shouldCommit = nextAllowed.length >= 2 || nextAllowed.length === adj.length;
-    if (shouldCommit) {
-      commitMove({ position: pending.origin, allowed: nextAllowed });
-      setPending(null);
-    } else {
-      setPending({ origin: pending.origin, allowed: nextAllowed });
+
+    const emptyPairsExist = getAdjacentEmptyPairs(state.board).length > 0;
+
+    if (!pending.allowed.length) {
+      if (emptyPairsExist && state.board[idx] !== null) return;
+      setPending({ origin: pending.origin, allowed: [idx] });
+      return;
     }
+    const first = pending.allowed[0];
+    if (first === idx) return;
+    if (emptyPairsExist && state.board[idx] !== null) return;
+    if (!getAdjacentCells(first).includes(idx)) return;
+    const allowed = [first, idx];
+    commitMove({ position: pending.origin, allowed });
+    setPending(null);
   };
 
   const replay = (index) => {
@@ -184,6 +240,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
           onSelect={mode === 'adjacent' ? handleSelect : undefined}
           pendingOrigin={mode === 'adjacent' ? pending?.origin : null}
           pendingAllowed={mode === 'adjacent' ? pending?.allowed || [] : []}
+          selectableTargets={mode === 'adjacent' ? selectableTargets : null}
         />
         {mode === 'adjacent' && pending?.origin !== null && (
           <div className="control-row">
