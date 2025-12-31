@@ -70,9 +70,13 @@ function minimaxAdjacent(state, player, depth, alpha = -Infinity, beta = Infinit
   let bestScore = -Infinity;
 
   for (const move of moves) {
-    const fullMove =
-      typeof move === 'number' ? buildAdjacentMove(state, move) : move;
-    const next = applyMove(state, fullMove);
+    const fullMove = typeof move === 'number' ? buildAdjacentMove(state, move) : move;
+    let next;
+    try {
+      next = applyMove(state, fullMove);
+    } catch {
+      continue; // skip illegal branches
+    }
     const { score } = minimaxAdjacent(next, player, depth - 1, -beta, -alpha);
     const adjusted = -score;
     if (adjusted > bestScore) {
