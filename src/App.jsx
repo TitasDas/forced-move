@@ -116,22 +116,22 @@ export default function App() {
           />
 
           {screen === 'menu' && (
-            <div className="panel grid two">
-              <div className="panel rule-card">
-                <div className="card-title">Ultimate rules</div>
-                <div className="list">
-                  <div className="rule-line">Your move marks a cell inside a mini-board and sends your opponent to the matching mini-board.</div>
-                  <div className="rule-line">If that target mini-board is full or already won, they may choose any open mini-board instead.</div>
-                  <div className="rule-line">Win a mini-board to claim its big square; three claimed big squares in a row wins the game.</div>
-                </div>
-              </div>
+            <div className="panel grid two rule-row">
               <div className="panel rule-card">
                 <div className="card-title">Adjacent Lock rules</div>
-                <div className="list">
-                  <div className="rule-line">On your turn, place your mark and choose up to two adjacent empty squares for your opponent to play next.</div>
-                  <div className="rule-line">If only one adjacent empty exists, pick that one; if none exist, they may play anywhere.</div>
-                  <div className="rule-line">If one chosen square is blocked, your opponent takes the other; if both are blocked, they can play any open square.</div>
-                </div>
+                <ol className="list numbered">
+                  <li>Place your mark and choose up to two adjacent empty squares for your opponent to play next.</li>
+                  <li>If only one adjacent empty exists, pick that one; if none exist, they may play anywhere.</li>
+                  <li>If one chosen square is blocked, your opponent takes the other; if both are blocked, they can play any open square.</li>
+                </ol>
+              </div>
+              <div className="panel rule-card">
+                <div className="card-title">Ultimate rules</div>
+                <ol className="list numbered">
+                  <li>Your move marks a cell inside a mini-board and sends your opponent to the matching mini-board.</li>
+                  <li>If that target mini-board is full or already won, they may choose any open mini-board instead.</li>
+                  <li>Win a mini-board to claim its big square; three claimed big squares in a row wins the game.</li>
+                </ol>
               </div>
             </div>
           )}
