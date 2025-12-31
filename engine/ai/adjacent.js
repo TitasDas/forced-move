@@ -1,7 +1,7 @@
 import { applyMove, getAvailableMoves } from '../index.js';
 import { GAME_STATUS, PLAYER_O, PLAYER_X } from '../state.js';
 import { WIN_LINES } from '../classic.js';
-import { getAdjacentCells } from '../adjacent.js';
+import { getAdjacentCells, getAdjacentEmptyPairs } from '../adjacent.js';
 
 function randomChoice(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -141,28 +141,34 @@ export function chooseAdjacentMove(state, difficulty = 3) {
 export function buildAdjacentMove(state, position) {
   const shadowBoard = state.board.slice();
   shadowBoard[position] = state.currentPlayer;
-  const adjacentEmpties = getAdjacentCells(position).filter((idx) => shadowBoard[idx] === null);
-
-  if (adjacentEmpties.length >= 2) {
-    let bestPair = [adjacentEmpties[0], adjacentEmpties[1]];
+  const pairs = getAdjacentEmptyPairs(shadowBoard);
+  if (pairs.length) {
+    let bestPair = pairs[0];
     let bestScore = -Infinity;
-    for (let i = 0; i < adjacentEmpties.length; i += 1) {
-      for (let j = i + 1; j < adjacentEmpties.length; j += 1) {
-        const pair = [adjacentEmpties[i], adjacentEmpties[j]];
-        const score = scoreConstraintPair(state, position, pair);
-        if (score > bestScore) {
-          bestScore = score;
-          bestPair = pair;
-        }
+    for (const pair of pairs) {
+      const score = scoreConstraintPair(state, position, pair);
+      if (score > bestScore) {
+        bestScore = score;
+        bestPair = pair;
       }
     }
     return { position, allowed: bestPair };
   }
-
-  if (adjacentEmpties.length === 1) {
-    return { position, allowed: [adjacentEmpties[0]] };
+  // No empty adjacent pairs; pick a single best empty cell if possible.
+  const empties = shadowBoard
+    .map((cell, idx) => (cell === null ? idx : null))
+    .filter((idx) => idx !== null);
+  if (empties.length) {
+    const preferred = [4, 0, 2, 6, 8, 1, 3, 5, 7];
+    const chosen = preferred.find((idx) => empties.includes(idx)) ?? empties[0];
+    return { position, allowed: [chosen] };
   }
-
-  // No adjacent empty cells left; opponent gets a free move.
-  return { position, allowed: [] };
+  // Fallback: any adjacent even if filled, as last resort.
+  for (let i = 0; i < 9; i += 1) {
+    for (const neighbor of getAdjacentCells(i)) {
+      if (neighbor === i) continue;
+      return { position, allowed: [i] };
+    }
+  }
+  return { position, allowed: [0] };
 }

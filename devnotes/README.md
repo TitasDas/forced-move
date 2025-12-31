@@ -8,7 +8,7 @@ For maintainers and contributors. Player-facing info lives in the root README.
 - Game engine: `engine/` pure logic (adjacent-lock and ultimate rules), state versioning, deterministic applyMove, AI ladder.
 - Backend: `server/index.js` (Express + `ws`). Authoritative validation, invite tokens, lightweight rate limiting. In-memory store (add Redis/DB for production).
 - Multiplayer: WebSocket path `/ws` with `gameId` + `token`. Moves validated server-side; state broadcast to both players.
-- Adjacent Lock mode: move includes `{ position, allowed[] }` with cells adjacent to the just-played mark. If two or more adjacent empties exist, pick two; if only one exists, pick that one; if none are open, the opponent gets a free move. If both chosen are blocked on the next turn, opponent falls back to any open cell.
+- Adjacent Lock mode: move includes `{ position, allowed[] }` with adjacent cells to constrain the opponent. If empty adjacent pairs exist, two empty adjacent cells are required; if none exist, a single empty cell is allowed. If both chosen are blocked on the next turn, opponent falls back to any open cell.
 
 ## Scripts
 

@@ -11,14 +11,13 @@ export default function BoardClassic({
 }) {
   const { board, winLine } = state;
   const selectingTargets = Array.isArray(selectableTargets);
-  const constrainedRaw =
+  const constrained =
     pendingOrigin === null &&
     state.mode === 'adjacent' &&
     state.constraintTargets &&
     state.constraintTargets.length
       ? state.constraintTargets.filter((idx) => state.board[idx] === null)
       : null;
-  const constrained = constrainedRaw && constrainedRaw.length ? constrainedRaw : null;
   return (
     <div
       className="board classic-board"
