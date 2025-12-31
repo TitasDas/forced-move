@@ -5,6 +5,7 @@ import { getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.j
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import WinnerOverlay from './WinnerOverlay.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 
 export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
   const [mode, setMode] = useState(initialMode);
@@ -231,9 +232,6 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
           <div className="tag">
             Board: {mode === 'adjacent' ? 'Adjacent Lock' : 'Ultimate Tic-Tac-Toe'}
           </div>
-          <a className="btn secondary" href="mailto:titas.das+gh@gmail.com?subject=Forced%20Move%20feedback">
-            Send feedback
-          </a>
       </div>
       <div className="status">
         <div>
@@ -308,6 +306,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
             {!state.history.length && <li>No moves yet — start playing.</li>}
           </ol>
         </div>
+        <FeedbackBox context="solo mode" />
       </div>
     </div>
   );

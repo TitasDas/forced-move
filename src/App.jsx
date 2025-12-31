@@ -4,8 +4,7 @@ import SinglePlayerGame from './components/SinglePlayerGame.jsx';
 import MultiplayerLobby from './components/MultiplayerLobby.jsx';
 import AudioToggle from './components/AudioToggle.jsx';
 import { GAME_VERSION } from '../engine/state.js';
-
-const FEEDBACK_MAILTO = 'mailto:titas.das+gh@gmail.com?subject=Forced%20Move%20feedback';
+import FeedbackBox from './components/FeedbackBox.jsx';
 
 const MODES = [
   {
@@ -66,13 +65,9 @@ function StartScreen({ mode, setMode, setScreen }) {
             </button>
           </div>
           <div className="tag">Current board: {activeMode.label}</div>
-          <div className="control-row">
-            <a className="btn secondary" href={FEEDBACK_MAILTO}>
-              Send feedback
-            </a>
-          </div>
         </div>
       </div>
+      <FeedbackBox context="main menu" />
     </header>
   );
 }

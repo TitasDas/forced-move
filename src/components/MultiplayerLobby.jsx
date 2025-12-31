@@ -4,6 +4,7 @@ import BoardNested from './BoardNested.jsx';
 import { useWebSocketGame } from '../hooks/useWebSocketGame.js';
 import WinnerOverlay from './WinnerOverlay.jsx';
 import { getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
+import FeedbackBox from './FeedbackBox.jsx';
 
 export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const [mode, setMode] = useState(initialMode === 'nested' ? 'nested' : 'adjacent');
@@ -158,9 +159,6 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
           ← Back
         </button>
         <div className="tag">Board: {mode === 'adjacent' ? 'Adjacent Lock' : 'Ultimate Tic-Tac-Toe'}</div>
-        <a className="btn secondary" href="mailto:titas.das+gh@gmail.com?subject=Forced%20Move%20feedback">
-          Send feedback
-        </a>
       </div>
       <div className="status">
         <div>
@@ -234,6 +232,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
           </div>
         </div>
       </div>
+      <FeedbackBox context="multiplayer lobby" />
     </div>
   );
 }
