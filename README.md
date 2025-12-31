@@ -6,10 +6,11 @@ Forced Move is a take on Tic-Tac-Toe where the rules constrain what comes next. 
 ## A quick story
 
 I first learned about this family of games while reading Ben Orlin’s *Math with Bad Drawings*, where he mentions mathematicians in Berkeley getting hooked on an “ultimate” Tic-Tac-Toe played across nested boards. Forced Move is my homage to that tale: a calm, mobile-friendly way to play the same idea with friends or the computer. ***What's fascinating about this is how simple rules quietly force deep strategy.*** 
+ 
 
 ## Play it
 
-- Solo vs CPU: five difficulty levels, from playful to thoughtful.
+- Solo vs CPU: five difficulty levels per mode, scaling up to hard-to-beat search/rollouts.
 - With a friend: create a game, share the invite link, and play in real time.
 - Accessible controls: keyboard-friendly, high-contrast toggle, clear board labels.
 
@@ -20,11 +21,10 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 ## How it works
 
 
-### Adjacent Lock (classic remix)
-
+### Adjacent Lock (original remix)
 - Play on the classic 3×3 board, but with constraints.
-- On your turn, place your mark **and** specify up to two adjacent squares where your opponent must play next.
-- If one of those squares is occupied, your opponent is forced into the other; if both are open, they are free to pick any. 
+- On your turn, place your mark **and** specify adjacent squares where your opponent must play next (up to two if an empty adjacent pair exists, otherwise a single empty square when no empty adjacent pair remains).
+- If one target is occupied, they take the other; if both are blocked, they can play anywhere.
 
 ### Ultimate
 - Each big square is its own mini 3×3 board.
@@ -37,9 +37,14 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 ```
 npm install
 npm run dev   # open http://localhost:5173
+npm run build # output to dist/
 ```
 
 That’s it! grab a friend or play the CPU, and enjoy the forced-move dance.
+
+### Android (WebView wrapper)
+- Build the web app first: `npm run build`
+- From `android/`: `./gradlew :app:assembleDebug` (or `assembleRelease`) to produce an APK that loads `dist/` locally. No proprietary SDKs; F-Droid friendly.
 
 ## For curious builders
 
