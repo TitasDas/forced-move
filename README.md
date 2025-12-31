@@ -14,7 +14,7 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 - With a friend: create a game, share the invite link, and play in real time.
 - Accessible controls: keyboard-friendly, high-contrast toggle, clear board labels.
 
-[Play the game](https://example.com/demo) (link coming soon, for now you have to run it locally)
+[Play the game](https://forced-move.onrender.com/) (Still in testing, feedback can be given by filing an issue)
 
 
 
