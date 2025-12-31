@@ -175,7 +175,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     // Rebuild the game up to the desired history index.
     let replayState = createGame(mode);
     state.history.slice(0, index + 1).forEach((move) => {
-      replayState = applyMove(replayState, mode === 'classic' ? move.position : move);
+      replayState = applyMove(replayState, move);
     });
     setState(replayState);
   };

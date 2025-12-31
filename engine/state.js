@@ -9,19 +9,6 @@ export const GAME_STATUS = {
   DRAW: 'draw',
 };
 
-export function createClassicGame() {
-  return {
-    version: GAME_VERSION,
-    mode: 'classic',
-    board: Array(9).fill(null),
-    currentPlayer: PLAYER_X,
-    status: GAME_STATUS.IN_PROGRESS,
-    winner: null,
-    lastMove: null,
-    history: [],
-  };
-}
-
 export function createAdjacentGame() {
   return {
     version: GAME_VERSION,

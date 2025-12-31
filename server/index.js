@@ -36,7 +36,7 @@ function rateLimit(req, res, next) {
   return next();
 }
 
-function newGame(mode = 'classic') {
+function newGame(mode = 'adjacent') {
   const state = createGame(mode);
   return {
     state,
@@ -57,7 +57,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.post('/api/games', rateLimit, (req, res) => {
-  const { mode = 'classic' } = req.body || {};
+  const { mode = 'adjacent' } = req.body || {};
   const game = newGame(mode);
   games.set(game.gameId, game);
   res.json({

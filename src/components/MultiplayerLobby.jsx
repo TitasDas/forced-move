@@ -6,7 +6,7 @@ import WinnerOverlay from './WinnerOverlay.jsx';
 import { getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
 
 export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
-  const [mode, setMode] = useState(initialMode === 'classic' ? 'adjacent' : initialMode);
+  const [mode, setMode] = useState(initialMode === 'nested' ? 'nested' : 'adjacent');
   const [gameId, setGameId] = useState('');
   const [token, setToken] = useState('');
   const [inviteToken, setInviteToken] = useState('');
