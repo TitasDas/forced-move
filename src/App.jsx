@@ -118,79 +118,17 @@ export default function App() {
               <div className="panel rule-card">
                 <div className="card-title">Ultimate rules</div>
                 <div className="list">
-                  <div className="rule-line">
-                    <svg width="90" height="90" viewBox="0 0 90 90">
-                      <rect x="5" y="5" width="80" height="80" fill="none" stroke="currentColor" />
-                      {[30, 60].map((p) => (
-                        <line key={p} x1={p} y1="5" x2={p} y2="85" stroke="currentColor" />
-                      ))}
-                      {[30, 60].map((p) => (
-                        <line key={p} x1="5" y1={p} x2="85" y2={p} stroke="currentColor" />
-                      ))}
-                      <rect x="8" y="8" width="24" height="24" fill="rgba(255,77,109,0.18)" stroke="var(--accent)" />
-                      <text x="20" y="24" textAnchor="middle" fontSize="12" fontWeight="800" fill="var(--mark-x)">
-                        X
-                      </text>
-                      <rect x="34" y="34" width="24" height="24" fill="rgba(47,128,237,0.15)" stroke="var(--mark-o)" />
-                      <text x="46" y="50" textAnchor="middle" fontSize="12" fontWeight="800" fill="var(--mark-o)">
-                        O
-                      </text>
-                      <line x1="24" y1="24" x2="34" y2="34" stroke="var(--accent)" strokeWidth="2" />
-                    </svg>
-                    <span>Your move sends your opponent to the matching mini-board.</span>
-                  </div>
-                  <div className="rule-line">
-                    <svg width="90" height="90" viewBox="0 0 90 90">
-                      <rect x="5" y="5" width="80" height="80" fill="rgba(47,128,237,0.08)" stroke="currentColor" />
-                      <text x="45" y="36" textAnchor="middle" fontSize="11" fontWeight="700" fill="var(--ink)">
-                        Target full?
-                      </text>
-                      <rect x="18" y="48" width="54" height="16" rx="6" fill="#fff" stroke="var(--mark-o)" />
-                      <text x="45" y="60" textAnchor="middle" fontSize="10" fontWeight="800" fill="var(--mark-o)">
-                        Choose any board
-                      </text>
-                    </svg>
-                    <span>If the target board is full or won, pick any open mini-board.</span>
-                  </div>
+                  <div className="rule-line">Your move marks a cell inside a mini-board and sends your opponent to the matching mini-board.</div>
+                  <div className="rule-line">If that target mini-board is full or already won, they may choose any open mini-board instead.</div>
+                  <div className="rule-line">Win a mini-board to claim its big square; three claimed big squares in a row wins the game.</div>
                 </div>
               </div>
               <div className="panel rule-card">
                 <div className="card-title">Adjacent Lock rules</div>
                 <div className="list">
-                  <div className="rule-line">
-                    <svg width="90" height="90" viewBox="0 0 90 90">
-                      <rect x="5" y="5" width="80" height="80" fill="none" stroke="currentColor" />
-                      {[30, 60].map((p) => (
-                        <line key={p} x1={p} y1="5" x2={p} y2="85" stroke="currentColor" />
-                      ))}
-                      {[30, 60].map((p) => (
-                        <line key={p} x1="5" y1={p} x2="85" y2={p} stroke="currentColor" />
-                      ))}
-                      <text x="45" y="50" textAnchor="middle" fontSize="26" fontWeight="900" fill="var(--mark-x)">
-                        X
-                      </text>
-                      <circle cx="30" cy="50" r="7" fill="rgba(255,77,109,0.2)" stroke="var(--mark-x)" />
-                      <circle cx="60" cy="50" r="7" fill="rgba(47,128,237,0.2)" stroke="var(--mark-o)" />
-                    </svg>
-                    <span>Place your mark and pick up to two adjacent squares for your opponent.</span>
-                  </div>
-                  <div className="rule-line">
-                    <svg width="90" height="90" viewBox="0 0 90 90">
-                      <rect x="5" y="5" width="80" height="80" fill="none" stroke="currentColor" />
-                      {[30, 60].map((p) => (
-                        <line key={p} x1={p} y1="5" x2={p} y2="85" stroke="currentColor" />
-                      ))}
-                      {[30, 60].map((p) => (
-                        <line key={p} x1="5" y1={p} x2="85" y2={p} stroke="currentColor" />
-                      ))}
-                      <text x="45" y="50" textAnchor="middle" fontSize="26" fontWeight="900" fill="var(--mark-o)">
-                        O
-                      </text>
-                      <circle cx="30" cy="50" r="7" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" />
-                      <circle cx="60" cy="50" r="7" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" />
-                    </svg>
-                    <span>If one option is blocked, they take the other; if both blocked, any open square.</span>
-                  </div>
+                  <div className="rule-line">On your turn, place your mark and choose up to two adjacent empty squares for your opponent to play next.</div>
+                  <div className="rule-line">If only one adjacent empty exists, pick that one; if none exist, they may play anywhere.</div>
+                  <div className="rule-line">If one chosen square is blocked, your opponent takes the other; if both are blocked, they can play any open square.</div>
                 </div>
               </div>
             </div>
