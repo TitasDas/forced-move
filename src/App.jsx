@@ -10,7 +10,7 @@ const MODES = [
   {
     id: 'adjacent',
     label: 'Adjacent Lock',
-    description: 'Pick your square and two neighbors to constrain your opponent.',
+    description: 'Pick your square and any two empty pair of blank spaces to constrain your opponent.',
   },
   {
     id: 'nested',
@@ -117,17 +117,18 @@ export default function App() {
 
           {screen === 'menu' && (
             <div className="panel grid two rule-row">
-              <div className="panel rule-card">
-                <div className="card-title">Adjacent Lock rules</div>
-                <ol className="list numbered">
-                  <li>Place your mark and choose up to two adjacent empty squares for your opponent to play next.</li>
-                  <li>If only one adjacent empty exists, pick that one; if none exist, they may play anywhere.</li>
-                  <li>If one chosen square is blocked, your opponent takes the other; if both are blocked, they can play any open square.</li>
-                </ol>
-              </div>
-              <div className="panel rule-card">
-                <div className="card-title">Ultimate rules</div>
-                <ol className="list numbered">
+            <div className="panel rule-card">
+              <div className="card-title">Adjacent Lock rules</div>
+              <ol className="list numbered">
+                  <li>Place your mark, then choose any two empty spaces that touch horizontally or vertically for your opponent.</li>
+                  <li>Keep doing this until no adjacent empty pairs remain.</li>
+                  <li>When no adjacent pairs are left, you instead pick a single empty space after placing your mark.</li>
+                  <li>Play continues until someone wins or the board has no empty spaces.</li>
+              </ol>
+            </div>
+            <div className="panel rule-card">
+              <div className="card-title">Ultimate rules</div>
+              <ol className="list numbered">
                   <li>Your move marks a cell inside a mini-board and sends your opponent to the matching mini-board.</li>
                   <li>If that target mini-board is full or already won, they may choose any open mini-board instead.</li>
                   <li>Win a mini-board to claim its big square; three claimed big squares in a row wins the game.</li>

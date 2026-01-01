@@ -71,7 +71,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     if (nextState.status !== GAME_STATUS.IN_PROGRESS) return nextState;
     const moves = getAvailableMoves(nextState);
     if (moves.length === 0) {
-      setDeadlock('No moves available — board reset to keep play going.');
+      setDeadlock("Ooo, that's a deadlock — tap Reset to play again.");
       setPending(null);
       return createGame(mode);
     }
@@ -282,11 +282,28 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
           pendingAllowed={mode === 'adjacent' ? pending?.allowed || [] : []}
           selectableTargets={mode === 'adjacent' ? selectableTargets : null}
         />
-        {mode === 'adjacent' && pending?.origin !== null && (
-          <div className="control-row">
-            <div className="tag">Pick up to two adjacent squares for your opponent.</div>
-          </div>
-        )}
+        {(() => {
+          const showAdjInstruction =
+            mode === 'adjacent' &&
+            state.status === GAME_STATUS.IN_PROGRESS &&
+            state.currentPlayer === 'X';
+          const hasOrigin = pending && pending.origin !== null;
+          let instruction = null;
+          if (deadlock) {
+            instruction = "Ooo, that's a deadlock — tap Reset to play again.";
+          } else if (showAdjInstruction && hasOrigin) {
+            instruction = 'Pick up to two adjacent squares for your opponent.';
+          } else if (showAdjInstruction) {
+            instruction = 'Mark your square.';
+          }
+          return (
+            instruction && (
+              <div className="control-row">
+                <div className="tag">{instruction}</div>
+              </div>
+            )
+          );
+        })()}
       </div>
       <div className="grid two">
         <div className="panel">
