@@ -43,7 +43,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
         ? 'Your move'
         : `Computer thinking (level ${difficulty})`;
     }
-    if (state.status === GAME_STATUS.DRAW) return 'Draw game — balanced!';
+    if (state.status === GAME_STATUS.DRAW) return 'Draw game, balanced!';
     return state.winner === 'X' ? 'You win!' : 'Computer wins';
   }, [state, difficulty]);
 
@@ -82,7 +82,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     if (nextState.status !== GAME_STATUS.IN_PROGRESS) return nextState;
     const moves = getAvailableMoves(nextState);
     if (moves.length === 0) {
-      setDeadlock("Ooo, that's a deadlock — tap Reset to play again.");
+      setDeadlock("Ooo, that's a deadlock. Tap Reset to play again.");
       setPending(null);
       return createGame(mode);
     }
@@ -306,7 +306,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
             !adjacentRequirement.hasPairs;
           let instruction = null;
           if (deadlock) {
-            instruction = "Ooo, that's a deadlock — tap Reset to play again.";
+            instruction = "Ooo, that's a deadlock. Tap Reset to play again.";
           } else if (showAdjInstruction && requiresSingle) {
             instruction = 'Since adjacent squares are all used up, you can now pick just one square.';
           } else if (showAdjInstruction && hasOrigin) {
@@ -342,7 +342,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
                 </button>
               </li>
             ))}
-            {!state.history.length && <li>No moves yet — start playing.</li>}
+            {!state.history.length && <li>No moves yet, start playing.</li>}
           </ol>
         </div>
         <FeedbackBox context="solo mode" />
