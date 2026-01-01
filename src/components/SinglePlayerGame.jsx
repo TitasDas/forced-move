@@ -54,7 +54,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     shadow[pending.origin] = state.currentPlayer;
     const empties = shadow.map((cell, idx) => (cell === null ? idx : null)).filter((idx) => idx !== null);
     const emptyPairs = getAdjacentEmptyPairs(shadow);
-    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
+    const required = emptyPairs.length ? 2 : empties.length > 0 ? 1 : 0;
     if (!pending.allowed.length) {
       return empties;
     }
@@ -69,7 +69,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     shadow[pending.origin] = state.currentPlayer;
     const empties = shadow.map((cell, idx) => (cell === null ? idx : null)).filter((idx) => idx !== null);
     const emptyPairs = getAdjacentEmptyPairs(shadow);
-    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
+    const required = emptyPairs.length ? 2 : empties.length > 0 ? 1 : 0;
     return { required, hasPairs: emptyPairs.length > 0 };
   }, [mode, pending, state.board, state.currentPlayer]);
 
@@ -174,7 +174,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       shadow[idx] = state.currentPlayer;
       const empties = shadow.map((cell, i) => (cell === null ? i : null)).filter((i) => i !== null);
       const emptyPairs = getAdjacentEmptyPairs(shadow);
-      const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
+      const required = emptyPairs.length ? 2 : empties.length > 0 ? 1 : 0;
       if (required === 0) {
         commitMove({ position: idx, allowed: [] });
         return;
@@ -197,7 +197,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       return;
     }
     const emptyPairs = getAdjacentEmptyPairs(shadow);
-    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
+    const required = emptyPairs.length ? 2 : empties.length > 0 ? 1 : 0;
 
     if (!pending.allowed.length) {
       if (shadow[idx] !== null) return;
