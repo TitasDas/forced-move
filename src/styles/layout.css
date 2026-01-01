@@ -140,6 +140,10 @@
 }
 
 .board {
+  --cell-font-size: clamp(1.6rem, min(12vw, 6vh), 3.3rem);
+  --mini-cell-font-size: clamp(1.1rem, min(7vw, 5vh), 2.2rem);
+  --mini-overlay-size: clamp(2.6rem, 11vw, 3.6rem);
+  --badge-size: clamp(0.7rem, 2vw, 0.85rem);
   display: grid;
   gap: 6px;
   background: linear-gradient(135deg, rgba(236, 111, 102, 0.16), rgba(122, 199, 163, 0.16));
@@ -158,7 +162,7 @@
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.78));
   display: grid;
   place-items: center;
-  font-size: clamp(1.5rem, 8vw, 2.6rem);
+  font-size: var(--cell-font-size);
   font-weight: 700;
   color: var(--ink);
   cursor: pointer;
@@ -224,6 +228,10 @@
   min-height: 100%;
 }
 
+.mini-board .cell {
+  font-size: var(--mini-cell-font-size);
+}
+
 .mini-board .badge {
   position: absolute;
   top: 6px;
@@ -231,7 +239,7 @@
   padding: 0.2rem 0.45rem;
   border-radius: 999px;
   background: rgba(240, 183, 117, 0.2);
-  font-size: 0.75rem;
+  font-size: var(--badge-size);
 }
 
 .mini-board.mini-owned {
@@ -255,7 +263,7 @@
   inset: 0;
   display: grid;
   place-items: center;
-  font-size: 3.6rem;
+  font-size: var(--mini-overlay-size);
   font-weight: 900;
   color: #0d0d0d;
   text-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
