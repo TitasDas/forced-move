@@ -62,6 +62,17 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     return empties.filter((idx) => idx !== first && (required === 2 ? cellsAreAdjacent(first, idx) : true));
   }, [mode, pending, state.board, state.currentPlayer]);
 
+  const adjacentRequirement = useMemo(() => {
+    if (mode !== 'adjacent') return null;
+    if (!pending || pending.origin === null) return null;
+    const shadow = state.board.slice();
+    shadow[pending.origin] = state.currentPlayer;
+    const empties = shadow.map((cell, idx) => (cell === null ? idx : null)).filter((idx) => idx !== null);
+    const emptyPairs = getAdjacentEmptyPairs(shadow);
+    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
+    return { required, hasPairs: emptyPairs.length > 0 };
+  }, [mode, pending, state.board, state.currentPlayer]);
+
   const reset = () => {
     setState(createGame(mode));
     setDeadlock('');
@@ -288,9 +299,16 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
             state.status === GAME_STATUS.IN_PROGRESS &&
             state.currentPlayer === 'X';
           const hasOrigin = pending && pending.origin !== null;
+          const requiresSingle =
+            hasOrigin &&
+            adjacentRequirement &&
+            adjacentRequirement.required === 1 &&
+            !adjacentRequirement.hasPairs;
           let instruction = null;
           if (deadlock) {
             instruction = "Ooo, that's a deadlock — tap Reset to play again.";
+          } else if (showAdjInstruction && requiresSingle) {
+            instruction = 'Since adjacent squares are all used up, you can now pick just one square.';
           } else if (showAdjInstruction && hasOrigin) {
             instruction = 'Pick up to two adjacent squares for your opponent.';
           } else if (showAdjInstruction) {
