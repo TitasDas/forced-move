@@ -10,11 +10,11 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 
 ## Play it
 
-- Solo vs CPU: five difficulty levels per mode, scaling up to hard-to-beat search/rollouts.
-- With a friend: create a game, share the invite link, and play in real time.
-- Accessible controls: keyboard-friendly, high-contrast toggle, clear board labels.
+- **Solo vs CPU:** You can play single player mode against 5 levels of difficulty. 
+- **With a friend:** Create a game and share the game id and token with a friend so that they can join. 
+- **Accessible controls:** There are dark/light modes and a warm and cool colour pallette to toggle between. 
 
-[Play the game](https://forced-move.onrender.com/) (Still in testing, feedback can be given by filing an issue)
+[Play the game](https://forced-move.onrender.com/) (Still in testing, feedback can be given by filing an issue or sending me an email.)
 
 ## For curious builders
 

@@ -18,6 +18,12 @@
   --mark-o: #2f80ed;
 }
 
+.app,
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .app {
   min-height: 100vh;
   background:

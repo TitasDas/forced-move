@@ -126,12 +126,12 @@
 
 .board-wrap {
   width: 100%;
-  max-width: 520px;
+  max-width: min(520px, 100vw - 2rem);
   margin: 0 auto;
 }
 
 .board-wrap.nested {
-  max-width: 640px;
+  max-width: min(640px, 100vw - 1.5rem);
 }
 
 .game-panel {
@@ -145,6 +145,7 @@
   background: linear-gradient(135deg, rgba(236, 111, 102, 0.16), rgba(122, 199, 163, 0.16));
   padding: 12px;
   border-radius: var(--radius);
+  width: 100%;
 }
 
 .classic-board {
@@ -291,5 +292,29 @@
 @media (min-width: 960px) {
   .grid.two {
     grid-template-columns: minmax(360px, 1fr) minmax(320px, 0.8fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .board-wrap,
+  .board-wrap.nested {
+    max-width: 100%;
+  }
+  .board {
+    padding: 10px;
+    gap: 5px;
+  }
+  .mini-board {
+    padding: 6px;
+    gap: 5px;
+  }
+  .cell {
+    font-size: clamp(1.3rem, 9vw, 2.3rem);
+  }
+}
+
+@media (orientation: portrait) {
+  .board {
+    aspect-ratio: 1;
   }
 }

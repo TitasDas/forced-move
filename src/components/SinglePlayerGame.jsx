@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { applyMove, createGame, GAME_STATUS, getAvailableMoves } from '../../engine/index.js';
 import { chooseMove, DIFFICULTY_LEVELS, buildAdjacentMove } from '../../engine/ai/index.js';
-import { getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
+import { cellsAreAdjacent, getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
 import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import WinnerOverlay from './WinnerOverlay.jsx';
@@ -52,21 +52,14 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     if (!pending || pending.origin === null) return null;
     const shadow = state.board.slice();
     shadow[pending.origin] = state.currentPlayer;
+    const empties = shadow.map((cell, idx) => (cell === null ? idx : null)).filter((idx) => idx !== null);
     const emptyPairs = getAdjacentEmptyPairs(shadow);
-    const empties = shadow
-      .map((cell, idx) => (cell === null ? idx : null))
-      .filter((idx) => idx !== null);
-    const required = emptyPairs.length ? 2 : 1;
+    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
     if (!pending.allowed.length) {
-      return empties.filter((idx) => idx !== pending.origin);
+      return empties;
     }
     const first = pending.allowed[0];
-    return getAdjacentCells(first).filter(
-      (idx) =>
-        idx !== pending.origin &&
-        idx !== first &&
-        (required === 2 ? shadow[idx] === null : true),
-    );
+    return empties.filter((idx) => idx !== first && (required === 2 ? cellsAreAdjacent(first, idx) : true));
   }, [mode, pending, state.board, state.currentPlayer]);
 
   const reset = () => {
@@ -166,8 +159,12 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     if (!pending || pending.origin === null) {
       if (state.board[idx] !== null) return;
       if (constrained && !constrained.includes(idx)) return;
-      const adjacentEmpties = getAdjacentCells(idx).filter((cellIdx) => state.board[cellIdx] === null);
-      if (adjacentEmpties.length === 0) {
+      const shadow = state.board.slice();
+      shadow[idx] = state.currentPlayer;
+      const empties = shadow.map((cell, i) => (cell === null ? i : null)).filter((i) => i !== null);
+      const emptyPairs = getAdjacentEmptyPairs(shadow);
+      const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
+      if (required === 0) {
         commitMove({ position: idx, allowed: [] });
         return;
       }
@@ -182,17 +179,17 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
 
     const shadow = state.board.slice();
     shadow[pending.origin] = state.currentPlayer;
-    const adjacentEmpties = getAdjacentCells(pending.origin).filter((cellIdx) => shadow[cellIdx] === null);
-    if (adjacentEmpties.length === 0) {
+    const empties = shadow.map((cell, i) => (cell === null ? i : null)).filter((i) => i !== null);
+    if (!empties.length) {
       commitMove({ position: pending.origin, allowed: [] });
       setPending(null);
       return;
     }
-    const required = Math.min(2, adjacentEmpties.length);
+    const emptyPairs = getAdjacentEmptyPairs(shadow);
+    const required = emptyPairs.length ? 2 : Math.min(2, empties.length);
 
     if (!pending.allowed.length) {
       if (shadow[idx] !== null) return;
-      if (!adjacentEmpties.includes(idx)) return;
       if (required === 1) {
         commitMove({ position: pending.origin, allowed: [idx] });
         setPending(null);
@@ -203,13 +200,12 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     }
     const first = pending.allowed[0];
     if (first === idx) {
-      // Allow undo of first choice
       setPending({ origin: pending.origin, allowed: [] });
       return;
     }
     if (shadow[idx] !== null) return;
-    if (!adjacentEmpties.includes(idx)) return;
-    const allowed = [first, idx];
+    if (required === 2 && !cellsAreAdjacent(first, idx)) return;
+    const allowed = required === 2 ? [first, idx] : [idx];
     commitMove({ position: pending.origin, allowed });
     setPending(null);
   };

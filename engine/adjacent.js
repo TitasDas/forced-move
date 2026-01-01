@@ -120,7 +120,7 @@ export function applyAdjacentMove(state, move) {
   } else {
     const needed = Math.min(2, emptiesAfterMove.length);
     const allowedEmpties = cleanedAllowed.filter((idx) => next.board[idx] === null);
-    if (!allowedEmpties.length) {
+    if (!allowedEmpties.length && needed > 0) {
       throw new Error('Must choose an available cell');
     }
     constraint = allowedEmpties.slice(0, needed);
