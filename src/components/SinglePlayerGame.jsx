@@ -323,7 +323,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
           );
         })()}
       </div>
-      <div className="grid two">
+      <div className="grid two center-grid">
         <div className="panel">
           <div className="card-title">Move log</div>
           <ol className="list" aria-label="move history">

@@ -239,6 +239,14 @@
   grid-template-columns: 1fr;
 }
 
+.grid.center-grid {
+  justify-items: center;
+}
+
+.grid.center-grid > .panel {
+  width: min(520px, 100%);
+}
+
 .control-row {
   display: flex;
   gap: 0.5rem;
