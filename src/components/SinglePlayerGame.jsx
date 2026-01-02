@@ -345,7 +345,6 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
             {!state.history.length && <li>No moves yet, start playing.</li>}
           </ol>
         </div>
-        <FeedbackBox context="solo mode" />
       </div>
     </div>
   );

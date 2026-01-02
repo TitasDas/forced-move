@@ -237,7 +237,6 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
           </div>
         </div>
       </div>
-      <FeedbackBox context="multiplayer lobby" />
     </div>
   );
 }
