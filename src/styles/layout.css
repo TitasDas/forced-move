@@ -70,8 +70,8 @@
   text-align: center;
   color: var(--hero-ink);
   gap: 0.4rem;
-  backdrop-filter: blur(1px);
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.55));
+  backdrop-filter: blur(2px);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
 }
 
 .hero-overlay h1 {
@@ -97,6 +97,7 @@
   font-weight: 800;
   letter-spacing: 0.01em;
   box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
 }
 
 .hero h1 {

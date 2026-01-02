@@ -17,8 +17,8 @@
   --mark-x: #ff4d6d;
   --mark-o: #2f80ed;
   --hero-ink: #fefefe;
-  --hero-chip-bg: rgba(255, 255, 255, 0.18);
-  --hero-chip-border: rgba(255, 255, 255, 0.35);
+  --hero-chip-bg: rgba(8, 10, 18, 0.55);
+  --hero-chip-border: rgba(255, 255, 255, 0.45);
 }
 
 .app,
@@ -111,8 +111,8 @@ button {
   --mark-x: #ff9cc7;
   --mark-o: #63d2ff;
   --hero-ink: #f7f8fb;
-  --hero-chip-bg: rgba(0, 0, 0, 0.6);
-  --hero-chip-border: rgba(247, 248, 251, 0.3);
+  --hero-chip-bg: rgba(0, 0, 0, 0.7);
+  --hero-chip-border: rgba(247, 248, 251, 0.4);
   background: radial-gradient(circle at 18% 18%, rgba(88, 196, 255, 0.24), transparent 30%),
     radial-gradient(circle at 78% 12%, rgba(130, 170, 255, 0.24), transparent 28%),
     linear-gradient(135deg, #0c1018, #111624);
