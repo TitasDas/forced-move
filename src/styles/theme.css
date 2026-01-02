@@ -318,6 +318,12 @@ button {
   display: grid;
   gap: 0.6rem;
   align-items: center;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  max-width: min(340px, 90vw);
+  z-index: 25;
+  transition: transform var(--transition), opacity var(--transition);
 }
 
 .settings-head {
@@ -331,6 +337,22 @@ button {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 0.5rem;
+}
+
+.settings-panel.closed {
+  transform: translateX(calc(-100% + 52px));
+  opacity: 0.95;
+}
+
+.settings-toggle {
+  border: none;
+  background: rgba(12, 15, 26, 0.08);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  width: fit-content;
+  box-shadow: var(--shadow);
 }
 
 .rule-row .panel {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AudioToggle from './AudioToggle.jsx';
 
 export default function AccessibilityBar({
@@ -8,12 +8,22 @@ export default function AccessibilityBar({
   onTogglePalette,
   audioSrc,
 }) {
+  const [open, setOpen] = useState(true);
+
   return (
-    <div className="panel settings-panel" aria-label="accessibility and display controls">
+    <aside
+      className={`panel settings-panel ${open ? 'open' : 'closed'}`}
+      aria-label="display and sound controls"
+    >
+      <button
+        className="settings-toggle"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-label={open ? 'Collapse settings' : 'Expand settings'}
+      >
+        {open ? '⬅' : '➡'}
+      </button>
       <div className="settings-head">
-        <span className="pill-badge">
-          <span aria-hidden="true">🎮</span> Controls
-        </span>
         <div className="tag">
           <span aria-hidden="true">♿</span>
           Accessible play
@@ -26,7 +36,7 @@ export default function AccessibilityBar({
           aria-pressed={contrast}
           aria-label="Toggle light or dark mode"
         >
-          {contrast ? 'Switch to light' : 'Switch to dark'}
+          {contrast ? '☀️ Light mode' : '🌙 Dark mode'}
         </button>
         <button
           className="btn secondary"
@@ -34,10 +44,10 @@ export default function AccessibilityBar({
           aria-pressed={paletteAlt}
           aria-label="Toggle color palette"
         >
-          {paletteAlt ? 'Classic palette' : 'Alt palette'}
+          {paletteAlt ? '🎨 Classic palette' : '🎨 Alt palette'}
         </button>
         {audioSrc && <AudioToggle src={audioSrc} />}
       </div>
-    </div>
+    </aside>
   );
 }
