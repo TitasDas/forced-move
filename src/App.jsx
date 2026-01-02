@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AccessibilityBar from './components/AccessibilityBar.jsx';
+import AudioToggle from './components/AudioToggle.jsx';
 import SinglePlayerGame from './components/SinglePlayerGame.jsx';
 import MultiplayerLobby from './components/MultiplayerLobby.jsx';
 import { GAME_VERSION } from '../engine/state.js';
@@ -25,6 +26,20 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
   };
   return (
     <header className="menu-frame parchment">
+      <div className="top-controls">
+        <div className="accessibility-bar">
+          <AudioToggle src="/audio/lofi.mp3" iconOnly />
+          <button className="accessibility-seg" aria-label="Toggle dark mode" title="Dark mode">
+            ☾
+          </button>
+          <button className="accessibility-seg" aria-label="Toggle color palette" title="Palette">
+            🎨
+          </button>
+          <button className="accessibility-seg" aria-label="Accessibility" title="Accessibility">
+            ♿
+          </button>
+        </div>
+      </div>
       <div className="hero-visual banner tall" style={heroStyle} role="img" aria-label="Forced Move chalkboard illustration">
         <div className="hero-overlay vintage">
           <div className="tag ghost">A game of structure, not speed.</div>
@@ -33,8 +48,7 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
         </div>
       </div>
       <div className="hero-copy">
-        <h1 className="vintage-title">Forced Move</h1>
-        <p className="subtitle vintage-sub">Choose how you want to play.</p>
+        <p className="subtitle vintage-sub helper">Choose how you want to play.</p>
       </div>
       <div className="action-stack wide">
         <button className="btn parchment-btn large" onClick={() => setScreen('solo')}>
@@ -50,12 +64,12 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
         </button>
       </div>
       <div className="mode-selector">
-        <span className="tag">Choose a board type</span>
-        <div className="mode-grid compact">
+        <span className="tag selector-label">Choose a board type</span>
+        <div className="mode-grid compact mode-pills">
           {MODES.map((m) => (
             <button
               key={m.id}
-              className={`mode small ${mode === m.id ? 'active' : ''}`}
+              className={`mode small segmented ${mode === m.id ? 'active' : ''}`}
               onClick={() => setMode(m.id)}
             >
               <span className="mode-title">{m.label}</span>
@@ -107,9 +121,23 @@ export default function App() {
         )}
 
         <footer className="footer-tag parchment-footer">
-          <button className="btn secondary parchment-btn small" onClick={() => setShowFeedback(true)}>
-            Feedback
-          </button>
+          <div className="mode-pills footer-pills">
+            {MODES.map((m) => (
+              <button
+                key={m.id}
+                className={`mode small segmented ${mode === m.id ? 'active' : ''}`}
+                onClick={() => setMode(m.id)}
+              >
+                <span className="mode-title">{m.label}</span>
+              </button>
+            ))}
+          </div>
+          <div className="footer-right">
+            <span className="tag subtle">v{GAME_VERSION}</span>
+            <button className="btn parchment-btn small" onClick={() => setShowFeedback(true)}>
+              Feedback
+            </button>
+          </div>
         </footer>
       </div>
       {showRules && (
