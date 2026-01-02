@@ -18,74 +18,49 @@ const MODES = [
   },
 ];
 
-function StartScreen({ mode, setMode, setScreen }) {
+function StartScreen({ mode, setMode, setScreen, onShowRules }) {
   const activeMode = MODES.find((m) => m.id === mode);
   const heroStyle = {
-    backgroundImage: "url('/intro.jpg')",
+    backgroundImage: "url('/910.jpg'), url('/intro.jpg')",
   };
   return (
-    <header className="hero panel intro">
-      <div className="hero-visual" style={heroStyle} role="img" aria-label="Forced Move chalkboard illustration">
-        <div className="hero-overlay">
+    <header className="hero panel intro parchment">
+      <div className="hero-visual banner" style={heroStyle} role="img" aria-label="Forced Move chalkboard illustration">
+        <div className="hero-overlay vintage">
           <div className="tag ghost">A game of structure, not speed.</div>
           <h1>Forced Move</h1>
           <div className="tag ghost hero-chip">Every move is a decision for both players.</div>
         </div>
       </div>
-      <h1>Choose your board, then hit start.</h1>
-      <p>
-        Tic-Tac-Toe with a twist. Pick your board style, go solo against the CPU, or
-        send an invite link to a friend. Built for quick play on any device.
-      </p>
-      <div className="panel grid two rule-row">
-        <div className="panel rule-card">
-          <div className="card-title">Adjacent Lock rules</div>
-          <ol className="list numbered">
-            <li>Place your mark, then choose any two empty spaces that touch horizontally or vertically for your opponent.</li>
-            <li>Keep doing this until no adjacent empty pairs remain.</li>
-            <li>When no adjacent pairs are left, you instead pick a single empty space after placing your mark.</li>
-            <li>Play continues until someone wins or the board has no empty spaces.</li>
-          </ol>
-        </div>
-        <div className="panel rule-card">
-          <div className="card-title">Ultimate rules</div>
-          <ol className="list numbered">
-            <li>Your move marks a cell inside a mini-board and sends your opponent to the matching mini-board.</li>
-            <li>If that target mini-board is full or already won, they may choose any open mini-board instead.</li>
-            <li>Win a mini-board to claim its big square; three claimed big squares in a row wins the game.</li>
-          </ol>
-        </div>
+      <div className="hero-copy">
+        <h1>Ultimate Tic-Tac-Toe</h1>
+        <p className="subtitle">A quiet game of strategy and thought.</p>
       </div>
-      <div className="grid two">
-        <div className="panel start-card">
-          <div className="card-title">Choose your board</div>
-          <div className="mode-grid">
+      <div className="action-stack">
+        <button className="btn parchment-btn" onClick={() => setScreen('solo')}>
+          <span aria-hidden="true">👤</span> Single Player
+        </button>
+        <button className="btn parchment-btn" onClick={() => setScreen('multi')}>
+          <span aria-hidden="true">👥</span> Two Players
+        </button>
+        <button className="btn secondary parchment-btn" onClick={onShowRules}>
+          <span aria-hidden="true">📖</span> Rules
+        </button>
+        <div className="mode-selector">
+          <span className="tag">Board: {activeMode.label}</span>
+          <div className="mode-grid compact">
             {MODES.map((m) => (
               <button
                 key={m.id}
-                className={`mode ${mode === m.id ? 'active' : ''}`}
+                className={`mode small ${mode === m.id ? 'active' : ''}`}
                 onClick={() => setMode(m.id)}
               >
                 <span className="mode-title">{m.label}</span>
-                <span className="mode-desc">{m.description}</span>
               </button>
             ))}
           </div>
         </div>
-        <div className="panel start-card">
-          <div className="card-title">Pick how you play</div>
-          <div className="control-row pill-row">
-            <button className="btn" onClick={() => setScreen('solo')}>
-              Start solo vs CPU
-            </button>
-            <button className="btn secondary" onClick={() => setScreen('multi')}>
-              Start with a friend
-            </button>
-          </div>
-          <div className="tag">Current board: {activeMode.label}</div>
-        </div>
       </div>
-      <FeedbackBox context="main menu" />
     </header>
   );
 }
@@ -96,9 +71,18 @@ export default function App() {
   const [screen, setScreen] = useState('menu');
   const [mode, setMode] = useState('adjacent');
   const [intro, setIntro] = useState(true);
+  const [showRules, setShowRules] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   return (
     <div className={`app ${contrast ? 'high-contrast' : ''} ${paletteAlt ? 'palette-alt' : ''}`}>
+      <AccessibilityBar
+        contrast={contrast}
+        paletteAlt={paletteAlt}
+        onToggleContrast={() => setContrast((v) => !v)}
+        onTogglePalette={() => setPaletteAlt((v) => !v)}
+        audioSrc="/audio/lofi.mp3"
+      />
       {intro ? (
         <div
           className="intro-screen"
@@ -106,40 +90,89 @@ export default function App() {
           aria-label="Forced Move intro"
           style={{ backgroundImage: "url('/intro.jpg')" }}
         >
-          <div className="intro-overlay panel">
-            <button className="btn" onClick={() => setIntro(false)}>
+          <div className="intro-overlay panel parchment">
+            <button className="btn parchment-btn" onClick={() => setIntro(false)}>
               Enter the game
             </button>
             <div className="tag ghost">A game where each move limits the choices that follow.</div>
           </div>
         </div>
       ) : (
-        <div className="shell">
-          <AccessibilityBar
-            contrast={contrast}
-            paletteAlt={paletteAlt}
-            onToggleContrast={() => setContrast((v) => !v)}
-            onTogglePalette={() => setPaletteAlt((v) => !v)}
-            audioSrc="/audio/lofi.mp3"
-          />
-          {screen === 'menu' && <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} />}
+        <div className="shell parchment-shell">
+          {screen === 'menu' && (
+            <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} onShowRules={() => setShowRules(true)} />
+          )}
 
           {screen === 'solo' && (
-            <SinglePlayerGame
-              initialMode={mode}
-              onBack={() => setScreen('menu')}
-            />
+            <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
+              <SinglePlayerGame
+                initialMode={mode}
+                onBack={() => setScreen('menu')}
+              />
+            </div>
           )}
           {screen === 'multi' && (
-            <MultiplayerLobby
-              initialMode={mode}
-              onBack={() => setScreen('menu')}
-            />
+            <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
+              <MultiplayerLobby
+                initialMode={mode}
+                onBack={() => setScreen('menu')}
+              />
+            </div>
           )}
 
-          <footer className="footer-tag">
-            <span className="tag">Forced Move · v{GAME_VERSION}</span>
+          <footer className="footer-tag parchment-footer">
+            <div className="footer-left">
+              <span className="tag subtle">Created by titas das</span>
+              <span className="tag subtle">v{GAME_VERSION}</span>
+              <button className="btn secondary parchment-btn small" onClick={() => setShowFeedback(true)}>
+                Feedback
+              </button>
+            </div>
           </footer>
+        </div>
+      )}
+      {showRules && (
+        <div className="modal-overlay">
+          <div className="panel modal parchment">
+            <div className="modal-head">
+              <div className="card-title">Rules</div>
+              <button className="btn secondary parchment-btn small" onClick={() => setShowRules(false)}>
+                Close
+              </button>
+            </div>
+            <div className="grid two rule-row">
+              <div className="panel rule-card">
+                <div className="card-title">Adjacent Lock</div>
+                <ol className="list numbered">
+                  <li>Place your mark, then choose any two empty spaces that touch horizontally or vertically for your opponent.</li>
+                  <li>Keep doing this until no adjacent empty pairs remain.</li>
+                  <li>When no adjacent pairs are left, you instead pick a single empty space after placing your mark.</li>
+                  <li>Play continues until someone wins or the board has no empty spaces.</li>
+                </ol>
+              </div>
+              <div className="panel rule-card">
+                <div className="card-title">Ultimate</div>
+                <ol className="list numbered">
+                  <li>Your move marks a cell inside a mini-board and sends your opponent to the matching mini-board.</li>
+                  <li>If that target mini-board is full or already won, they may choose any open mini-board instead.</li>
+                  <li>Win a mini-board to claim its big square; three claimed big squares in a row wins the game.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showFeedback && (
+        <div className="modal-overlay">
+          <div className="panel modal parchment">
+            <div className="modal-head">
+              <div className="card-title">Send feedback</div>
+              <button className="btn secondary parchment-btn small" onClick={() => setShowFeedback(false)}>
+                Close
+              </button>
+            </div>
+            <FeedbackBox context="menu feedback" />
+          </div>
         </div>
       )}
     </div>
