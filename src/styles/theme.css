@@ -314,6 +314,25 @@ button {
   font-size: 1.2rem;
 }
 
+.settings-panel {
+  display: grid;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.settings-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.5rem;
+}
+
 .rule-row .panel {
   background: rgba(255, 255, 255, 0.9);
 }

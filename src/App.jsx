@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import AccessibilityBar from './components/AccessibilityBar.jsx';
 import SinglePlayerGame from './components/SinglePlayerGame.jsx';
 import MultiplayerLobby from './components/MultiplayerLobby.jsx';
-import AudioToggle from './components/AudioToggle.jsx';
 import { GAME_VERSION } from '../engine/state.js';
 import FeedbackBox from './components/FeedbackBox.jsx';
 
@@ -100,17 +99,6 @@ export default function App() {
 
   return (
     <div className={`app ${contrast ? 'high-contrast' : ''} ${paletteAlt ? 'palette-alt' : ''}`}>
-      <div className="sound-corner">
-        <AudioToggle src="/audio/lofi.mp3" />
-        <button
-          className="btn secondary palette-toggle"
-          onClick={() => setPaletteAlt((v) => !v)}
-          aria-label="Toggle color palette"
-          title="Switch color palette"
-        >
-          {paletteAlt ? '🎨' : '◐'}
-        </button>
-      </div>
       {intro ? (
         <div
           className="intro-screen"
@@ -127,12 +115,14 @@ export default function App() {
         </div>
       ) : (
         <div className="shell">
-          {screen === 'menu' && <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} />}
-
           <AccessibilityBar
             contrast={contrast}
+            paletteAlt={paletteAlt}
             onToggleContrast={() => setContrast((v) => !v)}
+            onTogglePalette={() => setPaletteAlt((v) => !v)}
+            audioSrc="/audio/lofi.mp3"
           />
+          {screen === 'menu' && <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} />}
 
           {screen === 'solo' && (
             <SinglePlayerGame
