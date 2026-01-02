@@ -29,7 +29,7 @@ function StartScreen({ mode, setMode, setScreen }) {
         <div className="hero-overlay">
           <div className="tag ghost">A game of structure, not speed.</div>
           <h1>Forced Move</h1>
-          <p className="hero-chip">Every move is a decision for both players.</p>
+          <div className="tag ghost hero-chip">Every move is a decision for both players.</div>
         </div>
       </div>
       <h1>Choose your board, then hit start.</h1>
