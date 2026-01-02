@@ -10,6 +10,21 @@ export default function AccessibilityBar({
 }) {
   const [open, setOpen] = useState(true);
 
+  const items = [
+    {
+      label: contrast ? 'Light mode' : 'Dark mode',
+      icon: '🌙',
+      action: onToggleContrast,
+      aria: 'Toggle light or dark mode',
+    },
+    {
+      label: paletteAlt ? 'Classic palette' : 'Alt palette',
+      icon: '🎨',
+      action: onTogglePalette,
+      aria: 'Toggle color palette',
+    },
+  ];
+
   return (
     <aside
       className={`panel settings-panel ${open ? 'open' : 'closed'}`}
@@ -21,33 +36,35 @@ export default function AccessibilityBar({
         aria-expanded={open}
         aria-label={open ? 'Collapse settings' : 'Expand settings'}
       >
-        {open ? '⬅' : '➡'}
+        ☰
       </button>
       <div className="settings-head">
+        <div className="settings-title">Quick settings</div>
         <div className="tag">
           <span aria-hidden="true">♿</span>
           Accessible play
         </div>
       </div>
-      <div className="settings-grid">
-        <button
-          className="btn secondary"
-          onClick={onToggleContrast}
-          aria-pressed={contrast}
-          aria-label="Toggle light or dark mode"
-        >
-          {contrast ? '☀️ Light mode' : '🌙 Dark mode'}
-        </button>
-        <button
-          className="btn secondary"
-          onClick={onTogglePalette}
-          aria-pressed={paletteAlt}
-          aria-label="Toggle color palette"
-        >
-          {paletteAlt ? '🎨 Classic palette' : '🎨 Alt palette'}
-        </button>
-        {audioSrc && <AudioToggle src={audioSrc} />}
-      </div>
+      <nav className="settings-list">
+        {items.map((item) => (
+          <button
+            key={item.label}
+            className="settings-item"
+            onClick={item.action}
+            aria-label={item.aria}
+          >
+            <span className="icon" aria-hidden="true">
+              {item.icon}
+            </span>
+            <span className="label">{item.label}</span>
+          </button>
+        ))}
+        {audioSrc && (
+          <div className="settings-item sound">
+            <AudioToggle src={audioSrc} />
+          </div>
+        )}
+      </nav>
     </aside>
   );
 }
