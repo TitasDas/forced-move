@@ -24,41 +24,43 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
     backgroundImage: "url('/910.jpg'), url('/intro.jpg')",
   };
   return (
-    <header className="hero panel intro parchment">
-      <div className="hero-visual banner" style={heroStyle} role="img" aria-label="Forced Move chalkboard illustration">
+    <header className="menu-frame parchment">
+      <div className="hero-visual banner tall" style={heroStyle} role="img" aria-label="Forced Move chalkboard illustration">
         <div className="hero-overlay vintage">
           <div className="tag ghost">A game of structure, not speed.</div>
           <h1>Forced Move</h1>
-          <div className="tag ghost hero-chip">Every move is a decision for both players.</div>
+          <div className="tag ghost">Every move is a decision for both players.</div>
         </div>
       </div>
       <div className="hero-copy">
-        <h1>Ultimate Tic-Tac-Toe</h1>
-        <p className="subtitle">A quiet game of strategy and thought.</p>
+        <h1 className="vintage-title">Forced Move</h1>
+        <p className="subtitle vintage-sub">Choose how you want to play.</p>
       </div>
-      <div className="action-stack">
-        <button className="btn parchment-btn" onClick={() => setScreen('solo')}>
+      <div className="action-stack wide">
+        <button className="btn parchment-btn large" onClick={() => setScreen('solo')}>
           <span aria-hidden="true">👤</span> Single Player
+          <span aria-hidden="true" className="chevron">›</span>
         </button>
-        <button className="btn parchment-btn" onClick={() => setScreen('multi')}>
+        <button className="btn parchment-btn large" onClick={() => setScreen('multi')}>
           <span aria-hidden="true">👥</span> Two Players
+          <span aria-hidden="true" className="chevron">›</span>
         </button>
-        <button className="btn secondary parchment-btn" onClick={onShowRules}>
+        <button className="btn parchment-btn large outlined" onClick={onShowRules}>
           <span aria-hidden="true">📖</span> Rules
         </button>
-        <div className="mode-selector">
-          <span className="tag">Board: {activeMode.label}</span>
-          <div className="mode-grid compact">
-            {MODES.map((m) => (
-              <button
-                key={m.id}
-                className={`mode small ${mode === m.id ? 'active' : ''}`}
-                onClick={() => setMode(m.id)}
-              >
-                <span className="mode-title">{m.label}</span>
-              </button>
-            ))}
-          </div>
+      </div>
+      <div className="mode-selector">
+        <span className="tag">Choose a board type</span>
+        <div className="mode-grid compact">
+          {MODES.map((m) => (
+            <button
+              key={m.id}
+              className={`mode small ${mode === m.id ? 'active' : ''}`}
+              onClick={() => setMode(m.id)}
+            >
+              <span className="mode-title">{m.label}</span>
+            </button>
+          ))}
         </div>
       </div>
     </header>
@@ -70,7 +72,6 @@ export default function App() {
   const [paletteAlt, setPaletteAlt] = useState(false);
   const [screen, setScreen] = useState('menu');
   const [mode, setMode] = useState('adjacent');
-  const [intro, setIntro] = useState(true);
   const [showRules, setShowRules] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
@@ -83,54 +84,34 @@ export default function App() {
         onTogglePalette={() => setPaletteAlt((v) => !v)}
         audioSrc="/audio/lofi.mp3"
       />
-      {intro ? (
-        <div
-          className="intro-screen"
-          role="dialog"
-          aria-label="Forced Move intro"
-          style={{ backgroundImage: "url('/intro.jpg')" }}
-        >
-          <div className="intro-overlay panel parchment">
-            <button className="btn parchment-btn" onClick={() => setIntro(false)}>
-              Enter the game
-            </button>
-            <div className="tag ghost">A game where each move limits the choices that follow.</div>
+      <div className="shell parchment-shell">
+        {screen === 'menu' && (
+          <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} onShowRules={() => setShowRules(true)} />
+        )}
+
+        {screen === 'solo' && (
+          <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
+            <SinglePlayerGame
+              initialMode={mode}
+              onBack={() => setScreen('menu')}
+            />
           </div>
-        </div>
-      ) : (
-        <div className="shell parchment-shell">
-          {screen === 'menu' && (
-            <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} onShowRules={() => setShowRules(true)} />
-          )}
+        )}
+        {screen === 'multi' && (
+          <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
+            <MultiplayerLobby
+              initialMode={mode}
+              onBack={() => setScreen('menu')}
+            />
+          </div>
+        )}
 
-          {screen === 'solo' && (
-            <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
-              <SinglePlayerGame
-                initialMode={mode}
-                onBack={() => setScreen('menu')}
-              />
-            </div>
-          )}
-          {screen === 'multi' && (
-            <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
-              <MultiplayerLobby
-                initialMode={mode}
-                onBack={() => setScreen('menu')}
-              />
-            </div>
-          )}
-
-          <footer className="footer-tag parchment-footer">
-            <div className="footer-left">
-              <span className="tag subtle">Created by titas das</span>
-              <span className="tag subtle">v{GAME_VERSION}</span>
-              <button className="btn secondary parchment-btn small" onClick={() => setShowFeedback(true)}>
-                Feedback
-              </button>
-            </div>
-          </footer>
-        </div>
-      )}
+        <footer className="footer-tag parchment-footer">
+          <button className="btn secondary parchment-btn small" onClick={() => setShowFeedback(true)}>
+            Feedback
+          </button>
+        </footer>
+      </div>
       {showRules && (
         <div className="modal-overlay">
           <div className="panel modal parchment">
