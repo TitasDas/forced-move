@@ -1,25 +1,45 @@
 import React, { useState } from 'react';
-import AccessibilityBar from './components/AccessibilityBar.jsx';
 import SinglePlayerGame from './components/SinglePlayerGame.jsx';
 import MultiplayerLobby from './components/MultiplayerLobby.jsx';
 import { GAME_VERSION } from '../engine/state.js';
 import FeedbackBox from './components/FeedbackBox.jsx';
+import AudioToggle from './components/AudioToggle.jsx';
 
 const MODES = [
-  {
-    id: 'adjacent',
-    label: 'Adjacent Lock',
-    description: 'Pick your square and any two empty pair of blank spaces to constrain your opponent.',
-  },
-  {
-    id: 'nested',
-    label: 'Ultimate Tic-Tac-Toe',
-    description: 'Each move locks the next board for your opponent.',
-  },
+  { id: 'adjacent', label: 'Adjacent Lock' },
+  { id: 'nested', label: 'Ultimate Tic-Tac-Toe' },
 ];
 
-function StartScreen({ mode, setMode, setScreen, onShowRules }) {
-  const activeMode = MODES.find((m) => m.id === mode);
+function A11yCluster({ contrast, paletteAlt, onToggleContrast, onTogglePalette }) {
+  return (
+    <div className="a11y-cluster" aria-label="accessibility and display">
+      <AudioToggle src="/audio/lofi.mp3" iconOnly />
+      <button
+        className="accessibility-seg"
+        onClick={onToggleContrast}
+        aria-pressed={contrast}
+        aria-label="Toggle dark mode"
+        title="Dark mode"
+      >
+        ☾
+      </button>
+      <button
+        className="accessibility-seg"
+        onClick={onTogglePalette}
+        aria-pressed={paletteAlt}
+        aria-label="Toggle color palette"
+        title="Palette"
+      >
+        🎨
+      </button>
+      <button className="accessibility-seg" type="button" aria-label="Accessibility" title="Accessibility">
+        ♿
+      </button>
+    </div>
+  );
+}
+
+function StartScreen({ mode, setMode, setScreen, onShowRules, contrast, paletteAlt, onToggleContrast, onTogglePalette }) {
   const heroStyle = {
     backgroundImage: "url('/910.jpg'), url('/intro.jpg')",
   };
@@ -27,13 +47,18 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
     <header className="menu-frame parchment">
       <div className="hero-visual banner tall" style={heroStyle} role="img" aria-label="Forced Move chalkboard illustration">
         <div className="hero-overlay vintage">
+          <A11yCluster
+            contrast={contrast}
+            paletteAlt={paletteAlt}
+            onToggleContrast={onToggleContrast}
+            onTogglePalette={onTogglePalette}
+          />
           <div className="tag ghost">A game of structure, not speed.</div>
           <h1>Forced Move</h1>
           <div className="tag ghost">Every move is a decision for both players.</div>
         </div>
       </div>
       <div className="hero-copy">
-        <h1 className="vintage-title">Forced Move</h1>
         <p className="subtitle vintage-sub">Choose how you want to play.</p>
       </div>
       <div className="action-stack wide">
@@ -55,7 +80,7 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
           {MODES.map((m) => (
             <button
               key={m.id}
-              className={`mode small ${mode === m.id ? 'active' : ''}`}
+              className={`mode small segmented ${mode === m.id ? 'active' : ''}`}
               onClick={() => setMode(m.id)}
             >
               <span className="mode-title">{m.label}</span>
@@ -77,16 +102,18 @@ export default function App() {
 
   return (
     <div className={`app ${contrast ? 'high-contrast' : ''} ${paletteAlt ? 'palette-alt' : ''}`}>
-      <AccessibilityBar
-        contrast={contrast}
-        paletteAlt={paletteAlt}
-        onToggleContrast={() => setContrast((v) => !v)}
-        onTogglePalette={() => setPaletteAlt((v) => !v)}
-        audioSrc="/audio/lofi.mp3"
-      />
       <div className="shell parchment-shell">
         {screen === 'menu' && (
-          <StartScreen mode={mode} setMode={setMode} setScreen={setScreen} onShowRules={() => setShowRules(true)} />
+          <StartScreen
+            mode={mode}
+            setMode={setMode}
+            setScreen={setScreen}
+            onShowRules={() => setShowRules(true)}
+            contrast={contrast}
+            paletteAlt={paletteAlt}
+            onToggleContrast={() => setContrast((v) => !v)}
+            onTogglePalette={() => setPaletteAlt((v) => !v)}
+          />
         )}
 
         {screen === 'solo' && (
@@ -107,9 +134,17 @@ export default function App() {
         )}
 
         <footer className="footer-tag parchment-footer">
-          <button className="btn secondary parchment-btn small" onClick={() => setShowFeedback(true)}>
-            Feedback
-          </button>
+          <div className="footer-left">
+            <span className="tag subtle">
+              ⚙ Created by titas das
+            </span>
+          </div>
+          <div className="footer-right">
+            <span className="tag subtle">v{GAME_VERSION}</span>
+            <button className="btn secondary parchment-btn small" onClick={() => setShowFeedback(true)}>
+              Feedback
+            </button>
+          </div>
         </footer>
       </div>
       {showRules && (
