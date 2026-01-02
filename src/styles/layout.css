@@ -68,7 +68,7 @@
   display: grid;
   place-content: center;
   text-align: center;
-  color: #fefefe;
+  color: var(--hero-ink);
   gap: 0.4rem;
   backdrop-filter: blur(1px);
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.55));
@@ -81,7 +81,22 @@
 
 .hero-overlay .ghost {
   background: rgba(255, 255, 255, 0.12);
-  color: #fefefe;
+  color: var(--hero-ink);
+}
+
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: var(--hero-chip-bg);
+  border: 1px solid var(--hero-chip-border);
+  color: var(--hero-ink);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
 }
 
 .hero h1 {

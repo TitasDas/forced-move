@@ -30,7 +30,7 @@ function StartScreen({ mode, setMode, setScreen }) {
         <div className="hero-overlay">
           <div className="tag ghost">A game of structure, not speed.</div>
           <h1>Forced Move</h1>
-          <p>Win the small boards to claim the big board.</p>
+          <p className="hero-chip">Every move is a decision for both players.</p>
         </div>
       </div>
       <h1>Choose your board, then hit start.</h1>
@@ -38,6 +38,25 @@ function StartScreen({ mode, setMode, setScreen }) {
         Tic-Tac-Toe with a twist. Pick your board style, go solo against the CPU, or
         send an invite link to a friend. Built for quick play on any device.
       </p>
+      <div className="panel grid two rule-row">
+        <div className="panel rule-card">
+          <div className="card-title">Adjacent Lock rules</div>
+          <ol className="list numbered">
+            <li>Place your mark, then choose any two empty spaces that touch horizontally or vertically for your opponent.</li>
+            <li>Keep doing this until no adjacent empty pairs remain.</li>
+            <li>When no adjacent pairs are left, you instead pick a single empty space after placing your mark.</li>
+            <li>Play continues until someone wins or the board has no empty spaces.</li>
+          </ol>
+        </div>
+        <div className="panel rule-card">
+          <div className="card-title">Ultimate rules</div>
+          <ol className="list numbered">
+            <li>Your move marks a cell inside a mini-board and sends your opponent to the matching mini-board.</li>
+            <li>If that target mini-board is full or already won, they may choose any open mini-board instead.</li>
+            <li>Win a mini-board to claim its big square; three claimed big squares in a row wins the game.</li>
+          </ol>
+        </div>
+      </div>
       <div className="grid two">
         <div className="panel start-card">
           <div className="card-title">Choose your board</div>
@@ -114,28 +133,6 @@ export default function App() {
             contrast={contrast}
             onToggleContrast={() => setContrast((v) => !v)}
           />
-
-          {screen === 'menu' && (
-            <div className="panel grid two rule-row">
-            <div className="panel rule-card">
-              <div className="card-title">Adjacent Lock rules</div>
-              <ol className="list numbered">
-                  <li>Place your mark, then choose any two empty spaces that touch horizontally or vertically for your opponent.</li>
-                  <li>Keep doing this until no adjacent empty pairs remain.</li>
-                  <li>When no adjacent pairs are left, you instead pick a single empty space after placing your mark.</li>
-                  <li>Play continues until someone wins or the board has no empty spaces.</li>
-              </ol>
-            </div>
-            <div className="panel rule-card">
-              <div className="card-title">Ultimate rules</div>
-              <ol className="list numbered">
-                  <li>Your move marks a cell inside a mini-board and sends your opponent to the matching mini-board.</li>
-                  <li>If that target mini-board is full or already won, they may choose any open mini-board instead.</li>
-                  <li>Win a mini-board to claim its big square; three claimed big squares in a row wins the game.</li>
-                </ol>
-              </div>
-            </div>
-          )}
 
           {screen === 'solo' && (
             <SinglePlayerGame
