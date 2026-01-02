@@ -55,17 +55,17 @@
   position: relative;
   border-radius: 18px;
   overflow: hidden;
-  min-height: 440px;
+  min-height: 500px;
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.25));
   background-size: cover;
-  background-position: center;
+  background-position: center 20%;
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.35);
 }
 .hero-visual.banner {
   border: 1px solid rgba(0, 0, 0, 0.08);
 }
 .hero-visual.banner.tall {
-  min-height: clamp(380px, 55vw, 520px);
+  min-height: clamp(440px, 60vw, 600px);
 }
 
 .hero-overlay {
@@ -153,6 +153,27 @@
     linear-gradient(180deg, #f2e1cb, #e6d1b2);
   padding: 1rem;
   border-radius: 18px;
+}
+
+.high-contrast .parchment {
+  background: linear-gradient(180deg, rgba(60, 52, 44, 0.92), rgba(48, 42, 35, 0.95));
+}
+
+.high-contrast .parchment-shell {
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 35%),
+    radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.08), transparent 35%),
+    linear-gradient(180deg, #3c342c, #2f2822);
+}
+
+.high-contrast .parchment-btn {
+  background: linear-gradient(180deg, #d8c5a8, #c4aa86);
+  border: 1px solid rgba(240, 210, 170, 0.3);
+  color: #f3e7d5;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.high-contrast .parchment-btn.outlined {
+  border: 1px solid rgba(240, 210, 170, 0.45);
 }
 
 .parchment-footer {
