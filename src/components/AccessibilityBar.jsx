@@ -29,14 +29,6 @@ export default function AccessibilityBar({
       >
         🎨
       </button>
-      <button
-        className="accessibility-seg"
-        type="button"
-        aria-label="Settings"
-        title="Settings"
-      >
-        ⚙
-      </button>
     </div>
   );
 }
