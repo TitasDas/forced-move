@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function AudioToggle({ src = '/audio/lofi.mp3' }) {
+export default function AudioToggle({ src = '/audio/lofi.mp3', iconOnly = false }) {
   const audioRef = useRef(null);
   const [enabled, setEnabled] = useState(true);
 
@@ -21,11 +21,20 @@ export default function AudioToggle({ src = '/audio/lofi.mp3' }) {
     }
   }, [enabled]);
 
+  const label = enabled ? 'Sound on' : 'Sound off';
+  const glyph = enabled ? '🔊' : '🔇';
+
   return (
     <div className="sound-toggle">
       <audio ref={audioRef} src={src} preload="none" loop />
-      <button className="btn secondary" onClick={() => setEnabled((v) => !v)}>
-        {enabled ? '🔊 On' : '🔇 Off'}
+      <button
+        className="accessibility-seg"
+        onClick={() => setEnabled((v) => !v)}
+        aria-pressed={enabled}
+        aria-label={label}
+        title={label}
+      >
+        {iconOnly ? glyph : `${glyph} ${enabled ? 'On' : 'Off'}`}
       </button>
     </div>
   );
