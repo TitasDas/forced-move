@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import AccessibilityBar from './components/AccessibilityBar.jsx';
-import AudioToggle from './components/AudioToggle.jsx';
 import SinglePlayerGame from './components/SinglePlayerGame.jsx';
 import MultiplayerLobby from './components/MultiplayerLobby.jsx';
 import { GAME_VERSION } from '../engine/state.js';
@@ -26,20 +25,6 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
   };
   return (
     <header className="menu-frame parchment">
-      <div className="top-controls">
-        <div className="accessibility-bar">
-          <AudioToggle src="/audio/lofi.mp3" iconOnly />
-          <button className="accessibility-seg" aria-label="Toggle dark mode" title="Dark mode">
-            ☾
-          </button>
-          <button className="accessibility-seg" aria-label="Toggle color palette" title="Palette">
-            🎨
-          </button>
-          <button className="accessibility-seg" aria-label="Accessibility" title="Accessibility">
-            ♿
-          </button>
-        </div>
-      </div>
       <div className="hero-visual banner tall" style={heroStyle} role="img" aria-label="Forced Move chalkboard illustration">
         <div className="hero-overlay vintage">
           <div className="tag ghost">A game of structure, not speed.</div>
