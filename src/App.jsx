@@ -106,23 +106,9 @@ export default function App() {
         )}
 
         <footer className="footer-tag parchment-footer">
-          <div className="mode-pills footer-pills">
-            {MODES.map((m) => (
-              <button
-                key={m.id}
-                className={`mode small segmented ${mode === m.id ? 'active' : ''}`}
-                onClick={() => setMode(m.id)}
-              >
-                <span className="mode-title">{m.label}</span>
-              </button>
-            ))}
-          </div>
-          <div className="footer-right">
-            <span className="tag subtle">v{GAME_VERSION}</span>
-            <button className="btn parchment-btn small" onClick={() => setShowFeedback(true)}>
-              Feedback
-            </button>
-          </div>
+          <button className="btn parchment-btn small" onClick={() => setShowFeedback(true)}>
+            Feedback
+          </button>
         </footer>
       </div>
       {showRules && (
