@@ -166,14 +166,14 @@
 }
 
 .high-contrast .parchment-btn {
-  background: linear-gradient(180deg, #d8c5a8, #c4aa86);
-  border: 1px solid rgba(240, 210, 170, 0.3);
-  color: #f3e7d5;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  background: linear-gradient(180deg, #534437, #3b2f25);
+  border: 1px solid rgba(240, 210, 170, 0.14);
+  color: #f6ecdb;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .high-contrast .parchment-btn.outlined {
-  border: 1px solid rgba(240, 210, 170, 0.45);
+  border: 1px solid rgba(240, 210, 170, 0.22);
 }
 
 .parchment-footer {
@@ -202,6 +202,13 @@
   width: 100%;
 }
 
+.high-contrast .mode.small {
+  background: linear-gradient(180deg, #42362c, #312921);
+  border: 1px solid rgba(240, 210, 170, 0.16);
+  color: #f6ecdb;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
 .mode-pills {
   display: grid;
   gap: 0.35rem;
@@ -216,6 +223,12 @@
   box-shadow: 0 10px 22px rgba(61, 44, 28, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.7);
   border-color: rgba(124, 92, 55, 0.55);
   background: linear-gradient(180deg, #edd6b7, #dcbf99);
+}
+
+.high-contrast .mode.small.segmented.active {
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  border-color: rgba(240, 210, 170, 0.26);
+  background: linear-gradient(180deg, #4b3b30, #3a2f25);
 }
 
 .menu-frame {
@@ -264,6 +277,7 @@
 
 .grid.center-grid {
   justify-items: center;
+  width: 100%;
 }
 
 .grid.center-grid > .panel {
@@ -291,6 +305,12 @@
   background: rgba(245, 229, 207, 0.82);
   border: 1px solid rgba(77, 55, 25, 0.2);
   box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+}
+
+.high-contrast .play-panel.panel {
+  background: linear-gradient(180deg, rgba(60, 52, 44, 0.92), rgba(48, 42, 35, 0.95));
+  border: 1px solid rgba(240, 210, 170, 0.2);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5);
 }
 
 .topbar {

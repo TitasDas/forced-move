@@ -325,6 +325,12 @@ button {
   border-radius: 999px;
 }
 
+.high-contrast .accessibility-bar {
+  background: linear-gradient(180deg, #4a3d32, #342a22);
+  border: 1px solid rgba(240, 210, 170, 0.2);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
 .accessibility-seg {
   border: none;
   background: transparent;
@@ -345,6 +351,14 @@ button {
 
 .accessibility-seg + .accessibility-seg {
   border-left: 1px solid rgba(40, 30, 20, 0.4);
+}
+
+.high-contrast .accessibility-seg {
+  color: #f6ecdb;
+}
+
+.high-contrast .accessibility-seg + .accessibility-seg {
+  border-left: 1px solid rgba(240, 210, 170, 0.25);
 }
 
 .rule-row .panel {
@@ -372,6 +386,16 @@ button {
 
 .rule-row li {
   line-height: 1.5;
+}
+
+.high-contrast .rule-row .panel {
+  background: linear-gradient(135deg, rgba(33, 36, 48, 0.9), rgba(23, 26, 36, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--ink);
+}
+
+.high-contrast .rule-row .list.numbered {
+  color: var(--ink);
 }
 
 .feedback-card {
@@ -452,27 +476,6 @@ button {
   color: var(--muted);
   width: 100%;
   position: relative;
-}
-
-.palette-alt {
-  --bg: #f1f4ff;
-  --panel: #fdfcff;
-  --accent: #7c5cff;
-  --accent-strong: #4ac7ff;
-  --ink: #0c1433;
-  --muted: #2f395e;
-  --grid: rgba(14, 19, 48, 0.1);
-  --glow: rgba(124, 92, 255, 0.24);
-  --shadow: 0 14px 32px rgba(10, 12, 30, 0.2);
-  --focus: 0 0 0 3px rgba(124, 92, 255, 0.5);
-  --retro-green: #38e0b8;
-  --retro-blue: #1f8af0;
-  --retro-purple: #a46cff;
-  --mark-x: #7c5cff;
-  --mark-o: #1f8af0;
-  --hero-ink: #0c1433;
-  --hero-chip-bg: rgba(255, 255, 255, 0.9);
-  --hero-chip-border: rgba(12, 20, 51, 0.16);
 }
 
 .winner-overlay {

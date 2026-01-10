@@ -47,6 +47,8 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
     return state.winner === 'X' ? 'You win!' : 'Computer wins';
   }, [state, difficulty]);
 
+  const canUndo = useMemo(() => state.history.some((move) => move.player === 'X'), [state.history]);
+
   const selectableTargets = useMemo(() => {
     if (mode !== 'adjacent') return null;
     if (!pending || pending.origin === null) return null;
@@ -76,6 +78,33 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
   const reset = () => {
     setState(createGame(mode));
     setDeadlock('');
+  };
+
+  const undoLastMove = () => {
+    if (aiTimer.current) {
+      clearTimeout(aiTimer.current);
+      aiTimer.current = null;
+    }
+    setAiThinking(false);
+    setPending(null);
+    setDeadlock('');
+    setState((current) => {
+      const history = current.history || [];
+      let lastPlayerIdx = -1;
+      for (let i = history.length - 1; i >= 0; i -= 1) {
+        if (history[i].player === 'X') {
+          lastPlayerIdx = i;
+          break;
+        }
+      }
+      if (lastPlayerIdx === -1) return current;
+      const truncated = history.slice(0, lastPlayerIdx);
+      let rebuilt = createGame(current.mode);
+      truncated.forEach((move) => {
+        rebuilt = applyMove(rebuilt, move);
+      });
+      return rebuilt;
+    });
   };
 
   const resolveDeadlock = (nextState) => {
@@ -281,6 +310,9 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
           </label>
           <button className="btn secondary" onClick={reset}>
             Reset
+          </button>
+          <button className="btn secondary" onClick={undoLastMove} disabled={!canUndo}>
+            Undo
           </button>
         </div>
       </div>
