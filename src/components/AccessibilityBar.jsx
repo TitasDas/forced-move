@@ -3,9 +3,7 @@ import AudioToggle from './AudioToggle.jsx';
 
 export default function AccessibilityBar({
   contrast,
-  paletteAlt = false,
   onToggleContrast,
-  onTogglePalette,
   audioSrc,
 }) {
   return (
@@ -19,15 +17,6 @@ export default function AccessibilityBar({
         title="Theme"
       >
         ☾
-      </button>
-      <button
-        className="accessibility-seg"
-        onClick={onTogglePalette}
-        aria-pressed={paletteAlt}
-        aria-label="Toggle color palette"
-        title="Palette"
-      >
-        🎨
       </button>
     </div>
   );

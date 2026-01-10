@@ -68,19 +68,16 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
 
 export default function App() {
   const [contrast, setContrast] = useState(false);
-  const [paletteAlt, setPaletteAlt] = useState(false);
   const [screen, setScreen] = useState('menu');
   const [mode, setMode] = useState('adjacent');
   const [showRules, setShowRules] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
   return (
-    <div className={`app ${contrast ? 'high-contrast' : ''} ${paletteAlt ? 'palette-alt' : ''}`}>
+    <div className={`app ${contrast ? 'high-contrast' : ''}`}>
       <AccessibilityBar
         contrast={contrast}
-        paletteAlt={paletteAlt}
         onToggleContrast={() => setContrast((v) => !v)}
-        onTogglePalette={() => setPaletteAlt((v) => !v)}
         audioSrc="/audio/lofi.mp3"
       />
       <div className="shell parchment-shell">
