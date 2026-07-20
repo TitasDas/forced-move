@@ -106,6 +106,11 @@ export default function App() {
           <button className="btn parchment-btn small" onClick={() => setShowFeedback(true)}>
             Feedback
           </button>
+          <span className="music-credit">
+            Music: “Lobby Time” by{' '}
+            <a href="https://incompetech.com" target="_blank" rel="noreferrer">Kevin MacLeod</a>{' '}
+            (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>)
+          </span>
         </footer>
       </div>
       {showRules && (
