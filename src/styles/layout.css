@@ -553,3 +553,26 @@
     aspect-ratio: 1;
   }
 }
+
+.music-credit {
+  margin-left: auto;
+  align-self: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.music-credit a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .footer-tag {
+    flex-wrap: wrap;
+  }
+
+  .music-credit {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+}
