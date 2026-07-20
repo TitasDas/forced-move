@@ -565,3 +565,14 @@
   color: inherit;
   text-decoration: underline;
 }
+
+@media (max-width: 700px) {
+  .footer-tag {
+    flex-wrap: wrap;
+  }
+
+  .music-credit {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+}
