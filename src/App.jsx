@@ -21,7 +21,7 @@ const MODES = [
 function StartScreen({ mode, setMode, setScreen, onShowRules }) {
   const activeMode = MODES.find((m) => m.id === mode);
   const heroStyle = {
-    backgroundImage: "url('/910.jpg'), url('/intro.jpg')",
+    backgroundImage: "url('./910.jpg'), url('./intro.jpg')",
   };
   return (
     <header className="menu-frame parchment">
@@ -78,7 +78,7 @@ export default function App() {
       <AccessibilityBar
         contrast={contrast}
         onToggleContrast={() => setContrast((v) => !v)}
-        audioSrc="/audio/lofi.mp3"
+        audioSrc="./audio/lofi.mp3"
       />
       <div className="shell parchment-shell">
         {screen === 'menu' && (
@@ -86,7 +86,7 @@ export default function App() {
         )}
 
         {screen === 'solo' && (
-          <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
+          <div className="board-stage" style={{ backgroundImage: "url('./intro.jpg')" }}>
             <SinglePlayerGame
               initialMode={mode}
               onBack={() => setScreen('menu')}
@@ -94,7 +94,7 @@ export default function App() {
           </div>
         )}
         {screen === 'multi' && (
-          <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
+          <div className="board-stage" style={{ backgroundImage: "url('./intro.jpg')" }}>
             <MultiplayerLobby
               initialMode={mode}
               onBack={() => setScreen('menu')}
