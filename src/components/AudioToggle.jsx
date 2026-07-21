@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function AudioToggle({ src = '/audio/lofi.mp3', iconOnly = false }) {
+export default function AudioToggle({ src = './audio/lofi.mp3', iconOnly = false }) {
   const audioRef = useRef(null);
   const [enabled, setEnabled] = useState(true);
 

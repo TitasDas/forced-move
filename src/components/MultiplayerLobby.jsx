@@ -5,6 +5,7 @@ import { useWebSocketGame } from '../hooks/useWebSocketGame.js';
 import WinnerOverlay from './WinnerOverlay.jsx';
 import { cellsAreAdjacent, getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
 import FeedbackBox from './FeedbackBox.jsx';
+import { apiUrl } from '../lib/server.js';
 
 export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const [mode, setMode] = useState(initialMode === 'nested' ? 'nested' : 'adjacent');
@@ -29,7 +30,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const createGame = async () => {
     setError('');
     try {
-      const res = await fetch('/api/games', {
+      const res = await fetch(apiUrl('/api/games'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mode }),
@@ -48,7 +49,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const joinGame = async () => {
     setError('');
     try {
-      const res = await fetch(`/api/games/${gameId}/join`, {
+      const res = await fetch(apiUrl(`/api/games/${gameId}/join`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inviteToken }),

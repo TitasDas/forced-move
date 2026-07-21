@@ -12,7 +12,7 @@ export default function WinnerOverlay({ message, subText, onAction, actionLabel 
 
   return (
     <div className="winner-overlay" role="alert">
-      <audio ref={audioRef} src="/audio/cheer.mp3" preload="auto" />
+      <audio ref={audioRef} src="./audio/cheer.mp3" preload="auto" />
       <div className="confetti">
         {Array.from({ length: 18 }).map((_, i) => (
           <span key={i} className={`flake f-${i % 6}`} />
