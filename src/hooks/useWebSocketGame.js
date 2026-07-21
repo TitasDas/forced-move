@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { wsUrl } from '../lib/server.js';
 
 export function useWebSocketGame(gameId, token) {
   const [state, setState] = useState(null);
@@ -8,7 +9,7 @@ export function useWebSocketGame(gameId, token) {
 
   useEffect(() => {
     if (!gameId || !token) return undefined;
-    const url = new URL('/ws', window.location.origin.replace('http', 'ws'));
+    const url = wsUrl('/ws');
     url.searchParams.set('gameId', gameId);
     url.searchParams.set('token', token);
     const ws = new WebSocket(url);
