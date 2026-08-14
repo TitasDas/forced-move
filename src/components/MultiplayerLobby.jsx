@@ -5,6 +5,7 @@ import { useWebSocketGame } from '../hooks/useWebSocketGame.js';
 import WinnerOverlay from './WinnerOverlay.jsx';
 import { cellsAreAdjacent, getAdjacentCells, getAdjacentEmptyPairs } from '../../engine/adjacent.js';
 import FeedbackBox from './FeedbackBox.jsx';
+import RulesModal from './RulesModal.jsx';
 
 export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const [mode, setMode] = useState(initialMode === 'nested' ? 'nested' : 'adjacent');
@@ -14,6 +15,7 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
   const [link, setLink] = useState('');
   const [error, setError] = useState('');
   const [pending, setPending] = useState(null); // { origin, allowed[] }
+  const [showRules, setShowRules] = useState(false);
 
   const { state, role, status, sendMove } = useWebSocketGame(gameId, token);
   const Board = state?.mode === 'nested' ? BoardNested : BoardClassic;
@@ -163,8 +165,14 @@ export default function MultiplayerLobby({ initialMode = 'nested', onBack }) {
         <button className="btn secondary" onClick={onBack}>
           ← Back
         </button>
-        <div className="tag">Board: {mode === 'adjacent' ? 'Adjacent Lock' : 'Ultimate Tic-Tac-Toe'}</div>
+        <div className="control-row">
+          <div className="tag">Board: {mode === 'adjacent' ? 'Adjacent Lock' : 'Ultimate Tic-Tac-Toe'}</div>
+          <button className="btn secondary" onClick={() => setShowRules(true)}>
+            Rules
+          </button>
+        </div>
       </div>
+      {showRules && <RulesModal onClose={() => setShowRules(false)} />}
       <div className="status">
         <div>
           <div className="card-title">Multiplayer</div>

@@ -6,6 +6,7 @@ import BoardClassic from './BoardClassic.jsx';
 import BoardNested from './BoardNested.jsx';
 import WinnerOverlay from './WinnerOverlay.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
+import RulesModal from './RulesModal.jsx';
 
 export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
   const [mode, setMode] = useState(initialMode);
@@ -15,6 +16,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
   const aiTimer = useRef(null);
   const [pending, setPending] = useState(null); // { origin, allowed[] }
   const [deadlock, setDeadlock] = useState('');
+  const [showRules, setShowRules] = useState(false);
 
   useEffect(() => {
     setState(createGame(mode));
@@ -273,10 +275,16 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
         <button className="btn secondary" onClick={onBack}>
           ← Back
         </button>
+        <div className="control-row">
           <div className="tag">
             Board: {mode === 'adjacent' ? 'Adjacent Lock' : 'Ultimate Tic-Tac-Toe'}
           </div>
+          <button className="btn secondary" onClick={() => setShowRules(true)}>
+            Rules
+          </button>
+        </div>
       </div>
+      {showRules && <RulesModal onClose={() => setShowRules(false)} />}
       <div className="status">
         <div>
           <div className="card-title">Solo mode</div>
@@ -358,7 +366,7 @@ export default function SinglePlayerGame({ initialMode = 'adjacent', onBack }) {
       <div className="grid two center-grid">
         <div className="panel">
           <div className="card-title">Move log</div>
-          <ol className="list" aria-label="move history">
+          <ol className="list move-log" aria-label="move history">
             {state.history.map((move, idx) => (
               <li key={`${move.player}-${idx}`} className="control-row">
                 <span className="mono">
