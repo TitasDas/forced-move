@@ -354,8 +354,11 @@
 }
 
 .modal {
+  box-sizing: border-box;
   max-width: 960px;
   width: min(960px, 95vw);
+  max-height: 90vh;
+  overflow-y: auto;
   display: grid;
   gap: 1rem;
 }
@@ -371,11 +374,19 @@
   --mini-cell-font-size: clamp(1.1rem, min(7vw, 5vh), 2.2rem);
   --mini-overlay-size: clamp(2.6rem, 11vw, 3.6rem);
   --badge-size: clamp(0.7rem, 2vw, 0.85rem);
+  --chalk: #f2f6f0;
+  --chalk-x: #ffafc0;
+  --chalk-o: #a9ccff;
   display: grid;
-  gap: 6px;
-  background: linear-gradient(135deg, rgba(236, 111, 102, 0.16), rgba(122, 199, 163, 0.16));
+  gap: 8px;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.07), transparent 42%),
+    radial-gradient(circle at 78% 82%, rgba(255, 255, 255, 0.05), transparent 40%),
+    linear-gradient(160deg, #2d4638, #22362b 55%, #1c2d23);
   padding: 12px;
+  border: 4px solid rgba(97, 68, 39, 0.8);
   border-radius: var(--radius);
+  box-shadow: inset 0 2px 18px rgba(0, 0, 0, 0.45), 0 16px 34px rgba(0, 0, 0, 0.25);
   width: 100%;
 }
 
@@ -385,25 +396,43 @@
 
 .cell {
   aspect-ratio: 1;
-  border-radius: 12px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.78));
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(240, 246, 240, 0.16);
   display: grid;
   place-items: center;
   font-size: var(--cell-font-size);
   font-weight: 700;
-  color: var(--ink);
+  color: var(--chalk, var(--ink));
   cursor: pointer;
   transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
 }
 
+.board .mark {
+  font-family: 'Caveat', 'Segoe Print', 'Comic Sans MS', cursive;
+  font-size: 1.18em;
+  line-height: 1;
+  animation: chalk-pop 220ms ease-out;
+}
+
+.board .mark.ghost {
+  opacity: 0.55;
+}
+
+@keyframes chalk-pop {
+  0% { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+  65% { transform: scale(1.12) rotate(2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
 .cell.mark-x {
-  color: var(--mark-x);
-  text-shadow: 0 2px 6px rgba(255, 77, 109, 0.35);
+  color: var(--chalk-x);
+  text-shadow: 0 0 8px rgba(255, 175, 192, 0.4), 1px 1px 0 rgba(0, 0, 0, 0.35);
 }
 
 .cell.mark-o {
-  color: var(--mark-o);
-  text-shadow: 0 2px 6px rgba(47, 128, 237, 0.25);
+  color: var(--chalk-o);
+  text-shadow: 0 0 8px rgba(169, 204, 255, 0.4), 1px 1px 0 rgba(0, 0, 0, 0.35);
 }
 
 .claimed-mark {
@@ -416,47 +445,67 @@
   color: #0d0d0d;
 }
 
-.cell:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+.cell:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.11);
+  transform: translateY(-1px);
 }
 
 .cell.locked {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
 .cell.win {
-  background: radial-gradient(circle at 30% 30%, rgba(243, 167, 18, 0.75), rgba(236, 111, 102, 0.75));
-  box-shadow: 0 12px 30px var(--glow);
+  background: rgba(247, 214, 96, 0.14);
+  animation: win-glow 900ms ease-in-out infinite alternate;
+}
+
+@keyframes win-glow {
+  from { box-shadow: inset 0 0 0 2px rgba(247, 214, 96, 0.5), 0 0 10px rgba(247, 214, 96, 0.2); }
+  to { box-shadow: inset 0 0 0 2px rgba(247, 214, 96, 0.9), 0 0 22px rgba(247, 214, 96, 0.45); }
+}
+
+.cell.must-play {
+  box-shadow: inset 0 0 0 2px rgba(255, 214, 130, 0.55);
+  animation: chalk-nudge 1.4s ease-in-out infinite;
+}
+
+@keyframes chalk-nudge {
+  50% { box-shadow: inset 0 0 0 3px rgba(255, 214, 130, 0.95); }
 }
 
 .cell.pending-origin {
-  outline: 3px solid rgba(255, 77, 109, 0.5);
+  outline: 3px solid rgba(255, 175, 192, 0.8);
+  outline-offset: -3px;
 }
 
 .cell.pending-choice {
-  outline: 2px dashed rgba(47, 128, 237, 0.5);
+  outline: 2px dashed rgba(169, 204, 255, 0.7);
+  outline-offset: -2px;
 }
 
 .cell.pending-selected {
-  outline: 3px solid rgba(47, 128, 237, 0.8);
-  background: radial-gradient(circle at 50% 50%, rgba(47, 128, 237, 0.18), rgba(255, 255, 255, 0.8));
+  outline: 3px solid rgba(169, 204, 255, 0.95);
+  outline-offset: -3px;
+  background: rgba(169, 204, 255, 0.16);
 }
 
 .mini-board {
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 8px;
-  background: linear-gradient(160deg, rgba(111, 163, 255, 0.12), rgba(160, 105, 217, 0.12));
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(240, 246, 240, 0.12);
   display: grid;
   gap: 6px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   position: relative;
   min-height: 100%;
+  transition: background var(--transition), box-shadow var(--transition), border var(--transition);
 }
 
 .mini-board .cell {
   font-size: var(--mini-cell-font-size);
+  border-radius: 6px;
 }
 
 .mini-board .badge {
@@ -465,24 +514,29 @@
   right: 6px;
   padding: 0.2rem 0.45rem;
   border-radius: 999px;
-  background: rgba(240, 183, 117, 0.2);
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--chalk, #f2f6f0);
   font-size: var(--badge-size);
 }
 
+.mini-board.mini-active {
+  box-shadow: inset 0 0 0 2px rgba(255, 214, 130, 0.55);
+  animation: chalk-nudge 1.4s ease-in-out infinite;
+}
+
 .mini-board.mini-owned {
-  background: linear-gradient(160deg, rgba(255, 77, 109, 0.22), rgba(47, 128, 237, 0.2));
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.15);
-  border: 2px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(240, 246, 240, 0.16);
 }
 
 .mini-board.mini-owned.mark-x {
-  box-shadow: 0 14px 30px rgba(255, 77, 109, 0.35);
-  border-color: rgba(255, 77, 109, 0.35);
+  background: rgba(255, 77, 109, 0.14);
+  border-color: rgba(255, 175, 192, 0.45);
 }
 
 .mini-board.mini-owned.mark-o {
-  box-shadow: 0 14px 30px rgba(47, 128, 237, 0.35);
-  border-color: rgba(47, 128, 237, 0.35);
+  background: rgba(47, 128, 237, 0.14);
+  border-color: rgba(169, 204, 255, 0.45);
 }
 
 .mini-overlay {
@@ -490,12 +544,20 @@
   inset: 0;
   display: grid;
   place-items: center;
+  font-family: 'Caveat', 'Segoe Print', 'Comic Sans MS', cursive;
   font-size: var(--mini-overlay-size);
-  font-weight: 900;
-  color: #0d0d0d;
-  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
-  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  font-weight: 700;
+  color: var(--chalk, #f2f6f0);
+  text-shadow: 0 0 14px rgba(0, 0, 0, 0.6);
+  background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.05));
   pointer-events: none;
+  animation: claim-pop 320ms ease-out;
+}
+
+@keyframes claim-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .status {
@@ -522,6 +584,22 @@
 .mono {
   font-family: 'Space Grotesk', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
+}
+
+.move-log {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board .mark,
+  .mini-overlay,
+  .cell.win,
+  .cell.must-play,
+  .mini-board.mini-active {
+    animation: none;
+  }
 }
 
 @media (min-width: 960px) {

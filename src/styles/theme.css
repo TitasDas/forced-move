@@ -146,20 +146,23 @@ button {
 }
 
 .high-contrast .mini-board {
-  background: linear-gradient(160deg, rgba(124, 92, 255, 0.12), rgba(91, 186, 242, 0.12));
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .high-contrast .board {
-  background: linear-gradient(135deg, rgba(124, 92, 255, 0.14), rgba(91, 186, 242, 0.12));
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.05), transparent 42%),
+    linear-gradient(160deg, #20302a, #17231d 55%, #101a15);
+  border-color: rgba(240, 210, 170, 0.3);
 }
 
 .high-contrast .cell {
-  background: linear-gradient(145deg, rgba(32, 36, 52, 0.85), rgba(28, 30, 46, 0.75));
-  color: var(--ink);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--chalk, #f2f6f0);
 }
 
 .high-contrast .cell.locked {
-  opacity: 0.7;
+  opacity: 0.55;
 }
 
 .high-contrast .badge {
