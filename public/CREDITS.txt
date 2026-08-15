@@ -1,0 +1,11 @@
+Forced Move - asset credits
+
+Music: "Lobby Time" by Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 4.0
+https://creativecommons.org/licenses/by/4.0/
+
+Win sound: excerpt of "Fireworks end of act applause" (public domain)
+https://commons.wikimedia.org/wiki/File:Fireworks_end_of_act_applause.ogg
+
+Artwork: original to this project, CC0 1.0.
+Code: GPL-3.0-or-later, source at https://github.com/TitasDas/forced-move
