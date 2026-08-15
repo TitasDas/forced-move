@@ -120,6 +120,11 @@ export default function App() {
               </button>
             </div>
             <FeedbackBox context="menu feedback" />
+            <div className="credits">
+              Music: <a href="https://incompetech.com" target="_blank" rel="noreferrer">"Lobby Time" by Kevin MacLeod</a>{' '}
+              (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>).
+              Win sound: public domain. Artwork: original to this project (CC0).
+            </div>
           </div>
         </div>
       )}
