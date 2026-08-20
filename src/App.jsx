@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AccessibilityBar from './components/AccessibilityBar.jsx';
 import SinglePlayerGame from './components/SinglePlayerGame.jsx';
 import MultiplayerLobby from './components/MultiplayerLobby.jsx';
 import { GAME_VERSION } from '../engine/state.js';
 import FeedbackBox from './components/FeedbackBox.jsx';
 import RulesModal from './components/RulesModal.jsx';
+import { loadSession } from './lib/mpSession.js';
 
 const MODES = [
   {
@@ -67,10 +68,27 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
   );
 }
 
+function readJoinRequest() {
+  const params = new URLSearchParams(window.location.search);
+  const gameId = params.get('gameId');
+  const invite = params.get('invite');
+  return gameId && invite ? { gameId, invite } : null;
+}
+
 export default function App() {
   const [contrast, setContrast] = useState(false);
-  const [screen, setScreen] = useState('menu');
+  const [joinRequest] = useState(readJoinRequest);
+  // Land straight back in the game after an invite link or a mid-game refresh.
+  const [screen, setScreen] = useState(joinRequest || loadSession() ? 'multi' : 'menu');
   const [mode, setMode] = useState('adjacent');
+
+  useEffect(() => {
+    // The invite params are consumed on load; keep the URL clean so a refresh
+    // resumes via the stored session instead of re-joining.
+    if (joinRequest) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [joinRequest]);
   const [showRules, setShowRules] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
@@ -98,6 +116,7 @@ export default function App() {
           <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
             <MultiplayerLobby
               initialMode={mode}
+              joinRequest={joinRequest}
               onBack={() => setScreen('menu')}
             />
           </div>
