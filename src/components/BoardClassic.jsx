@@ -51,16 +51,10 @@ export default function BoardClassic({
         const isSelectedPending = pendingAllowed.includes(idx);
         const isMustPlay = !selectingTargets && constrained && constrained.includes(idx);
         const handler = onSelect || onMove;
-        const handleTouch = (event) => {
-          if (locked || !handler) return;
-          event.preventDefault();
-          handler(idx);
-        };
         return (
           <button
             key={idx}
             className={`cell ${cell ? `mark-${cell.toLowerCase()}` : ''} ${locked ? 'locked' : ''} ${isWin ? 'win' : ''} ${isPendingOrigin ? 'pending-origin' : ''} ${isPendingChoice ? 'pending-choice' : ''} ${isSelectedPending ? 'pending-selected' : ''} ${isMustPlay ? 'must-play' : ''}`}
-            onTouchEnd={handleTouch}
             onClick={() => !locked && handler && handler(idx)}
             disabled={locked}
             aria-label={`Cell ${idx + 1} ${cell ? `occupied by ${cell}` : 'empty'}`}
