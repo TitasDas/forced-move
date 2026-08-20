@@ -19,3 +19,7 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 ## For curious builders
 
 Developer details live in `devnotes/README.md` (architecture, backend, multiplayer flow), and UI/UX choices plus future polish ideas live in `ui-ux-notes/README.md`.
+
+## Credits
+
+Background music: "Lobby Time" by Kevin MacLeod (incompetech.com), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Full asset licensing details are in [ASSETS_LICENSE.md](ASSETS_LICENSE.md).

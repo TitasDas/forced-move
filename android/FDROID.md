@@ -37,10 +37,10 @@ For an F-Droid submission, create `metadata/com.forcedmove.yml` in the F-Droid d
 ```yaml
 Categories:
   - Games
-License: MIT
-SourceCode: https://github.com/your-org/forced-move
-IssueTracker: https://github.com/your-org/forced-move/issues
-Changelog: https://github.com/your-org/forced-move/releases
+License: GPL-3.0-or-later
+SourceCode: https://github.com/TitasDas/forced-move
+IssueTracker: https://github.com/TitasDas/forced-move/issues
+Changelog: https://github.com/TitasDas/forced-move/releases
 Builds:
   - versionName: 1.0.0
     versionCode: 1
