@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AccessibilityBar from './components/AccessibilityBar.jsx';
 import SinglePlayerGame from './components/SinglePlayerGame.jsx';
 import MultiplayerLobby from './components/MultiplayerLobby.jsx';
 import { GAME_VERSION } from '../engine/state.js';
 import FeedbackBox from './components/FeedbackBox.jsx';
+import RulesModal from './components/RulesModal.jsx';
+import { loadSession } from './lib/mpSession.js';
 
 const MODES = [
   {
@@ -66,10 +68,27 @@ function StartScreen({ mode, setMode, setScreen, onShowRules }) {
   );
 }
 
+function readJoinRequest() {
+  const params = new URLSearchParams(window.location.search);
+  const gameId = params.get('gameId');
+  const invite = params.get('invite');
+  return gameId && invite ? { gameId, invite } : null;
+}
+
 export default function App() {
   const [contrast, setContrast] = useState(false);
-  const [screen, setScreen] = useState('menu');
+  const [joinRequest] = useState(readJoinRequest);
+  // Land straight back in the game after an invite link or a mid-game refresh.
+  const [screen, setScreen] = useState(joinRequest || loadSession() ? 'multi' : 'menu');
   const [mode, setMode] = useState('adjacent');
+
+  useEffect(() => {
+    // The invite params are consumed on load; keep the URL clean so a refresh
+    // resumes via the stored session instead of re-joining.
+    if (joinRequest) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [joinRequest]);
   const [showRules, setShowRules] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
@@ -97,6 +116,7 @@ export default function App() {
           <div className="board-stage" style={{ backgroundImage: "url('/intro.jpg')" }}>
             <MultiplayerLobby
               initialMode={mode}
+              joinRequest={joinRequest}
               onBack={() => setScreen('menu')}
             />
           </div>
@@ -113,37 +133,7 @@ export default function App() {
           </span>
         </footer>
       </div>
-      {showRules && (
-        <div className="modal-overlay">
-          <div className="panel modal parchment">
-            <div className="modal-head">
-              <div className="card-title">Rules</div>
-              <button className="btn secondary parchment-btn small" onClick={() => setShowRules(false)}>
-                Close
-              </button>
-            </div>
-            <div className="grid two rule-row">
-              <div className="panel rule-card">
-                <div className="card-title">Adjacent Lock</div>
-                <ol className="list numbered">
-                  <li>Place your mark, then choose any two empty spaces that touch horizontally or vertically for your opponent.</li>
-                  <li>Keep doing this until no adjacent empty pairs remain.</li>
-                  <li>When no adjacent pairs are left, you instead pick a single empty space after placing your mark.</li>
-                  <li>Play continues until someone wins or the board has no empty spaces.</li>
-                </ol>
-              </div>
-              <div className="panel rule-card">
-                <div className="card-title">Ultimate</div>
-                <ol className="list numbered">
-                  <li>Your move marks a cell inside a mini-board and sends your opponent to the matching mini-board.</li>
-                  <li>If that target mini-board is full or already won, they may choose any open mini-board instead.</li>
-                  <li>Win a mini-board to claim its big square; three claimed big squares in a row wins the game.</li>
-                </ol>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {showRules && <RulesModal onClose={() => setShowRules(false)} />}
       {showFeedback && (
         <div className="modal-overlay">
           <div className="panel modal parchment">
@@ -154,6 +144,11 @@ export default function App() {
               </button>
             </div>
             <FeedbackBox context="menu feedback" />
+            <div className="credits">
+              Music: <a href="https://incompetech.com" target="_blank" rel="noreferrer">"Lobby Time" by Kevin MacLeod</a>{' '}
+              (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>).
+              Win sound: public domain. Artwork: original to this project (CC0).
+            </div>
           </div>
         </div>
       )}

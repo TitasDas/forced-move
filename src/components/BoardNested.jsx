@@ -15,10 +15,14 @@ function MiniBoard({ board, boardIndex, state, onMove }) {
   const closed = board.winner || board.isFull;
   const label = `Mini board ${boardIndex + 1}`;
   const owner = board.winner;
+  const isActiveTarget =
+    state.status === GAME_STATUS.IN_PROGRESS &&
+    state.nextBoardConstraint === boardIndex &&
+    constraintIsOpen;
 
   return (
     <div
-      className={`mini-board ${owner ? `mini-owned mark-${owner.toLowerCase()}` : ''}`}
+      className={`mini-board ${owner ? `mini-owned mark-${owner.toLowerCase()}` : ''} ${isActiveTarget ? 'mini-active' : ''}`}
       aria-label={label}
       role="grid"
     >
@@ -31,21 +35,15 @@ function MiniBoard({ board, boardIndex, state, onMove }) {
           state.status !== GAME_STATUS.IN_PROGRESS ||
           !isConstrained;
         const isWin = board.line?.includes(cellIndex);
-        const handleTouch = (event) => {
-          if (locked || !onMove) return;
-          event.preventDefault();
-          onMove({ boardIndex, cellIndex });
-        };
         return (
           <button
             key={cellIndex}
             className={`cell ${cell ? `mark-${cell.toLowerCase()}` : ''} ${locked ? 'locked' : ''} ${isWin ? 'win' : ''}`}
-            onTouchEnd={handleTouch}
-            onClick={() => !locked && onMove({ boardIndex, cellIndex })}
+            onClick={() => !locked && onMove && onMove({ boardIndex, cellIndex })}
             disabled={locked}
             aria-label={`${label} cell ${cellIndex + 1} ${cell ? `occupied by ${cell}` : 'empty'}`}
           >
-            {cell}
+            {cell && <span className="mark">{cell}</span>}
           </button>
         );
       })}

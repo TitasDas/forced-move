@@ -95,6 +95,28 @@ function broadcast(game, payload) {
   });
 }
 
+function presenceOf(game) {
+  return {
+    X: { joined: true, connected: Boolean(game.players.X?.connected) },
+    O: { joined: Boolean(game.players.O), connected: Boolean(game.players.O?.connected) },
+  };
+}
+
+function broadcastState(game) {
+  wss.clients.forEach((client) => {
+    if (client.readyState !== 1) return;
+    if (client.gameId !== game.gameId) return;
+    client.send(
+      JSON.stringify({
+        type: 'state',
+        state: game.state,
+        youAre: client.player,
+        players: presenceOf(game),
+      }),
+    );
+  });
+}
+
 function validateToken(game, token) {
   if (game.players.X?.token === token) return 'X';
   if (game.players.O?.token === token) return 'O';
@@ -126,8 +148,10 @@ wss.on('connection', (ws, req) => {
       type: 'state',
       state: game.state,
       youAre: role,
+      players: presenceOf(game),
     }),
   );
+  broadcast(game, { type: 'presence', players: presenceOf(game) });
 
   ws.on('message', (raw) => {
     try {
@@ -137,7 +161,19 @@ wss.on('connection', (ws, req) => {
         return;
       }
       if (msg.type === 'request_state') {
-        ws.send(JSON.stringify({ type: 'state', state: game.state, youAre: role }));
+        ws.send(
+          JSON.stringify({ type: 'state', state: game.state, youAre: role, players: presenceOf(game) }),
+        );
+        return;
+      }
+      if (msg.type === 'reset') {
+        if (game.state.status === GAME_STATUS.IN_PROGRESS && game.state.history.length > 0) {
+          ws.send(JSON.stringify({ type: 'error', message: 'Game still in progress' }));
+          return;
+        }
+        game.state = createGame(game.mode);
+        game.lastUpdate = Date.now();
+        broadcastState(game);
         return;
       }
       if (msg.type === 'move') {
@@ -157,7 +193,7 @@ wss.on('connection', (ws, req) => {
           return;
         }
         game.lastUpdate = Date.now();
-        broadcast(game, { type: 'state', state: game.state });
+        broadcastState(game);
       }
     } catch (err) {
       ws.send(JSON.stringify({ type: 'error', message: err.message }));
@@ -166,6 +202,7 @@ wss.on('connection', (ws, req) => {
 
   ws.on('close', () => {
     game.players[role].connected = false;
+    broadcast(game, { type: 'presence', players: presenceOf(game) });
   });
 });
 
