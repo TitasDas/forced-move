@@ -1,1 +1,13 @@
 node_modules
+screenshot/
+linkedin/
+tools/walkthrough/caps/
+tools/walkthrough/frames/
+tools/walkthrough/*.mp3
+tools/walkthrough/*.wav
+tools/walkthrough/*.mp4
+tools/walkthrough/*.gif
+tools/walkthrough/*.jpg
+tools/walkthrough/*.txt
+tools/walkthrough/*.vtt
+tools/walkthrough/*.json
