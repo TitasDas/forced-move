@@ -10,7 +10,7 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 
 ## See it played
 
-[![Forced Move walkthrough: placing a mark, then choosing the two squares the opponent must use](assets/walkthrough-teaser.gif)](https://implantintelligence.com/p/forced-move#usage-demo)
+[![Forced Move: tic-tac-toe where your move limits your opponent's next one](assets/walkthrough-teaser.gif)](https://implantintelligence.com/p/forced-move#usage-demo)
 
 [Watch the 45-second walkthrough](https://implantintelligence.com/p/forced-move#usage-demo) with sound and captions, or [play it now](https://forced-move.onrender.com/).
 

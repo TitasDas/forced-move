@@ -4,7 +4,9 @@ Scenes are sequences of (capture, click) pairs. A cursor glides to each click
 point and taps; captions double as VTT cues and chapter titles.
 Output: frames/NNNNN.png (25 fps, 1280x960), usage-demo.vtt, transcript, chapters.json
 """
-import json, math, os, shutil
+import json, math, os, shutil, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import captions as CAP
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 CAPS = 'caps'; OUT = 'frames'
@@ -20,8 +22,8 @@ def font(name, size):
 
 F_TITLE = font('InstrumentSerif-Regular.ttf', 96)
 F_SUB = font('InstrumentSerif-Italic.ttf', 40)
-F_BODY = font('InstrumentSans-Regular.ttf', 30)
-F_CAP = font('InstrumentSans-Bold.ttf', 30)
+F_BODY = font('InstrumentSans-Regular.ttf', 40)
+F_CAP = font('InstrumentSans-Bold.ttf', 50)
 F_SMALL = font('InstrumentSans-Regular.ttf', 22)
 
 _bg = None
@@ -89,11 +91,7 @@ def app_frame(cap, caption='', cursor=None, press=0.0, zoom=1.0, focus=(0.5, 0.5
         x0 = min(max(cx - cw // 2, 0), W - cw); y0 = min(max(cy - ch // 2, 0), H - ch)
         canvas = canvas.crop((x0, y0, x0 + cw, y0 + ch)).resize((W, H), Image.LANCZOS)
     if caption:
-        bar = Image.new('RGBA', (W, 96), (0, 0, 0, 0)); d = ImageDraw.Draw(bar)
-        tw = d.textlength(caption, font=F_CAP)
-        d.rounded_rectangle(((W - tw) / 2 - 28, 18, (W + tw) / 2 + 28, 78), radius=30, fill=(26, 40, 34, 235))
-        d.text(((W - tw) / 2, 30), caption, font=F_CAP, fill=CREAM)
-        canvas.paste(bar, (0, H - 106), bar)
+        canvas = CAP.caption(canvas, caption, F_CAP, accent=(226, 160, 90))
     return canvas
 
 
@@ -107,9 +105,8 @@ def card(title, sub, lines=(), small=None, bg_image=None, image_has_title=False)
         canvas = Image.blend(im, Image.new('RGB', (W, H), DARK), 0.25)
     d = ImageDraw.Draw(canvas, 'RGBA')
     if image_has_title:
-        # the artwork already carries the title; add the tagline on a band near the bottom
-        y = H - 170
-        d.rectangle((0, y - 24, W, y + 44 * len(lines) + 12), fill=(26, 40, 34, 200))
+        # the artwork already carries the title; the tagline goes in the caption style
+        return CAP.caption(canvas, ' '.join(lines), F_CAP, accent=(226, 160, 90))
     else:
         y = H // 2 - 120 - 22 * len(lines)
         tw = d.textlength(title, font=F_TITLE); d.text(((W - tw) / 2, y), title, font=F_TITLE, fill=CREAM); y += 120
@@ -123,19 +120,19 @@ def card(title, sub, lines=(), small=None, bg_image=None, image_has_title=False)
 
 # ---- storyboard ---------------------------------------------------------------
 SCENES = [
-    ('card', 3.4, dict(title='Forced Move', sub='A game of structure, not speed.', lines=['Tic-tac-toe where every move shapes what your opponent can do next.'], bg_image=os.environ.get('WALKTHROUGH_INTRO', '/home/td/work/forced-move/public/intro.jpg'), image_has_title=True), 'Forced Move'),
-    ('seq', 3.8, dict(seq=[('01-home', None)], caption='Pick a board. Play the computer or a friend. No install.', zoom=(1.0, 1.06), focus=(0.5, 0.75)), 'Pick a board'),
-    ('seq', 3.6, dict(seq=[('01-home', STEPS['02-rules']), ('02-rules', None)], caption='Two rule sets, both written to make you think one move ahead.'), 'Two rule sets'),
-    ('seq', 3.0, dict(seq=[('01-home', STEPS['03-solo-start']), ('03-solo-start', None)], caption='Solo against the computer, five levels.'), 'Solo mode'),
+    ('card', 3.4, dict(title='Forced Move', sub='A game of structure, not speed.', lines=['Tic-tac-toe where your move limits theirs.'], bg_image=os.environ.get('WALKTHROUGH_INTRO', '/home/td/work/forced-move/public/intro.jpg'), image_has_title=True), 'Forced Move'),
+    ('seq', 3.8, dict(seq=[('01-home', None)], caption='Plays in your browser. Nothing to install.', zoom=(1.0, 1.06), focus=(0.5, 0.75)), 'Pick a board'),
+    ('seq', 3.6, dict(seq=[('01-home', STEPS['02-rules']), ('02-rules', None)], caption='Two rule sets. Both make you think ahead.'), 'Two rule sets'),
+    ('seq', 3.0, dict(seq=[('01-home', STEPS['03-solo-start']), ('03-solo-start', None)], caption='Play the computer at five levels.'), 'Solo mode'),
     ('seq', 3.0, dict(seq=[('03-solo-start', STEPS['04-origin']), ('04-origin', None)], caption='Adjacent Lock: place your mark.'), 'Place your mark'),
-    ('seq', 4.6, dict(seq=[('04-origin', STEPS['05-first-allowed']), ('05-first-allowed', STEPS['06-committed-ai-replied']), ('06-committed-ai-replied', None)], caption='Then choose the two touching squares your opponent must use.'), 'Choose their squares'),
-    ('seq', 3.4, dict(seq=[('06-committed-ai-replied', STEPS['07-turn2-origin']), ('07-turn2-origin', None)], caption='The computer answers and boxes you in the same way.'), 'Boxed in'),
-    ('seq', 4.6, dict(seq=[('07-turn2-origin', STEPS['08-turn2-first']), ('08-turn2-first', STEPS['09-turn2-done']), ('09-turn2-done', STEPS['10-turn3']), ('10-turn3', None)], caption='Every turn is a trade: your square for their options.'), 'Every turn is a trade'),
+    ('seq', 4.6, dict(seq=[('04-origin', STEPS['05-first-allowed']), ('05-first-allowed', STEPS['06-committed-ai-replied']), ('06-committed-ai-replied', None)], caption='Then pick the two squares your opponent must use.'), 'Choose their squares'),
+    ('seq', 3.4, dict(seq=[('06-committed-ai-replied', STEPS['07-turn2-origin']), ('07-turn2-origin', None)], caption='Now the computer boxes you in.'), 'Boxed in'),
+    ('seq', 4.6, dict(seq=[('07-turn2-origin', STEPS['08-turn2-first']), ('08-turn2-first', STEPS['09-turn2-done']), ('09-turn2-done', STEPS['10-turn3']), ('10-turn3', None)], caption='Each move narrows the next one.'), 'Every turn is a trade'),
     ('seq', 2.8, dict(seq=[('10-turn3', STEPS['11-difficulty']), ('11-difficulty', None)], caption='Level 5 does not forgive.', zoom=(1.0, 1.08), focus=(0.62, 0.2)), 'Five levels'),
     ('seq', 3.0, dict(seq=[('01-home', STEPS['12-mode-ultimate']), ('12-mode-ultimate', None)], caption='Ultimate: nine boards in one.', zoom=(1.0, 1.06), focus=(0.55, 0.9)), 'Ultimate'),
-    ('seq', 6.2, dict(seq=[('13-ultimate-start', STEPS['14-ultimate-move']), ('14-ultimate-move', STEPS['15-ultimate-move2']), ('15-ultimate-move2', STEPS['16-ultimate-move3']), ('16-ultimate-move3', None)], caption='Your cell sends your opponent to the matching mini-board. Win small to claim big.'), 'Nested boards'),
-    ('seq', 3.6, dict(seq=[('01-home', STEPS['17-lobby']), ('17-lobby', None)], caption='Or create a game and send a friend the link. The server checks every move.'), 'Play a friend'),
-    ('seq', 3.4, dict(seq=[('01-home', STEPS['18-dark']), ('18-dark', None), ('19-dark-game', None)], caption='Light or dark. Keyboard and screen readers welcome.'), 'Light or dark'),
+    ('seq', 6.2, dict(seq=[('13-ultimate-start', STEPS['14-ultimate-move']), ('14-ultimate-move', STEPS['15-ultimate-move2']), ('15-ultimate-move2', STEPS['16-ultimate-move3']), ('16-ultimate-move3', None)], caption='Where you play picks their board. Win small boards to win the big one.'), 'Nested boards'),
+    ('seq', 3.6, dict(seq=[('01-home', STEPS['17-lobby']), ('17-lobby', None)], caption='Or send a friend a link and play live.'), 'Play a friend'),
+    ('seq', 3.4, dict(seq=[('01-home', STEPS['18-dark']), ('18-dark', None), ('19-dark-game', None)], caption='Light or dark. Works with a keyboard and screen readers.'), 'Light or dark'),
     ('card', 4.6, dict(title='Forced Move', sub='Free. In your browser.', lines=['forced-move.onrender.com', 'implantintelligence.com/p/forced-move'], small='Open source, GPL-3.0. Music: Lobby Time by Kevin MacLeod, CC BY 4.0.'), 'Play now'),
 ]
 XFADE = 0.6
