@@ -8,6 +8,12 @@ Forced Move is a take on Tic-Tac-Toe where the rules constrain what comes next. 
 I first learned about this family of games while reading Ben Orlin’s *Math with Bad Drawings*, where he mentions mathematicians in Berkeley getting hooked on an “ultimate” Tic-Tac-Toe played across nested boards. Forced Move is my homage to that tale: a calm, mobile-friendly way to play the same idea with friends or the computer. ***What's fascinating about this is how simple rules quietly force deep strategy.*** 
  
 
+## See it played
+
+[![Forced Move walkthrough: placing a mark, then choosing the two squares the opponent must use](assets/walkthrough-teaser.gif)](https://implantintelligence.com/p/forced-move#usage-demo)
+
+[Watch the 45-second walkthrough](https://implantintelligence.com/p/forced-move#usage-demo) with sound and captions, or [play it now](https://forced-move.onrender.com/).
+
 ## Play it
 
 - **Solo vs CPU:** You can play single player mode against 5 levels of difficulty. 
