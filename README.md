@@ -12,7 +12,7 @@ I first learned about this family of games while reading Ben Orlin’s *Math wit
 
 [![Forced Move: tic-tac-toe where your move limits your opponent's next one](assets/walkthrough-teaser.gif)](https://implantintelligence.com/p/forced-move#usage-demo)
 
-[Watch the narrated walkthrough](https://implantintelligence.com/p/forced-move#usage-demo) (1 min 18 sec) with captions, or [play it now](https://forced-move.onrender.com/).
+[Watch the narrated walkthrough](https://implantintelligence.com/p/forced-move#usage-demo) (1 min 29 sec) with captions, or [play it now](https://forced-move.onrender.com/).
 
 ## Play it
 
