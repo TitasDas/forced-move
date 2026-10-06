@@ -120,7 +120,7 @@ def card(title, sub, lines=(), small=None, bg_image=None, image_has_title=False)
 
 # ---- storyboard ---------------------------------------------------------------
 SCENES = [
-    ('card', 3.4, dict(title='Forced Move', sub='A game of structure, not speed.', lines=['Tic-tac-toe where your move limits theirs.'], bg_image=os.environ.get('WALKTHROUGH_INTRO', '~/work/forced-move/public/intro.jpg'), image_has_title=True), 'Forced Move'),
+    ('card', 3.4, dict(title='Forced Move', sub='A game of structure, not speed.', lines=['Tic-tac-toe where your move limits theirs.'], bg_image=os.environ.get('WALKTHROUGH_INTRO', os.path.expanduser('~/work/forced-move/public/intro.jpg')), image_has_title=True), 'Forced Move'),
     ('seq', 3.8, dict(seq=[('01-home', None)], caption='Plays in your browser. Nothing to install.', zoom=(1.0, 1.06), focus=(0.5, 0.75)), 'Pick a board'),
     ('seq', 3.6, dict(seq=[('01-home', STEPS['02-rules']), ('02-rules', None)], caption='Two rule sets. Both make you think ahead.'), 'Two rule sets'),
     ('seq', 3.0, dict(seq=[('01-home', STEPS['03-solo-start']), ('03-solo-start', None)], caption='Play the computer at five levels.'), 'Solo mode'),
